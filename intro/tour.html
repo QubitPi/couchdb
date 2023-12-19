@@ -1,0 +1,552 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.6. Getting Started &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/intro/tour.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.7. The Core API" href="api.html" />
+    <link rel="prev" title="1.5. Security" href="security.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Introduction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">1.1. Technical Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="why.html">1.2. Why CouchDB?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="consistency.html">1.3. Eventual Consistency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="curl.html">1.4. cURL: Your Command Line Friend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">1.5. Security</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.6. Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#all-systems-are-go">1.6.1. All Systems Are Go!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#welcome-to-fauxton">1.6.2. Welcome to Fauxton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#your-first-database-and-document">1.6.3. Your First Database and Document</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-a-mango-query">1.6.4. Running a Mango Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#triggering-replication">1.6.5. Triggering Replication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapping-up">1.6.6. Wrapping Up</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">1.7. The Core API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Introduction</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.6. </span>Getting Started</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/intro/tour.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<span id="intro-tour"></span><h1><span class="section-number">1.6. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h1>
+<p>In this document, we’ll take a quick tour of CouchDB’s features.
+We’ll create our first document and experiment with CouchDB views.</p>
+<section id="all-systems-are-go">
+<h2><span class="section-number">1.6.1. </span>All Systems Are Go!<a class="headerlink" href="#all-systems-are-go" title="Permalink to this heading">¶</a></h2>
+<p>We’ll have a very quick look at CouchDB’s bare-bones Application Programming
+Interface (API) by using the command-line utility curl. Please note that this
+is not the only way of talking to CouchDB. We will show you plenty more
+throughout the rest of the documents. What’s interesting about curl is that it
+gives you control over raw HTTP requests, and you can see exactly what is
+going on “underneath the hood” of your database.</p>
+<p>Make sure CouchDB is still running, and then do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>This issues a GET request to your newly installed CouchDB instance.</p>
+<p>The reply should look something like:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="s2">&quot;couchdb&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Welcome&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;version&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3.0.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;git_sha&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;83bdcf693&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;uuid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;56f16e7c93ff4a2dc20eb6acc7000b71&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;features&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;access-ready&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;partitioned&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;pluggable-storage-engines&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;reshard&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;scheduler&quot;</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="s2">&quot;vendor&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;The Apache Software Foundation&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Not all that spectacular. CouchDB is saying “hello” with the running version
+number.</p>
+<p>Next, we can get a list of databases:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_all_dbs</span>
+</pre></div>
+</div>
+<p>All we added to the previous request is the _all_dbs string, and our admin user
+name and password (set when installing CouchDB).</p>
+<p>The response should look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;_replicator&quot;</span><span class="p">,</span><span class="s2">&quot;_users&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In case this returns an empty Array for you, it means you haven’t finished
+installation correctly. Please refer to <a class="reference internal" href="../setup/index.html#setup"><span class="std std-ref">Setup</span></a> for further
+information on this.</p>
+<p>For the purposes of this example, we’ll not be showing the system databases
+past this point. In <em>your</em> installation, any time you <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/_all_dbs</span></code>,
+you should see the system databases in the list, too.</p>
+</div>
+<p>Oh, that’s right, we didn’t create any user databases yet!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The curl command issues GET requests by default. You can issue POST requests
+using <code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-X</span> <span class="pre">POST</span></code>. To make it easy to work with our terminal history,
+we usually use the <code class="docutils literal notranslate"><span class="pre">-X</span></code> option even when issuing GET requests.
+If we want to send a POST next time, all we have to change is the method.</p>
+<p>HTTP does a bit more under the hood than you can see in the examples here.
+If you’re interested in every last detail that goes over the wire,
+pass in the <code class="docutils literal notranslate"><span class="pre">-v</span></code> option (e.g., <code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-vX</span> <span class="pre">GET</span></code>), which will show you
+the server curl tries to connect to, the request headers it sends,
+and response headers it receives back. Great for debugging!</p>
+</div>
+<p>Let’s create a database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">baseball</span>
+</pre></div>
+</div>
+<p>CouchDB will reply with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Retrieving the list of databases again shows some useful results this time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_all_dbs</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;baseball&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We should mention JavaScript Object Notation (JSON) here, the data format
+CouchDB speaks. JSON is a lightweight data interchange format based on
+JavaScript syntax. Because JSON is natively compatible with JavaScript, your
+web browser is an ideal client for CouchDB.</p>
+<p>Brackets (<code class="docutils literal notranslate"><span class="pre">[]</span></code>) represent ordered lists, and curly braces (<code class="docutils literal notranslate"><span class="pre">{}</span></code>)
+represent key/value dictionaries. Keys must be strings, delimited by quotes
+(<code class="docutils literal notranslate"><span class="pre">&quot;</span></code>), and values can be strings, numbers, booleans, lists, or key/value
+dictionaries. For a more detailed description of JSON, see Appendix E, JSON
+Primer.</p>
+</div>
+<p>Let’s create another database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">baseball</span>
+</pre></div>
+</div>
+<p>CouchDB will reply with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span><span class="s2">&quot;file_exists&quot;</span><span class="p">,</span><span class="s2">&quot;reason&quot;</span><span class="p">:</span><span class="s2">&quot;The database could not be created,</span>
+<span class="n">the</span> <span class="n">file</span> <span class="n">already</span> <span class="n">exists</span><span class="o">.</span><span class="s2">&quot;}</span>
+</pre></div>
+</div>
+<p>We already have a database with that name, so CouchDB will respond with an
+error. Let’s try again with a different database name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">plankton</span>
+</pre></div>
+</div>
+<p>CouchDB will reply with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Retrieving the list of databases yet again shows some useful results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_all_dbs</span>
+</pre></div>
+</div>
+<p>CouchDB will respond with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;baseball&quot;</span><span class="p">,</span> <span class="s2">&quot;plankton&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>To round things off, let’s delete the second database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">DELETE</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">plankton</span>
+</pre></div>
+</div>
+<p>CouchDB will reply with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The list of databases is now the same as it was before:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_all_dbs</span>
+</pre></div>
+</div>
+<p>CouchDB will respond with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;baseball&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For brevity, we’ll skip working with documents, as the next section covers a
+different and potentially easier way of working with CouchDB that should
+provide experience with this. As we work through the example,
+keep in mind that “under the hood” everything is being done by the
+application exactly as you have been doing here manually.
+Everything is done using GET, PUT, POST, and DELETE with a URI.</p>
+</section>
+<section id="welcome-to-fauxton">
+<span id="intro-tour-fauxton"></span><h2><span class="section-number">1.6.2. </span>Welcome to Fauxton<a class="headerlink" href="#welcome-to-fauxton" title="Permalink to this heading">¶</a></h2>
+<p>After having seen CouchDB’s raw API, let’s get our feet wet by playing with
+Fauxton, the built-in administration interface. Fauxton provides full access
+to all of CouchDB’s features and makes it easy to work with some of the more
+complex ideas involved. With Fauxton we can create and destroy databases; view
+and edit documents; compose and run MapReduce views; and trigger replication
+between databases.</p>
+<p>To load Fauxton in your browser, visit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_utils</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>and log in when prompted with your admin password.</p>
+<p>In later documents, we’ll focus on using CouchDB from server-side languages
+such as Ruby and Python. As such, this document is a great opportunity to
+showcase an example of natively serving up a dynamic web application using
+nothing more than CouchDB’s integrated web server, something you may wish to do
+with your own applications.</p>
+<p>The first thing we should do with a fresh installation of CouchDB is run the
+test suite to verify that everything is working properly. This assures us
+that any problems we may run into aren’t due to bothersome issues with our
+setup. By the same token, failures in the Fauxton test suite are a red flag,
+telling us to double-check our installation before attempting to use a
+potentially broken database server, saving us the confusion when nothing
+seems to be working quite like we expect!</p>
+<p>To validate your installation, click on the <cite>Verify</cite> link on the left-hand
+side, then press the green <cite>Verify Installation</cite> button. All tests should
+pass with a check mark. If any fail, re-check your installation steps.</p>
+</section>
+<section id="your-first-database-and-document">
+<h2><span class="section-number">1.6.3. </span>Your First Database and Document<a class="headerlink" href="#your-first-database-and-document" title="Permalink to this heading">¶</a></h2>
+<p>Creating a database in Fauxton is simple. From the overview page,
+click “Create Database.” When asked for a name, enter <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> and click
+the Create button.</p>
+<p>After your database has been created, Fauxton will display a list of all its
+documents. This list will start out empty, so let’s
+create our first document. Click the plus sign next to “All Documents” and
+select the “New Doc” link. CouchDB will generate a UUID for you.</p>
+<p>For demoing purposes, having CouchDB assign a UUID is fine. When you write
+your first programs, we recommend assigning your own UUIDs. If you rely on
+the server to generate the UUID and you end up making two POST requests
+because the first POST request bombed out, you might generate two docs and
+never find out about the first one because only the second one will be
+reported back. Generating your own UUIDs makes sure that you’ll never end up
+with duplicate documents.</p>
+<p>Fauxton will display the newly created document, with its _id field. To create
+a new field, simply use the editor to write valid JSON. Add a new field by
+appending a comma to the <code class="docutils literal notranslate"><span class="pre">_id</span></code> value, then adding the text:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;my new value&quot;</span>
+</pre></div>
+</div>
+<p>Click the green Create Document button to finalize creating the
+document.</p>
+<p>You can experiment with other JSON values; e.g., <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">&quot;c&quot;]</span></code> or
+<code class="docutils literal notranslate"><span class="pre">{&quot;foo&quot;:</span> <span class="pre">&quot;bar&quot;}</span></code>.</p>
+<p>You’ll notice that the document’s _rev has been added. We’ll go into more detail
+about this in later documents, but for now, the important thing to note is
+that _rev acts like a safety feature when saving a document. As long as you
+and CouchDB agree on the most recent _rev of a document, you can successfully
+save your changes.</p>
+<p>For clarity, you may want to display the contents of the document in the all
+document view. To enable this, from the upper-right corner of the window,
+select Options, then check the Include Docs option. Finally, press the Run
+Query button. The full document should be displayed along with the <code class="docutils literal notranslate"><span class="pre">_id</span></code>
+and <code class="docutils literal notranslate"><span class="pre">_rev</span></code> values.</p>
+</section>
+<section id="running-a-mango-query">
+<h2><span class="section-number">1.6.4. </span>Running a Mango Query<a class="headerlink" href="#running-a-mango-query" title="Permalink to this heading">¶</a></h2>
+<p>Now that we have stored documents successfully, we want to be able to query
+them. The easiest way to do this in CouchDB is running a Mango Query. There are
+always two parts to a Mango Query: the index and the selector.</p>
+<p>The index specifies which fields we want to be able to query on, and the
+selector includes the actual query parameters that define what we are looking
+for exactly.</p>
+<p>Indexes are stored as rows that are kept sorted by the fields you specify. This
+makes retrieving data from a range of keys efficient even when there are
+thousands or millions of rows.</p>
+<p>Before we can run an example query, we’ll need some data to run it on. We’ll
+create documents with information about movies. Let’s create documents for
+three movies. (Allow CouchDB to generate the <code class="docutils literal notranslate"><span class="pre">_id</span></code> and <code class="docutils literal notranslate"><span class="pre">_rev</span></code> fields.) Use Fauxton
+to create documents that have a final JSON structure that look like this:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;00a271787f89c0ef2e10e88a0c0001f4&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;movie&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;My Neighbour Totoro&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;year&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1988</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;director&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;miyazaki&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;rating&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8.2</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;00a271787f89c0ef2e10e88a0c0003f0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;movie&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Kikis Delivery Service&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;year&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1989</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;director&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;miyazaki&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;rating&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">7.8</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;00a271787f89c0ef2e10e88a0c00048b&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;movie&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Princess Mononoke&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;year&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1997</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;director&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;miyazaki&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;rating&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8.4</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now we want to be able to find a movie by its release year, we need to create a
+Mango Index. To do this, go to “Run A Query with Mango” in the Database
+overview. Then click on “manage indexes”, and change the index field on the
+left to look like this:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">         </span><span class="s2">&quot;year&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;year-json-index&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;json&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This defines an index on the field <code class="docutils literal notranslate"><span class="pre">year</span></code> and allows us to send queries for
+documents from a specific year.</p>
+<p>Next, click on “edit query” and change the Mango Query to look like this:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="s2">&quot;selector&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;year&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="s2">&quot;$eq&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1988</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then click on ”Run Query”.</p>
+<p>The result should be a single result, the movie “My Neighbour Totoro” which
+has the year value of 1988. <code class="docutils literal notranslate"><span class="pre">$eq</span></code> here stands for “equal”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that if you skip adding the index, the query will still return the
+correct results, although you will see a warning about not using a
+pre-existing index. Not using an index will work fine on small databases
+and is acceptable for testing out queries in development or training, but
+we very strongly discourage doing this in any other case, since an index is
+absolutely vital to good query performance.</p>
+</div>
+<p>You can also query for all movies during the 1980s, with this selector:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="s2">&quot;selector&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;year&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="s2">&quot;$lt&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1990</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;$gte&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1980</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The result are the two movies from 1988 and 1989. <code class="docutils literal notranslate"><span class="pre">$lt</span></code> here means “lower
+than”, and <code class="docutils literal notranslate"><span class="pre">$gte</span></code> means “greater than or equal to”. The latter currently
+doesn’t have any effect, given that all of our movies are more recent than
+1980, but this makes the query future-proof and allows us to add older
+movies later.</p>
+</section>
+<section id="triggering-replication">
+<h2><span class="section-number">1.6.5. </span>Triggering Replication<a class="headerlink" href="#triggering-replication" title="Permalink to this heading">¶</a></h2>
+<p>Fauxton can trigger replication between two local databases,
+between a local and remote database, or even between two remote databases.
+We’ll show you how to replicate data from one local database to another,
+which is a simple way of making backups of your databases as we’re working
+through the examples.</p>
+<p>First we’ll need to create an empty database to be the target of replication.
+Return to the Databases overview and create a database called
+<code class="docutils literal notranslate"><span class="pre">hello-replication</span></code>. Now click “Replication” in the sidebar and choose
+<code class="docutils literal notranslate"><span class="pre">hello-world</span></code> as the source and <code class="docutils literal notranslate"><span class="pre">hello-replication</span></code> as the target. Click
+“Replicate” to replicate your database.</p>
+<p>To view the result of your replication, click on the Databases tab again.
+You should see the <code class="docutils literal notranslate"><span class="pre">hello-replication</span></code> database has the same number of documents
+as the <code class="docutils literal notranslate"><span class="pre">hello-world</span></code> database, and it should take up roughly the same size as
+well.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For larger databases, replication can take much longer. It is important to
+leave the browser window open while replication is taking place.
+As an alternative, you can trigger replication via curl or some other HTTP
+client that can handle long-running connections. If your client closes the
+connection before replication finishes, you’ll have to retrigger it.
+Luckily, CouchDB’s replication can take over from where it left off
+instead of starting from scratch.</p>
+</div>
+</section>
+<section id="wrapping-up">
+<h2><span class="section-number">1.6.6. </span>Wrapping Up<a class="headerlink" href="#wrapping-up" title="Permalink to this heading">¶</a></h2>
+<p>Now that you’ve seen most of Fauxton’s features, you’ll be prepared to dive in
+and inspect your data as we build our example application in the next few
+documents. Fauxton’s pure JavaScript approach to managing CouchDB shows how
+it’s possible to build a fully featured web application using only CouchDB’s
+HTTP API and integrated web server.</p>
+<p>But before we get there, we’ll have another look at CouchDB’s HTTP API – now
+with a magnifying glass. Let’s curl up on the couch and relax.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="security.html" class="btn btn-neutral float-left" title="1.5. Security" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="1.7. The Core API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

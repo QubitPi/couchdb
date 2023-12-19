@@ -1,0 +1,616 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.7. Local (non-replicating) Documents &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/local.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. JSON Structure Reference" href="../json-structure.html" />
+    <link rel="prev" title="1.6. Partitioned Databases" href="partitioned-dbs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/index.html">1.2. Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database/index.html">1.3. Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="document/index.html">1.4. Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddoc/index.html">1.5. Design Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.7. Local (non-replicating) Documents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#db-local-docs">1.7.1. <code class="docutils literal notranslate"><span class="pre">/{db}/_local_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-local-docs-queries">1.7.2. <code class="docutils literal notranslate"><span class="pre">/{db}/_local_docs/queries</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-local-docid">1.7.3. <code class="docutils literal notranslate"><span class="pre">/{db}/_local/{docid}</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>API Reference</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.7. </span>Local (non-replicating) Documents</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/local.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="local-non-replicating-documents">
+<span id="api-local"></span><h1><span class="section-number">1.7. </span>Local (non-replicating) Documents<a class="headerlink" href="#local-non-replicating-documents" title="Permalink to this heading">¶</a></h1>
+<p>The local (non-replicating) document interface allows you to create local
+documents that are not replicated to other databases. These documents can be
+used to hold configuration or other information that is required specifically
+on the local CouchDB instance.</p>
+<p>Local documents have the following limitations:</p>
+<ul class="simple">
+<li><p>Local documents are not replicated to other databases.</p></li>
+<li><p>Local documents are not output by views, or the <a class="reference internal" href="database/bulk-api.html#api-db-all-docs"><span class="std std-ref">/{db}/_all_docs</span></a> view.</p></li>
+</ul>
+<p>From CouchDB 2.0, Local documents can be listed by using the <a class="reference internal" href="#api-db-local-docs"><span class="std std-ref">/{db}/_local_docs</span></a>
+endpoint.</p>
+<p>Local documents can be used when you want to store configuration or
+other information for the current (local) instance of a given database.</p>
+<p>A list of the available methods and URL paths are provided below:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Path</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GET,
+POST</p></td>
+<td><p>/{db}/_local_docs</p></td>
+<td><p>Returns a list of all the
+non-replicated documents in the database</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p>/{db}/_local_docs/queries</p></td>
+<td><p>Returns a list of specified
+non-replicated documents in the database</p></td>
+</tr>
+<tr class="row-even"><td><p>GET</p></td>
+<td><p>/{db}/_local/{docid}</p></td>
+<td><p>Returns the latest revision of the
+non-replicated document</p></td>
+</tr>
+<tr class="row-odd"><td><p>PUT</p></td>
+<td><p>/{db}/_local/{docid}</p></td>
+<td><p>Inserts a new version of the
+non-replicated document</p></td>
+</tr>
+<tr class="row-even"><td><p>DELETE</p></td>
+<td><p>/{db}/_local/{docid}</p></td>
+<td><p>Deletes the non-replicated document</p></td>
+</tr>
+<tr class="row-odd"><td><p>COPY</p></td>
+<td><p>/{db}/_local/{docid}</p></td>
+<td><p>Copies the non-replicated document</p></td>
+</tr>
+</tbody>
+</table>
+<section id="db-local-docs">
+<span id="api-db-local-docs"></span><h2><span class="section-number">1.7.1. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_local_docs</span></code><a class="headerlink" href="#db-local-docs" title="Permalink to this heading">¶</a></h2>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_local_docs">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_local_docs</span></span><a class="headerlink" href="#get--db-_local_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a JSON structure of all of the local documents in a given
+database. The information is returned as a JSON structure containing meta
+information about the return structure, including a list of all local
+documents and basic contents, consisting the ID, revision and key. The key
+is the from the local document’s <code class="docutils literal notranslate"><span class="pre">_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conflicts</strong> (<em>boolean</em>) – Includes <cite>conflicts</cite> information in response.
+Ignored if <code class="docutils literal notranslate"><span class="pre">include_docs</span></code> isn’t <code class="docutils literal notranslate"><span class="pre">true</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>descending</strong> (<em>boolean</em>) – Return the local documents in descending by
+key order. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>endkey</strong> (<em>string</em>) – Stop returning records when the specified key is
+reached. <em>Optional</em>.</p></li>
+<li><p><strong>end_key</strong> (<em>string</em>) – Alias for <code class="docutils literal notranslate"><span class="pre">endkey</span></code> param.</p></li>
+<li><p><strong>endkey_docid</strong> (<em>string</em>) – Stop returning records when the specified
+local document ID is reached. <em>Optional</em>.</p></li>
+<li><p><strong>end_key_doc_id</strong> (<em>string</em>) – Alias for <code class="docutils literal notranslate"><span class="pre">endkey_docid</span></code> param.</p></li>
+<li><p><strong>include_docs</strong> (<em>boolean</em>) – Include the full content of the local
+documents in the return. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>inclusive_end</strong> (<em>boolean</em>) – Specifies whether the specified end key
+should be included in the result. Default is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – Return only local documents that match the specified
+key. <em>Optional</em>.</p></li>
+<li><p><strong>keys</strong> (<em>string</em>) – Return only local documents that match the specified
+keys. <em>Optional</em>.</p></li>
+<li><p><strong>limit</strong> (<em>number</em>) – Limit the number of the returned local documents to
+the specified number. <em>Optional</em>.</p></li>
+<li><p><strong>skip</strong> (<em>number</em>) – Skip this number of records before starting to return
+the results. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>startkey</strong> (<em>string</em>) – Return records starting with the specified key.
+<em>Optional</em>.</p></li>
+<li><p><strong>start_key</strong> (<em>string</em>) – Alias for <code class="docutils literal notranslate"><span class="pre">startkey</span></code> param.</p></li>
+<li><p><strong>startkey_docid</strong> (<em>string</em>) – Return records starting with the specified
+local document ID. <em>Optional</em>.</p></li>
+<li><p><strong>start_key_doc_id</strong> (<em>string</em>) – Alias for <code class="docutils literal notranslate"><span class="pre">startkey_docid</span></code> param.</p></li>
+<li><p><strong>update_seq</strong> (<em>boolean</em>) – Response includes an <code class="docutils literal notranslate"><span class="pre">update_seq</span></code> value
+indicating which sequence id of the underlying database the view
+reflects. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> (<em>number</em>) – Offset where the local document list started</p></li>
+<li><p><strong>rows</strong> (<em>array</em>) – Array of view row objects. By default the information
+returned contains only the local document ID and revision.</p></li>
+<li><p><strong>total_rows</strong> (<em>number</em>) – Number of local documents in the database. Note
+that this is not the number of rows returned in the actual query.</p></li>
+<li><p><strong>update_seq</strong> (<em>number</em>) – Current update sequence for the database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_local_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 23 Dec 2017 16:22:56 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc01&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc01&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc02&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc02&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc03&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc03&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc04&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc04&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc05&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc05&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_local_docs">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_local_docs</span></span><a class="headerlink" href="#post--db-_local_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.3">POST</a> <cite>_local_docs</cite> functionality supports identical parameters and behavior
+as specified in the <a class="reference internal" href="#get--db-_local_docs" title="GET /{db}/_local_docs"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{db}/_local_docs</span></code></a> API but allows for the query string
+parameters to be supplied as keys in a JSON object in the body of the <cite>POST</cite> request.</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_local_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">70</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;keys&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;_local/localdoc02&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;_local/localdoc05&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The returned JSON is the all documents structure, but with only the
+selected keys in the output:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;total_rows&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;rows&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;rev&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc02&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;key&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc02&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;rev&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc05&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;key&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc05&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;offset&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-local-docs-queries">
+<span id="api-db-local-docs-queries"></span><h2><span class="section-number">1.7.2. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_local_docs/queries</span></code><a class="headerlink" href="#db-local-docs-queries" title="Permalink to this heading">¶</a></h2>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_local_docs-queries">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_local_docs/queries</span></span><a class="headerlink" href="#post--db-_local_docs-queries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Querying with specified <code class="docutils literal notranslate"><span class="pre">keys</span></code> will return local documents only.
+You can also combine <code class="docutils literal notranslate"><span class="pre">keys</span></code> with other query parameters,
+such as <code class="docutils literal notranslate"><span class="pre">limit</span></code> and <code class="docutils literal notranslate"><span class="pre">skip</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – An array of query objects with fields for the
+parameters of each individual view query to be executed.
+The field names and their meaning are the same as the query
+parameters of a regular
+<a class="reference internal" href="#api-db-local-docs"><span class="std std-ref">_local_docs request</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.1">Transfer-Encoding</a></span> – <code class="docutils literal notranslate"><span class="pre">chunked</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results</strong> (<em>array</em>) – An array of result objects - one for each query. Each
+result object contains the same fields as the response to a regular
+<a class="reference internal" href="#api-db-local-docs"><span class="std std-ref">_local_docs request</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid request</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Read permission required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database is missing</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Query execution error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_local_docs/queries</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;queries&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;keys&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;_local/localdoc05&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;_local/not-exist&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;_design/recipe&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;spaghetti&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Thu, 20 Jul 2023 21:45:37 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc05&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc05&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                      </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/not-exist&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;not_found&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc04&quot;</span><span class="p">,</span>
+<span class="w">                  </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/localdoc04&quot;</span><span class="p">,</span>
+<span class="w">                  </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                      </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Similar to <a class="reference internal" href="database/bulk-api.html#api-db-design-docs-queries"><span class="std std-ref">_design_docs/queries</span></a>,
+/{db}/_local_docs/queries will only return local documents.
+The difference is <code class="docutils literal notranslate"><span class="pre">total_rows</span></code> and <code class="docutils literal notranslate"><span class="pre">offset</span></code> are always <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+</div>
+</section>
+<section id="db-local-docid">
+<span id="api-db-local-doc"></span><h2><span class="section-number">1.7.3. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_local/{docid}</span></code><a class="headerlink" href="#db-local-docid" title="Permalink to this heading">¶</a></h2>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_local-docid">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_local/{docid}</span></span><a class="headerlink" href="#get--db-_local-docid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the specified local document. The semantics are identical to accessing
+a standard document in the specified database, except that the document is
+not replicated. See <a class="reference internal" href="document/common.html#get--db-docid" title="GET /{db}/{docid}"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{db}/{docid}</span></code></a>.</p>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--db-_local-docid">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/{db}/_local/{docid}</span></span><a class="headerlink" href="#put--db-_local-docid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the specified local document. The semantics are identical to storing
+a standard document in the specified database, except that the document is
+not replicated. See <a class="reference internal" href="document/common.html#put--db-docid" title="PUT /{db}/{docid}"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/{db}/{docid}</span></code></a>.</p>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--db-_local-docid">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/{db}/_local/{docid}</span></span><a class="headerlink" href="#delete--db-_local-docid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the specified local document. The semantics are identical to
+deleting a standard document in the specified database, except that the
+document is not replicated. See <a class="reference internal" href="document/common.html#delete--db-docid" title="DELETE /{db}/{docid}"><code class="xref http http-delete docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/{db}/{docid}</span></code></a>.</p>
+</dd></dl>
+
+<dl class="http copy">
+<dt class="sig sig-object http" id="copy--db-_local-docid">
+<span class="sig-name descname"><span class="pre">COPY</span> </span><span class="sig-name descname"><span class="pre">/{db}/_local/{docid}</span></span><a class="headerlink" href="#copy--db-_local-docid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the specified local document. The semantics are identical to copying
+a standard document in the specified database, except that the document is
+not replicated. See <a class="reference internal" href="document/common.html#copy--db-docid" title="COPY /{db}/{docid}"><code class="xref http http-copy docutils literal notranslate"><span class="pre">COPY</span> <span class="pre">/{db}/{docid}</span></code></a>.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="partitioned-dbs.html" class="btn btn-neutral float-left" title="1.6. Partitioned Databases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../json-structure.html" class="btn btn-neutral float-right" title="2. JSON Structure Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

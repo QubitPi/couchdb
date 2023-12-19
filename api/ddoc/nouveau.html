@@ -1,0 +1,382 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.5.7. /{db}/_design/{ddoc}/_nouveau/{index} &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/ddoc/nouveau.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.5.9. /{db}/_design/{ddoc}/_show/{func}" href="render.html" />
+    <link rel="prev" title="1.5.5. /{db}/_design/{ddoc}/_search/{index}" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/index.html">1.2. Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database/index.html">1.3. Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../document/index.html">1.4. Documents</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">1.5. Design Documents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common.html">1.5.1. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#db-design-ddoc-attname">1.5.2. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/{attname}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#db-design-ddoc-info">1.5.3. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_info</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="views.html">1.5.4. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_view/{view}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">1.5.5. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_search/{index}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html#db-design-ddoc-search-info-index">1.5.6. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_search_info/{index}</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1.5.7. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_nouveau/{index}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-design-ddoc-nouveau-info-index">1.5.8. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_nouveau_info/{index}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="render.html">1.5.9. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_show/{func}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="render.html#db-design-ddoc-show-func-docid">1.5.10. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_show/{func}/{docid}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="render.html#db-design-ddoc-list-func-view">1.5.11. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_list/{func}/{view}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="render.html#db-design-ddoc-list-func-other-ddoc-view">1.5.12. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_list/{func}/{other-ddoc}/{view}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="render.html#db-design-ddoc-update-func">1.5.13. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_update/{func}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="render.html#db-design-ddoc-update-func-docid">1.5.14. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_update/{func}/{docid}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="rewrites.html">1.5.15. <code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_rewrite/{path}</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../local.html">1.7. Local (non-replicating) Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">1. </span>API Reference</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1.5. </span>Design Documents</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.5.7. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_nouveau/{index}</span></code></li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/ddoc/nouveau.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="db-design-ddoc-nouveau-index">
+<span id="api-ddoc-nouveau"></span><h1><span class="section-number">1.5.7. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_nouveau/{index}</span></code><a class="headerlink" href="#db-design-ddoc-nouveau-index" title="Permalink to this heading">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Nouveau is an experimental feature. Future releases might change how the endpoints
+work and might invalidate existing indexes.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Nouveau endpoints require a running nouveau server.
+See <a class="reference internal" href="../../install/nouveau.html#install-nouveau"><span class="std std-ref">Nouveau Server Installation</span></a> for details.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 4.0.</span></p>
+</div>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_design-ddoc-_nouveau-index">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_design/{ddoc}/_nouveau/{index}</span></span><a class="headerlink" href="#get--db-_design-ddoc-_nouveau-index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes a nouveau request against the named index in the specified design document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+<li><p><strong>ddoc</strong> – Design document name</p></li>
+<li><p><strong>index</strong> – Nouveau index name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bookmark</strong> (<em>string</em>) – A bookmark received from a previous search. This parameter
+enables paging through the results. If there are no more results after the
+bookmark, you get a response with an empty rows array and the same bookmark,
+confirming the end of the result list.</p></li>
+<li><p><strong>counts</strong> (<em>json</em>) – An array of names of string fields for which counts
+are requested. The response contains counts for each unique value of this field
+name among the documents that match the search query.</p></li>
+<li><p><strong>include_docs</strong> (<em>boolean</em>) – Include the full content of the documents in the
+response.</p></li>
+<li><p><strong>locale</strong> (<em>string</em>) – The (Java) locale used to parse numbers in range queries.
+Defaults to the JDK default locale if not specified. Some examples are <code class="docutils literal notranslate"><span class="pre">de</span></code>
+, <code class="docutils literal notranslate"><span class="pre">us</span></code>, <code class="docutils literal notranslate"><span class="pre">gb</span></code>.</p></li>
+<li><p><strong>limit</strong> (<em>number</em>) – Limit the number of the returned documents to the specified
+number. For a grouped search, this parameter limits the number of documents per
+group.</p></li>
+<li><p><strong>query</strong> (<em>string</em>) – Required. The Lucene query string.</p></li>
+<li><p><strong>ranges</strong> (<em>json</em>) – This field defines ranges for numeric search fields. The
+value is a JSON object where the fields names are numeric search fields,
+and the values of the fields are arrays of JSON objects. The objects
+must have a <code class="docutils literal notranslate"><span class="pre">label</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> value (of type string,
+number, number respectively), and optional <code class="docutils literal notranslate"><span class="pre">min_inclusive</span></code> and
+<code class="docutils literal notranslate"><span class="pre">max_inclusive</span></code> properties (defaulting to <code class="docutils literal notranslate"><span class="pre">true</span></code> if not specified).
+Example: <code class="docutils literal notranslate"><span class="pre">{&quot;bar&quot;:[{&quot;label&quot;:&quot;cheap&quot;,&quot;min&quot;:0,&quot;max&quot;:100}]}</span></code></p></li>
+<li><p><strong>sort</strong> (<em>json</em>) – Specifies the sort order of the results.
+The default sort order is relevance. A JSON string of the form
+<code class="docutils literal notranslate"><span class="pre">&quot;fieldname&lt;type&gt;&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;-fieldname&lt;type&gt;&quot;</span></code> for descending order, where
+fieldname is the name of a string or number field, and <code class="docutils literal notranslate"><span class="pre">type</span></code> is either
+<code class="docutils literal notranslate"><span class="pre">double</span></code> or <code class="docutils literal notranslate"><span class="pre">string</span></code>. You can use a single string to sort by one field
+or an array of strings to sort by several fields in the same order as the
+array.
+Some examples are <code class="docutils literal notranslate"><span class="pre">&quot;relevance&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bar&lt;string&gt;&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;-foo&lt;double&gt;&quot;</span></code> and [<code class="docutils literal notranslate"><span class="pre">&quot;-foo&lt;double&gt;&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bar&lt;string&gt;&quot;</span></code>].</p></li>
+<li><p><strong>update</strong> (<em>boolean</em>) – Set to <code class="docutils literal notranslate"><span class="pre">false</span></code> to allow the use of an out-of-date index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.1">Transfer-Encoding</a></span> – <code class="docutils literal notranslate"><span class="pre">chunked</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hits</strong> (<em>array</em>) – Array of search hits. By default the information
+returned contains only the document ID and revision.</p></li>
+<li><p><strong>total_hits</strong> (<em>number</em>) – Number of matches for the query.</p></li>
+<li><p><strong>total_hits_relation</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">EQUAL_TO</span></code> if <code class="docutils literal notranslate"><span class="pre">total_hits</span></code> is exact.
+<code class="docutils literal notranslate"><span class="pre">GREATER_THAN_OR_EQUAL_TO</span></code> if not.</p></li>
+<li><p><strong>bookmark</strong> (<em>string</em>) – Opaque identifier to enable pagination.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid request</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Read permission required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database, design document or view is missed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Faceting is not supported on partitioned searches, so the following
+query parameters should not be used on those requests: <code class="docutils literal notranslate"><span class="pre">counts</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ranges</span></code>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more information about how nouveau works, see the
+<a class="reference internal" href="../../ddocs/nouveau.html#ddoc-nouveau"><span class="std std-ref">Nouveau User Guide</span></a>.</p>
+</div>
+</section>
+<section id="db-design-ddoc-nouveau-info-index">
+<h1><span class="section-number">1.5.8. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_design/{ddoc}/_nouveau_info/{index}</span></code><a class="headerlink" href="#db-design-ddoc-nouveau-info-index" title="Permalink to this heading">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Nouveau is an experimental feature. Future releases might change how the endpoints
+work and might invalidate existing indexes.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Nouveau endpoints require a running nouveau server.
+See <a class="reference internal" href="../../install/nouveau.html#install-nouveau"><span class="std std-ref">Nouveau Server Installation</span></a> for details.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 4.0.</span></p>
+</div>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_design-ddoc-_nouveau_info-index">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_design/{ddoc}/_nouveau_info/{index}</span></span><a class="headerlink" href="#get--db-_design-ddoc-_nouveau_info-index" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+<li><p><strong>ddoc</strong> – Design document name</p></li>
+<li><p><strong>index</strong> – Search index name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Request body is wrong (malformed or missing one of the mandatory fields)</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – A server error (or other kind of error) occurred</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/recipes/_design/cookbook/_search_info/ingredients</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/cookbook/ingredients&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;search_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;num_docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;update_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;disk_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1048576</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="search.html" class="btn btn-neutral float-left" title="1.5.5. /{db}/_design/{ddoc}/_search/{index}" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="render.html" class="btn btn-neutral float-right" title="1.5.9. /{db}/_design/{ddoc}/_show/{func}" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

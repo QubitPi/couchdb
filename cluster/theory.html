@@ -1,0 +1,243 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.1. Theory &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/cluster/theory.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.2. Node Management" href="nodes.html" />
+    <link rel="prev" title="4. Cluster Management" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Cluster Management</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.1. Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes.html">4.2. Node Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databases.html">4.3. Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharding.html">4.4. Shard Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="purging.html">4.5. Clustered Purge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tls_erlang_distribution.html">4.6. TLS Erlang Distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">4.7. Troubleshooting CouchDB 3 with WeatherReport</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">4. </span>Cluster Management</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4.1. </span>Theory</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cluster/theory.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="theory">
+<span id="cluster-theory"></span><h1><span class="section-number">4.1. </span>Theory<a class="headerlink" href="#theory" title="Permalink to this heading">¶</a></h1>
+<p>Before we move on, we need some theory.</p>
+<p>As you see in <code class="docutils literal notranslate"><span class="pre">etc/default.ini</span></code> there is a section called <code class="docutils literal notranslate"><span class="pre">[cluster]</span></code></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[cluster]
+q=2
+n=3
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">q</span></code> - The number of shards.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> - The number of copies there is of every document. Replicas.</p></li>
+</ul>
+<p>When creating a database you can send your own values with request and
+thereby override the defaults in <code class="docutils literal notranslate"><span class="pre">default.ini</span></code>.</p>
+<p>The number of copies of a document with the same revision that have to be read
+before CouchDB returns with a <code class="docutils literal notranslate"><span class="pre">200</span></code> is equal to a half of total copies of
+the document plus one. It is the same for the number of nodes that need to
+save a document before a write is returned with <code class="docutils literal notranslate"><span class="pre">201</span></code>. If there are less
+nodes than that number, then <code class="docutils literal notranslate"><span class="pre">202</span></code> is returned. Both read and write numbers
+can be specified with a request as <code class="docutils literal notranslate"><span class="pre">r</span></code> and <code class="docutils literal notranslate"><span class="pre">w</span></code> parameters accordingly.</p>
+<p>We will focus on the shards and replicas for now.</p>
+<p>A shard is a part of a database. It can be replicated multiple times. The more
+copies of a shard, the more you can scale out. If you have 4 replicas, that
+means that all 4 copies of this specific shard will live on at most 4 nodes.
+No node can have more than one copy of each shard replica. The default for
+CouchDB since 3.0.0 is <code class="docutils literal notranslate"><span class="pre">q=2</span></code> and <code class="docutils literal notranslate"><span class="pre">n=3</span></code>, meaning each database (and secondary
+index) is split into 2 shards, with 3 replicas per shard, for a total of 6
+shard replica files. For a CouchDB cluster only hosting a single database with
+these default values, a maximum of 6 nodes can be used to scale horizontally.</p>
+<p>Replicas add failure resistance, as some nodes can be offline without everything
+crashing down.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n=1</span></code> All nodes must be up.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n=2</span></code> Any 1 node can be down.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n=3</span></code> Any 2 nodes can be down.</p></li>
+<li><p>etc</p></li>
+</ul>
+<p>Computers go down and sysadmins pull out network cables in a furious rage from
+time to time, so using <code class="docutils literal notranslate"><span class="pre">n&lt;2</span></code> is asking for downtime. Having too high a value
+of <code class="docutils literal notranslate"><span class="pre">n</span></code> adds servers and complexity without any real benefit. The sweet spot is
+at <code class="docutils literal notranslate"><span class="pre">n=3</span></code>.</p>
+<p>Say that we have a database with 3 replicas and 4 shards. That would give us a
+maximum of 12 nodes: 4*3=12.</p>
+<p>We can lose any 2 nodes and still read and write all documents.</p>
+<p>What happens if we lose more nodes? It depends on how lucky we are. As long as
+there is at least one copy of every shard online, we can read and write all
+documents.</p>
+<p>So, if we are very lucky then we can lose 8 nodes at maximum.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="4. Cluster Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nodes.html" class="btn btn-neutral float-right" title="4.2. Node Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

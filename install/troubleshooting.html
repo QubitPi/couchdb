@@ -1,0 +1,524 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.10. Troubleshooting an Installation &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/install/troubleshooting.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Setup" href="../setup/index.html" />
+    <link rel="prev" title="1.9. Upgrading from prior CouchDB releases" href="upgrading.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Installation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="unix.html">1.1. Installation on Unix-like systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">1.2. Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mac.html">1.3. Installation on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="freebsd.html">1.4. Installation on FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html">1.5. Installation via Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kubernetes.html">1.6. Installation on Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search.html">1.7. Search Plugin Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nouveau.html">1.8. Nouveau Server Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrading.html">1.9. Upgrading from prior CouchDB releases</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.10. Troubleshooting an Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#first-install">1.10.1. First Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-build">1.10.2. Quick Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upgrading">1.10.3. Upgrading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#runtime-errors">1.10.4. Runtime Errors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#erlang-stack-trace-contains-system-limit-open-port-or-emfile">1.10.4.1. Erlang stack trace contains <code class="docutils literal notranslate"><span class="pre">system_limit</span></code>, <code class="docutils literal notranslate"><span class="pre">open_port</span></code>, or <code class="docutils literal notranslate"><span class="pre">emfile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lots-of-memory-being-used-on-startup">1.10.4.2. Lots of memory being used on startup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-raised-exception-cannot-encode-undefined-value-as-json">1.10.4.3. function raised exception (Cannot encode ‘undefined’ value as JSON)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#erlang-stack-trace-contains-bad-utf8-character-code">1.10.4.4. erlang stack trace contains <code class="docutils literal notranslate"><span class="pre">bad_utf8_character_code</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fips-mode">1.10.4.5. FIPS mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#debugging-startup">1.10.4.6. Debugging startup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#macos-known-issues">1.10.5. macOS Known Issues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#undefined-error-exit-status-134">1.10.5.1. undefined error, exit_status 134</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Installation</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.10. </span>Troubleshooting an Installation</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/install/troubleshooting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="troubleshooting-an-installation">
+<span id="install-troubleshooting"></span><h1><span class="section-number">1.10. </span>Troubleshooting an Installation<a class="headerlink" href="#troubleshooting-an-installation" title="Permalink to this heading">¶</a></h1>
+<section id="first-install">
+<h2><span class="section-number">1.10.1. </span>First Install<a class="headerlink" href="#first-install" title="Permalink to this heading">¶</a></h2>
+<p>If your CouchDB doesn’t start after you’ve just installed, check the following
+things:</p>
+<ul class="simple">
+<li><p>On UNIX-like systems, this is usually this is a permissions issue. Ensure
+that you’ve followed the <a class="reference internal" href="unix.html#install-unix-security"><span class="std std-ref">User Registration and Security</span></a>
+<code class="docutils literal notranslate"><span class="pre">chown</span></code>/<code class="docutils literal notranslate"><span class="pre">chmod</span></code> commands. This problem is indicated by the presence of
+the keyword <code class="docutils literal notranslate"><span class="pre">eacces</span></code> somewhere in the error output from CouchDB itself.</p></li>
+<li><p>Some Linux distributions split up Erlang into multiple packages. For your
+distribution, check that you <strong>really</strong> installed all the required Erlang
+modules. This varies from platform to platform, so you’ll just have to
+work it out for yourself. For example, on recent versions of Ubuntu/Debian,
+the <code class="docutils literal notranslate"><span class="pre">erlang</span></code> package includes all Erlang modules.</p></li>
+<li><p>Confirm that Erlang itself starts up with crypto (SSL) support:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>## what version of erlang are you running? Ensure it is supported
+erl -noshell -eval &#39;io:put_chars(erlang:system_info(otp_release)).&#39; -s erlang halt
+## are the erlang crypto (SSL) libraries working?
+erl -noshell -eval &#39;case application:load(crypto) of ok -&gt; io:put_chars(&quot;yay_crypto\n&quot;) ; _ -&gt; exit(no_crypto) end.&#39; -s init stop
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Next, identify where your Erlang CouchDB libraries are installed. This will
+typically be the lib/ subdirectory of the release that you have installed.</p></li>
+<li><p>Use this to start up Erlang with the CouchDB libraries in its path:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>erl -env ERL_LIBS $ERL_LIBS:/path/to/couchdb/lib -couch_ini -s crypto
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>In that Erlang shell, let’s check that the key libraries are running. The
+<code class="docutils literal notranslate"><span class="pre">%%</span></code> lines are comments, so you can skip them:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>%% test SSL support. If this fails, ensure you have the OTP erlang-crypto library installed
+crypto:md5_init().
+
+%% test Snappy compression. If this fails, check your CouchDB configure script output or alternatively
+%% if your distro comes with erlang-snappy make sure you&#39;re using only the CouchDB supplied version
+snappy:compress(&quot;gogogogogogogogogogogogogogo&quot;).
+
+%% test the CouchDB JSON encoder. CouchDB uses different encoders in each release, this one matches
+%% what is used in 2.0.x.
+jiffy:decode(jiffy:encode(&lt;&lt;&quot;[1,2,3,4,5]&quot;&gt;&gt;)).
+
+%% this is how you quit the erlang shell.
+q().
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The output should resemble this, or an error will be thrown:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Erlang/OTP 17 [erts-6.2] [source] [64-bit] [smp:2:2] [async-threads:10] [kernel-poll:false]
+
+Eshell V6.2  (abort with ^G)
+1&gt; crypto:md5_init().
+&lt;&lt;1,35,69,103,137,171,205,239,254,220,186,152,118,84,50,
+  16,0,0,0,0,0,0,0,0,0,0,0,0,0,...&gt;&gt;
+2&gt; snappy:compress(&quot;gogogogogogogogogogogogogogo&quot;).
+{ok,&lt;&lt;28,4,103,111,102,2,0&gt;&gt;}
+3&gt; jiffy:decode(jiffy:encode(&lt;&lt;&quot;[1,2,3,4,5]&quot;&gt;&gt;)).
+&lt;&lt;&quot;[1,2,3,4,5]&quot;&gt;&gt;
+4&gt; q().
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>At this point the only remaining dependency is your system’s Unicode support
+library, ICU, and the Spidermonkey Javascript VM from Mozilla. Make sure that
+your <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> or equivalent for non-Linux systems
+(<code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH</span></code> on macOS) makes these available to CouchDB.
+Linux example running as normal user:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  LD_LIBRARY_PATH=/usr/local/lib:/usr/local/spidermonkey/lib couchdb
+
+Linux example running as couchdb user:
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>echo LD_LIBRARY_PATH=/usr/local/lib:/usr/local/spidermonkey/lib couchdb | sudo -u couchdb sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you receive an error message including the key word <code class="docutils literal notranslate"><span class="pre">eaddrinuse</span></code>,
+such as this:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  Failure to start Mochiweb: eaddrinuse
+
+edit your ``etc/default.ini`` or ``etc/local.ini`` file and change the
+``[chttpd] port = 5984`` line to an available port.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you receive an error including the string:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>… OS Process Error … {os_process_error,{exit_status,127}}
+</pre></div>
+</div>
+<p>then it is likely your SpiderMonkey JavaScript VM installation is not
+correct. Please recheck your build dependencies and try again.</p>
+<ul class="simple">
+<li><p>If you receive an error including the string:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>… OS Process Error … {os_process_error,{exit_status,139}}
+</pre></div>
+</div>
+<p>this is caused by the fact that SELinux blocks access to certain areas of
+the file system. You must re-configure SELinux, or you can fully disable
+SELinux using the command:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>setenforce 0
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you are still not able to get CouchDB to start at this point, keep
+reading.</p></li>
+</ul>
+</section>
+<section id="quick-build">
+<h2><span class="section-number">1.10.2. </span>Quick Build<a class="headerlink" href="#quick-build" title="Permalink to this heading">¶</a></h2>
+<p>Having problems getting CouchDB to run for the first time? Follow this simple
+procedure and report back to the user mailing list or IRC with the output
+of each step. Please put the output of these steps into a paste service (such
+as <a class="reference external" href="https://paste.ee/">https://paste.ee/</a>) rather than including the output of your entire
+run in IRC or the mailing list directly.</p>
+<ol class="arabic simple">
+<li><p>Note down the name and version of your operating system and your processor
+architecture.</p></li>
+<li><p>Note down the installed versions of CouchDB’s dependencies.</p></li>
+<li><p>Follow the checkout instructions to get a fresh copy of CouchDB’s trunk.</p></li>
+<li><p>Configure from the couchdb directory:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>./configure
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Build the release:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>make release
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Run the couchdb command and log the output:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cd rel/couchdb
+bin/couchdb
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Use your system’s kernel trace tool and log the output of the above command.</p>
+<ol class="loweralpha simple">
+<li><p>For example, linux systems should use <code class="docutils literal notranslate"><span class="pre">strace</span></code>:</p></li>
+</ol>
+</li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>strace bin/couchdb 2&gt; strace.out
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>Report back to the mailing list (or IRC) with the output of each step.</p></li>
+</ol>
+</section>
+<section id="upgrading">
+<h2><span class="section-number">1.10.3. </span>Upgrading<a class="headerlink" href="#upgrading" title="Permalink to this heading">¶</a></h2>
+<p>Are you upgrading from CouchDB 1.x? Install CouchDB into a fresh directory.
+CouchDB’s directory layout has changed and may be confused by libraries
+present from previous releases.</p>
+</section>
+<section id="runtime-errors">
+<h2><span class="section-number">1.10.4. </span>Runtime Errors<a class="headerlink" href="#runtime-errors" title="Permalink to this heading">¶</a></h2>
+<section id="erlang-stack-trace-contains-system-limit-open-port-or-emfile">
+<h3><span class="section-number">1.10.4.1. </span>Erlang stack trace contains <code class="docutils literal notranslate"><span class="pre">system_limit</span></code>, <code class="docutils literal notranslate"><span class="pre">open_port</span></code>, or <code class="docutils literal notranslate"><span class="pre">emfile</span></code><a class="headerlink" href="#erlang-stack-trace-contains-system-limit-open-port-or-emfile" title="Permalink to this heading">¶</a></h3>
+<p>Modern Erlang has a default limit of 65536 ports (8196 on Windows), where each
+open file handle, tcp connection, and linked-in driver uses one port. OSes have
+different soft and hard limits on the number of open handles per process, often
+as low as 1024 or 4096 files. You’ve probably exceeded this.</p>
+<p>There are two settings that need changing to increase this value. Consult your
+OS documentation for how to increase the limit for your process. Under Linux
+and systemd, this setting can be adjusted via <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">edit</span> <span class="pre">couchdb</span></code> and
+adding the lines:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[Service]</span>
+<span class="na">LimitNOFILE</span><span class="o">=</span><span class="s">65536</span>
+</pre></div>
+</div>
+<p>to the file in the editor.</p>
+<p>To increase this value higher than 65536, you must also add the Erlang <code class="docutils literal notranslate"><span class="pre">+Q</span></code>
+parameter to your <code class="docutils literal notranslate"><span class="pre">etc/vm.args</span></code> file by adding the line:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>+Q 102400
+</pre></div>
+</div>
+<p>The old <code class="docutils literal notranslate"><span class="pre">ERL_MAX_PORTS</span></code> environment variable is ignored by the version of
+Erlang supplied with CouchDB.</p>
+</section>
+<section id="lots-of-memory-being-used-on-startup">
+<h3><span class="section-number">1.10.4.2. </span>Lots of memory being used on startup<a class="headerlink" href="#lots-of-memory-being-used-on-startup" title="Permalink to this heading">¶</a></h3>
+<p>Is your CouchDB using a lot of memory (several hundred MB) on startup? This one
+seems to especially affect Dreamhost installs. It’s really an issue with the
+Erlang VM pre-allocating data structures when ulimit is very large or
+unlimited. A detailed discussion can be found on the erlang-questions list,
+but the short answer is that you should decrease <code class="docutils literal notranslate"><span class="pre">ulimit</span> <span class="pre">-n</span></code> or lower the
+<code class="docutils literal notranslate"><span class="pre">vm.args</span></code> parameter <code class="docutils literal notranslate"><span class="pre">+Q</span></code> to something reasonable like 1024.</p>
+</section>
+<section id="function-raised-exception-cannot-encode-undefined-value-as-json">
+<h3><span class="section-number">1.10.4.3. </span>function raised exception (Cannot encode ‘undefined’ value as JSON)<a class="headerlink" href="#function-raised-exception-cannot-encode-undefined-value-as-json" title="Permalink to this heading">¶</a></h3>
+<p>If you see this in the CouchDB error logs, the JavaScript code you are using
+for either a map or reduce function is referencing an object member that is
+not defined in at least one document in your database. Consider this
+document:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;_id&quot;:&quot;XYZ123&quot;,
+  &quot;_rev&quot;:&quot;1BB2BB&quot;,
+  &quot;field&quot;:&quot;value&quot;
+}
+</pre></div>
+</div>
+<p>and this map function:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">emit</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">address</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will fail on the above document, as it does not contain a <code class="docutils literal notranslate"><span class="pre">name</span></code> or
+<code class="docutils literal notranslate"><span class="pre">address</span></code> member. Instead, use guarding to make sure the function only
+accesses members when they exist in a document:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">name</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">emit</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">address</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>While the above guard will work in most cases, it’s worth bearing JavaScript’s
+understanding of ‘false’ values in mind. Testing against a property with a
+value of 0 (zero), <code class="docutils literal notranslate"><span class="pre">''</span></code> (empty String), <code class="docutils literal notranslate"><span class="pre">false</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code> will return
+false. If this is undesired, a guard of the form <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(doc.foo</span> <span class="pre">!==</span> <span class="pre">undefined)</span></code>
+should do the trick.</p>
+<p>This error can also be caused if a reduce function does not return a value. For
+example, this reduce function will cause an error:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="w"> </span><span class="nx">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">sum</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The function needs to return a value:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="w"> </span><span class="nx">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">sum</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="erlang-stack-trace-contains-bad-utf8-character-code">
+<h3><span class="section-number">1.10.4.4. </span>erlang stack trace contains <code class="docutils literal notranslate"><span class="pre">bad_utf8_character_code</span></code><a class="headerlink" href="#erlang-stack-trace-contains-bad-utf8-character-code" title="Permalink to this heading">¶</a></h3>
+<p>CouchDB 1.1.1 and later contain stricter handling of UTF8 encoding. If you are
+replicating from older versions to newer versions, then this error may occur
+during replication.</p>
+<p>A number of work-arounds exist; the simplest is to do an in-place upgrade of
+the relevant CouchDB and then compact prior to replicating.</p>
+<p>Alternatively, if the number of documents impacted is small, use filtered
+replication to exclude only those documents.</p>
+</section>
+<section id="fips-mode">
+<h3><span class="section-number">1.10.4.5. </span>FIPS mode<a class="headerlink" href="#fips-mode" title="Permalink to this heading">¶</a></h3>
+<p>Operating systems can be configured to disallow the use of OpenSSL MD5 hash
+functions in order to prevent use of MD5 for cryptographic purposes. CouchDB
+makes use of MD5 hashes for verifying the integrity of data (and not for
+cryptography) and will not run without the ability to use MD5 hashes.</p>
+<p>The message below indicates that the operating system is running in “FIPS mode,”
+which, among other restrictions, does not allow the use of OpenSSL’s
+MD5 functions:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>md5_dgst.c(82): OpenSSL internal error, assertion failed: Digest MD5 forbidden in FIPS mode!
+[os_mon] memory supervisor port (memsup): Erlang has closed
+[os_mon] cpu supervisor port (cpu_sup): Erlang has closed
+Aborted
+</pre></div>
+</div>
+<p>A workaround for this is provided with the <code class="docutils literal notranslate"><span class="pre">--erlang-md5</span></code> compile flag. Use of
+the flag results in CouchDB substituting the OpenSSL MD5 function calls with
+equivalent calls to Erlang’s built-in library <code class="docutils literal notranslate"><span class="pre">erlang:md5.</span></code> NOTE: there may be
+a performance penalty associated with this workaround.</p>
+<p>Because CouchDB does not make use of MD5 hashes for cryptographic purposes, this
+workaround does not defeat the purpose of “FIPS mode,” provided that the system
+owner is aware of and consents to its use.</p>
+</section>
+<section id="debugging-startup">
+<h3><span class="section-number">1.10.4.6. </span>Debugging startup<a class="headerlink" href="#debugging-startup" title="Permalink to this heading">¶</a></h3>
+<p>If you’ve compiled from scratch and are having problems getting CouchDB to even
+start up, you may want to see more detail. Start by enabling logging at the debug
+level:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[log]</span>
+<span class="na">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">debug</span>
+</pre></div>
+</div>
+<p>You can then pass the <code class="docutils literal notranslate"><span class="pre">-init_debug</span> <span class="pre">+W</span> <span class="pre">i</span> <span class="pre">+v</span> <span class="pre">+V</span> <span class="pre">-emu_args</span></code> flags in the <code class="docutils literal notranslate"><span class="pre">ERL_FLAGS</span></code>
+environment variable to turn on additional debugging information that CouchDB
+developers can use to help you.</p>
+<p>Then, reach out to the CouchDB development team using the links provided on the
+<a class="reference external" href="https://couchdb.apache.org/">CouchDB home page</a> for assistance.</p>
+</section>
+</section>
+<section id="macos-known-issues">
+<h2><span class="section-number">1.10.5. </span>macOS Known Issues<a class="headerlink" href="#macos-known-issues" title="Permalink to this heading">¶</a></h2>
+<section id="undefined-error-exit-status-134">
+<h3><span class="section-number">1.10.5.1. </span>undefined error, exit_status 134<a class="headerlink" href="#undefined-error-exit-status-134" title="Permalink to this heading">¶</a></h3>
+<p>Sometimes the <code class="docutils literal notranslate"><span class="pre">Verify</span> <span class="pre">Installation</span></code> fails with an <code class="docutils literal notranslate"><span class="pre">undefined</span></code> error.
+This could be due to a missing dependency with Mac.
+In the logs, you will find <code class="docutils literal notranslate"><span class="pre">couchdb</span> <span class="pre">exit_status,134</span></code>.</p>
+<p>Installing the missing <code class="docutils literal notranslate"><span class="pre">nspr</span></code> via <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">nspr</span></code> resolves the issue.
+(see: <a class="reference external" href="https://github.com/apache/couchdb/issues/979">https://github.com/apache/couchdb/issues/979</a>)</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="upgrading.html" class="btn btn-neutral float-left" title="1.9. Upgrading from prior CouchDB releases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../setup/index.html" class="btn btn-neutral float-right" title="2. Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

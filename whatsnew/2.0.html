@@ -1,0 +1,342 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.8. 2.0.x Branch &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/whatsnew/2.0.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.9. 1.7.x Branch" href="1.7.html" />
+    <link rel="prev" title="1.7. 2.1.x Branch" href="2.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Release Notes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="3.3.html">1.1. 3.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2.html">1.2. 3.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.1.html">1.3. 3.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.0.html">1.4. 3.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3.html">1.5. 2.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2.html">1.6. 2.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.1.html">1.7. 2.1.x Branch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.8. 2.0.x Branch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#version-2-0-0">1.8.1. Version 2.0.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-notes">1.8.2. Upgrade Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-issues">1.8.3. Known Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#breaking-changes">1.8.4. Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1.7.html">1.9. 1.7.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.6.html">1.10. 1.6.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.5.html">1.11. 1.5.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4.html">1.12. 1.4.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3.html">1.13. 1.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2.html">1.14. 1.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.1.html">1.15. 1.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.0.html">1.16. 1.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.11.html">1.17. 0.11.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.10.html">1.18. 0.10.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.9.html">1.19. 0.9.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.8.html">1.20. 0.8.x Branch</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Release Notes</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.8. </span>2.0.x Branch</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/whatsnew/2.0.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x-branch">
+<span id="release-2-0-x"></span><h1><span class="section-number">1.8. </span>2.0.x Branch<a class="headerlink" href="#x-branch" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#version-2-0-0" id="id2">Version 2.0.0</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-notes" id="id3">Upgrade Notes</a></p></li>
+<li><p><a class="reference internal" href="#known-issues" id="id4">Known Issues</a></p></li>
+<li><p><a class="reference internal" href="#breaking-changes" id="id5">Breaking Changes</a></p></li>
+</ul>
+</nav>
+<section id="version-2-0-0">
+<span id="release-2-0-0"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">1.8.1. </span>Version 2.0.0</a><a class="headerlink" href="#version-2-0-0" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Native clustering is now supported. Rather than use CouchDB replication
+between multiple, distinct CouchDB servers, configure a cluster of CouchDB
+nodes. These nodes will use an optimized Erlang-driven ‘internal replication’
+to ensure data durability and accessibility. Combine a clustered CouchDB with
+a load balancer (such as <code class="docutils literal notranslate"><span class="pre">haproxy</span></code>) to scale CouchDB out horizontally. More
+details of the clustering feature are available in the <a class="reference internal" href="../cluster/index.html#cluster"><span class="std std-ref">Cluster Management</span></a>.</p></li>
+<li><p><cite>Futon</cite> replaced by brand-new, completely re-engineered <cite>Fauxton</cite> interface.
+URL remains the same.</p></li>
+<li><p>The new Mango Query Server provides a simple JSON-based way to perform CouchDB
+queries without JavaScript or MapReduce. Mango Queries have a similar indexing
+speed advantage over JavaScript Queries than the Erlang Queries have (2x-10x
+faster indexing depending on doc size and system configuration). We recommend
+all new apps start using Mango as a default. Further details are available
+in the <a class="reference internal" href="../api/database/find.html#api-db-find"><span class="std std-ref">_find, _index and _explain API</span></a>.</p></li>
+<li><p>Mango <a class="reference internal" href="../api/database/changes.html#changes-filter-selector"><span class="std std-ref">selectors</span></a> can be used in _changes
+feeds instead of JavaScript MapReduce filters. Mango has been tested to be
+up to an order of magnitude (10x) faster than JavaScript in this application.</p></li>
+<li><p><a class="reference internal" href="../api/ddoc/rewrites.html#api-ddoc-rewrite"><span class="std std-ref">Rewrite rules</span></a> for URLs can be performed using
+JavaScript functions.</p></li>
+<li><p><a class="reference internal" href="../api/ddoc/views.html#api-ddoc-view-multiple-queries"><span class="std std-ref">Multiple queries</span></a> can be made of a
+view with a single HTTP request.</p></li>
+<li><p>Views can be queried with sorting turned off ( <code class="docutils literal notranslate"><span class="pre">sorted=false</span></code>) for a
+performance boost.</p></li>
+<li><p>The global changes feed has been enhanced. It is now resumable and persistent.</p></li>
+<li><p>New endpoints added (documentation forthcoming):</p>
+<ul>
+<li><p><a class="reference internal" href="../api/server/common.html#api-server-membership"><span class="std std-ref">/_membership</span></a> shows all nodes in a cluster</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/_bulk_get</span></code> speeds up the replication protocol over low-latency
+connections</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/_node/</span></code> api to access individual nodes’ configuration and compaction
+features</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/_cluster_setup</span></code> api to set up a cluster from scratch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/_up</span></code> api to signal health of a node to a load-balancer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/db/_local_docs</span></code> and <code class="docutils literal notranslate"><span class="pre">/db/_design_docs</span></code> (similar to <code class="docutils literal notranslate"><span class="pre">/db/_all_docs</span></code>)</p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">/_log</span></code> endpoint was removed.</p></li>
+<li><p>“Backend” interface on port 5986 used for specific cluster admin tasks. Of
+interest are the <code class="docutils literal notranslate"><span class="pre">_nodes</span></code> and <code class="docutils literal notranslate"><span class="pre">_dbs</span></code> databases visible only through this
+interface.</p></li>
+<li><p>Support added for Erlang/OTP 17.x, 18.x and 19</p></li>
+<li><p>New streamlined build system written for Unix-like systems and Microsoft
+Windows</p></li>
+<li><p><a class="reference internal" href="../api/server/configuration.html#api-config"><span class="std std-ref">Configuration</span></a> has moved from <code class="docutils literal notranslate"><span class="pre">/_config</span></code> to
+<code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">instance_start_time</span></code> now always reports <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code>.</p></li>
+</ul>
+</section>
+<section id="upgrade-notes">
+<span id="release-2-0-x-upgrade"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">1.8.2. </span>Upgrade Notes</a><a class="headerlink" href="#upgrade-notes" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The update sequences returned by the <a class="reference internal" href="../api/database/changes.html#api-db-changes"><span class="std std-ref">/{db}/_changes</span></a> feed are no longer
+integers. They can be any JSON value. Applications should treat them as opaque
+values and return them to CouchDB as-is.</p></li>
+<li><p>Temporary views are no longer supported.</p></li>
+<li><p>It is possible to have multiple replicator databases.
+<code class="docutils literal notranslate"><span class="pre">replicator/db</span></code> config option has been removed.
+Instead <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> and any database names ending
+with the <code class="docutils literal notranslate"><span class="pre">/_replicator</span></code> suffix will be recognized as
+replicator databases by the system.</p></li>
+<li><p>Note that the semantics of some API calls have changed due to the introduction
+of the clustering feature. Specifically, make note of the difference between
+receiving a <code class="docutils literal notranslate"><span class="pre">201</span></code> and a <code class="docutils literal notranslate"><span class="pre">202</span></code> when storing a document.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">all_or_nothing</span></code> is no longer supported by the <a class="reference internal" href="../api/database/bulk-api.html#api-db-bulk-docs"><span class="std std-ref">bulk_docs</span></a> API</p></li>
+<li><p>After updating a design document containing a <code class="docutils literal notranslate"><span class="pre">show</span></code>, an immediate GET to
+that same <code class="docutils literal notranslate"><span class="pre">show</span></code> function may still return results from the previous
+definition. This is due to design document caching, which may take a few
+seconds to fully evict, or longer (up to ~30s) for a clustered installation.</p></li>
+</ul>
+</section>
+<section id="known-issues">
+<span id="release-2-0-x-knownissues"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.8.3. </span>Known Issues</a><a class="headerlink" href="#known-issues" title="Permalink to this heading">¶</a></h2>
+<p>All <a class="reference external" href="https://s.apache.org/couchdb-2.0-known-issues">known issues</a> filed against the 2.0 release are contained within the
+official <cite>CouchDB JIRA instance</cite> or <cite>CouchDB GitHub Issues</cite>.</p>
+<p>The following are some highlights of known issues for which fixes did not land
+in time for the 2.0.0 release:</p>
+<ul>
+<li><p><a class="reference external" href="https://issues.apache.org/jira/browse/COUCHDB-2980">COUCHDB-2980</a>: The replicator (whether invoked via <code class="docutils literal notranslate"><span class="pre">_replicate</span></code> or a
+document stored in the <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> database) understands two kinds of
+source and target:</p>
+<ol class="arabic simple">
+<li><p>A URL (e.g., <code class="docutils literal notranslate"><span class="pre">https://foo:bar&#64;foo.com/db1</span></code>), called a “remote” source or
+target</p></li>
+<li><p>A database name (e.g., <code class="docutils literal notranslate"><span class="pre">db1</span></code>), called a “local” source or target.</p></li>
+</ol>
+<p>Whenever the latter type is used, this refers to a local unclustered
+database, not a clustered one.</p>
+<p>In a future release we hope to support “local” source or target specs to
+clustered databases. For now, we recommend always using the URL format for
+both source and target specifications.</p>
+</li>
+<li><p><a class="reference external" href="https://issues.apache.org/jira/browse/COUCHDB-3034">COUCHDB-3034</a>: CouchDB will occasionally return 500 errors when multiple
+clients attempt to PUT or DELETE the same database concurrently.</p></li>
+<li><p><a class="reference external" href="https://issues.apache.org/jira/browse/COUCHDB-3119">COUCHDB-3119</a>: Adding nodes to a cluster fails if the Erlang node name
+is not <code class="docutils literal notranslate"><span class="pre">couchdb</span></code> (of the form <code class="docutils literal notranslate"><span class="pre">couchdb&#64;hostname</span></code>.)</p></li>
+<li><p><a class="reference external" href="https://issues.apache.org/jira/browse/COUCHDB-3050">COUCHDB-3050</a>: Occasionally the <code class="docutils literal notranslate"><span class="pre">dev/run</span></code> script used for development
+purposes to start a local 3-node cluster will fail to start one or more
+nodes.</p></li>
+<li><p><a class="reference external" href="https://issues.apache.org/jira/browse/COUCHDB-2817">COUCHDB-2817</a>: The compaction daemon will only compact views for shards
+that contain the design document.</p></li>
+<li><p><a class="reference external" href="https://issues.apache.org/jira/browse/COUCHDB-2804">COUCHDB-2804</a>: The fast_view optimization is not enabled on the clustered
+interface.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/656">#656</a>: The OAuth 1.0 support is broken and deprecated. It will be
+removed in a future version of CouchDB.</p></li>
+</ul>
+</section>
+<section id="breaking-changes">
+<span id="release-2-0-x-breakingchanges"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.8.4. </span>Breaking Changes</a><a class="headerlink" href="#breaking-changes" title="Permalink to this heading">¶</a></h2>
+<p>The following changes in 2.0 represent a significant deviation from
+CouchDB 1.x and may alter behaviour of systems designed to work with
+older versions of CouchDB:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/620">#620</a>: <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/dbname</span></code> no longer returns an ETag response header,
+in compliance with RFC 7231, Section 7.2.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="2.1.html" class="btn btn-neutral float-left" title="1.7. 2.1.x Branch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="1.7.html" class="btn btn-neutral float-right" title="1.9. 1.7.x Branch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

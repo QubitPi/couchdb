@@ -1,0 +1,256 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.3. Backing up CouchDB &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/maintenance/backups.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Fauxton" href="../fauxton/index.html" />
+    <link rel="prev" title="5.2. Performance" href="performance.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. Maintenance</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">5.1. Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">5.2. Performance</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.3. Backing up CouchDB</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-backups">5.3.1. Database Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-backups">5.3.2. Configuration Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#log-backups">5.3.3. Log Backups</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">5. </span>Maintenance</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5.3. </span>Backing up CouchDB</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/maintenance/backups.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="backing-up-couchdb">
+<span id="backups"></span><h1><span class="section-number">5.3. </span>Backing up CouchDB<a class="headerlink" href="#backing-up-couchdb" title="Permalink to this heading">¶</a></h1>
+<p>CouchDB has three different types of files it can create during runtime:</p>
+<ul class="simple">
+<li><p>Database files (including secondary indexes)</p></li>
+<li><p>Configuration files (<code class="docutils literal notranslate"><span class="pre">*.ini</span></code>)</p></li>
+<li><p>Log files (if configured to log to disk)</p></li>
+</ul>
+<p>Below are strategies for ensuring consistent backups of all of these files.</p>
+<section id="database-backups">
+<h2><span class="section-number">5.3.1. </span>Database Backups<a class="headerlink" href="#database-backups" title="Permalink to this heading">¶</a></h2>
+<p>The simplest and easiest approach for CouchDB backup is to use <a class="reference internal" href="../replication/index.html#replication"><span class="std std-ref">CouchDB
+replication</span></a> to another CouchDB installation.  You can choose
+between <a class="reference internal" href="../replication/replicator.html#normal-vs-continuous-replications"><span class="std std-ref">normal (one-shot) or continuous replications</span></a> depending on your need.</p>
+<p>However, you can also copy the actual <code class="docutils literal notranslate"><span class="pre">.couch</span></code> files from the CouchDB data
+directory (by default, <code class="docutils literal notranslate"><span class="pre">data/</span></code>) at any time, without problem. CouchDB’s
+append-only storage format for both databases and secondary indexes ensures that
+this will work without issue.</p>
+<p>To ensure reliability of backups, it is recommended that you <em>back up secondary
+indexes</em> (stored under <code class="docutils literal notranslate"><span class="pre">data/.shards</span></code>) <em>prior to backing up the main database
+files</em> (stored under <code class="docutils literal notranslate"><span class="pre">data/shards</span></code> as well as the system-level databases at the
+parent <code class="docutils literal notranslate"><span class="pre">data/</span></code> directory). This is because CouchDB will automatically handle
+views/secondary indexes that are slightly out of date by updating them on the
+next read access, but views or secondary indexes that are <em>newer</em> than their
+associated databases will trigger a <em>full rebuild of the index</em>. This can be a
+very costly and time-consuming operation, and can impact your ability to
+recover quickly in a disaster situation.</p>
+<p>On supported operating systems/storage environments, you can also make use of
+<a class="reference external" href="https://en.wikipedia.org/wiki/Snapshot_(computer_storage)">storage snapshots</a>.
+These have the advantage of being near-instantaneous when working with block
+storage systems such as <a class="reference external" href="https://en.wikipedia.org/wiki/ZFS">ZFS</a> or <a class="reference external" href="https://en.wikipedia.org/wiki/Logical_Volume_Manager_(Linux)">LVM</a> or <a class="reference external" href="https://en.wikipedia.org/wiki/Amazon_Elastic_Block_Store">Amazon EBS</a>. When using
+snapshots at the block-storage level, be sure to quiesce the file system with an
+OS-level utility such as Linux’s <a class="reference external" href="https://linux.die.net/man/8/fsfreeze">fsfreeze</a> if necessary. If unsure, consult your
+operating system’s or cloud provider’s documentation for more detail.</p>
+</section>
+<section id="configuration-backups">
+<h2><span class="section-number">5.3.2. </span>Configuration Backups<a class="headerlink" href="#configuration-backups" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB’s <a class="reference internal" href="../config/intro.html#config-intro"><span class="std std-ref">configuration system</span></a> stores data in <code class="docutils literal notranslate"><span class="pre">.ini</span></code> files
+under the configuration directory (by default, <code class="docutils literal notranslate"><span class="pre">etc/</span></code>). If changes are made
+to the configuration at runtime, the very last file in the configuration chain
+will be updated with the changes.</p>
+<p>Simple back up the entire <code class="docutils literal notranslate"><span class="pre">etc/</span></code> directory to ensure a consistent configuration
+after restoring from backup.</p>
+<p>If no changes to the configuration are made at runtime through the HTTP API,
+and all configuration files are managed by a configuration management system
+(such as <a class="reference external" href="https://en.wikipedia.org/wiki/Ansible_(software)">Ansible</a> or
+<a class="reference external" href="https://en.wikipedia.org/wiki/Chef_(software)">Chef</a>), there is no need to
+backup the configuration directory.</p>
+</section>
+<section id="log-backups">
+<h2><span class="section-number">5.3.3. </span>Log Backups<a class="headerlink" href="#log-backups" title="Permalink to this heading">¶</a></h2>
+<p>If <a class="reference internal" href="../config/logging.html#config-log"><span class="std std-ref">configured to log to a file</span></a>, you may want to back up the
+log files written by CouchDB. Any backup solution for these files works.</p>
+<p>Under UNIX-like systems, if using log rotation software, a copy-then-truncate
+approach is necessary. This will truncate the original log file to zero size in
+place after creating a copy. CouchDB does not recognize any signal to be told to
+close its log file and create a new one. Because of this, and because of
+differences in how file handles function, there is no straightforward log
+rotation solution under Microsoft Windows other than periodic restarts of the
+CouchDB process.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="performance.html" class="btn btn-neutral float-left" title="5.2. Performance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../fauxton/index.html" class="btn btn-neutral float-right" title="6. Fauxton" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

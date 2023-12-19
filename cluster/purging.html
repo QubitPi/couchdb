@@ -1,0 +1,370 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.5. Clustered Purge &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/cluster/purging.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.6. TLS Erlang Distribution" href="tls_erlang_distribution.html" />
+    <link rel="prev" title="4.4. Shard Management" href="sharding.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Cluster Management</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="theory.html">4.1. Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes.html">4.2. Node Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databases.html">4.3. Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharding.html">4.4. Shard Management</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.5. Clustered Purge</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#internal-structures">4.5.1. Internal Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compaction-of-purges">4.5.2. Compaction of Purges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-purge-checkpoint-documents">4.5.3. Local Purge Checkpoint Documents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-replication">4.5.4. Internal Replication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#indexes">4.5.5. Indexes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#config-settings">4.5.6. Config Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tls_erlang_distribution.html">4.6. TLS Erlang Distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">4.7. Troubleshooting CouchDB 3 with WeatherReport</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">4. </span>Cluster Management</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4.5. </span>Clustered Purge</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cluster/purging.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="clustered-purge">
+<span id="cluster-purging"></span><h1><span class="section-number">4.5. </span>Clustered Purge<a class="headerlink" href="#clustered-purge" title="Permalink to this heading">¶</a></h1>
+<p>The primary purpose of clustered purge is to clean databases that have multiple
+deleted tombstones or single documents that contain large numbers of conflicts.
+But it can also be used to purge any document (deleted or non-deleted) with any
+number of revisions.</p>
+<p>Clustered purge is designed to maintain eventual consistency and prevent
+unnecessary invalidation of secondary indexes. For this, every database keeps
+track of a certain number of historical purges requested in the database, as
+well as its current <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code>. Internal replications and secondary indexes
+process database’s purges and periodically update their corresponding purge
+checkpoint documents to report <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> processed by them. To ensure
+eventual consistency, the database will remove stored historical purge requests
+only after they have been processed by internal replication jobs and secondary
+indexes.</p>
+<section id="internal-structures">
+<h2><span class="section-number">4.5.1. </span>Internal Structures<a class="headerlink" href="#internal-structures" title="Permalink to this heading">¶</a></h2>
+<p>To enable internal replication of purge information between nodes and secondary
+indexes, two internal purge trees were added to a database file to track
+historical purges.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>purge_tree: UUID -&gt; {PurgeSeq, DocId, Revs}
+purge_seq_tree: PurgeSeq -&gt; {UUID, DocId, Revs}
+</pre></div>
+</div>
+<p>Each interactive request to <code class="docutils literal notranslate"><span class="pre">_purge</span> <span class="pre">API</span></code>, creates an ordered set of pairs on
+increasing <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> and purge_request, where purge_request is a tuple that
+contains docid and list of revisions. For each purge_request uuid is generated.
+A purge request is added to internal purge trees:
+a tuple <code class="docutils literal notranslate"><span class="pre">{UUID</span> <span class="pre">-&gt;</span> <span class="pre">{PurgeSeq,</span> <span class="pre">DocId,</span> <span class="pre">Revs}}</span></code> is added to <code class="docutils literal notranslate"><span class="pre">purge_tree</span></code>,
+a tuple is <code class="docutils literal notranslate"><span class="pre">{PurgeSeq</span> <span class="pre">-&gt;</span> <span class="pre">{UUID,</span> <span class="pre">DocId,</span> <span class="pre">Revs}}</span></code> added <code class="docutils literal notranslate"><span class="pre">to</span> <span class="pre">purge_seq_tree</span></code>.</p>
+</section>
+<section id="compaction-of-purges">
+<h2><span class="section-number">4.5.2. </span>Compaction of Purges<a class="headerlink" href="#compaction-of-purges" title="Permalink to this heading">¶</a></h2>
+<p>During the compaction of the database the oldest purge requests are to be
+removed to store only <code class="docutils literal notranslate"><span class="pre">purged_infos_limit</span></code> number of purges in the database.
+But in order to keep the database consistent with indexes and other replicas,
+we can only remove purge requests that have already been processed by indexes
+and internal replications jobs. Thus, occasionally purge trees may store
+more than <code class="docutils literal notranslate"><span class="pre">purged_infos_limit</span></code> purges. If the number of stored purges in the
+database exceeds <code class="docutils literal notranslate"><span class="pre">purged_infos_limit</span></code> by a certain threshold, a warning is
+produced in logs signaling a problem of synchronization of database’s purges
+with indexes and other replicas.</p>
+</section>
+<section id="local-purge-checkpoint-documents">
+<h2><span class="section-number">4.5.3. </span>Local Purge Checkpoint Documents<a class="headerlink" href="#local-purge-checkpoint-documents" title="Permalink to this heading">¶</a></h2>
+<p>Indexes and internal replications of the database with purges create and
+periodically update local checkpoint purge documents:
+<code class="docutils literal notranslate"><span class="pre">_local/purge-{type}-{hash}</span></code>. These documents report the last <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code>
+processed by them and the timestamp of the last processing. These documents
+are only visible in <code class="docutils literal notranslate"><span class="pre">_local_docs</span></code> when you add a <code class="docutils literal notranslate"><span class="pre">include_system=true</span></code>
+parameter, so e.g. <code class="docutils literal notranslate"><span class="pre">/test-db/_local_docs?include_system=true</span></code>. An example
+of a local checkpoint purge document:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_local/purge-mrview-86cacdfbaf6968d4ebbc324dd3723fe7&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;mrview&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;purge_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;updated_on&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1540541874</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;ddoc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/foo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;signature&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5d10247925f826ae3e00966ec24b7bf6&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The below image shows possible local checkpoint documents that a database may
+have.</p>
+<figure class="align-center" id="id1">
+<img alt="Local Purge Checkpoint Documents" src="../_images/purge-checkpoint-docs.png" />
+<figcaption>
+<p><span class="caption-text">Local Purge Checkpoint Documents</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="internal-replication">
+<h2><span class="section-number">4.5.4. </span>Internal Replication<a class="headerlink" href="#internal-replication" title="Permalink to this heading">¶</a></h2>
+<p class="open">Purge requests are replayed across all nodes in an eventually consistent manner.
+Internal replication of purges consists of two steps:</p>
+<p>1. Pull replication. Internal replication first starts by pulling purges from
+target and applying them on source to make sure we don’t reintroduce to target
+source’s docs/revs that have been already purged on target. In this step, we use
+purge checkpoint documents stored on target to keep track of the last target’s
+<code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> processed by the source. We find purge requests occurred after
+this <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code>, and replay them on source. This step is done by updating
+the target’s checkpoint purge documents with the latest process <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code>
+and timestamp.</p>
+<p>2. Push replication. Then internal replication proceeds as usual with an extra
+step inserted to push source’s purge requests to target. In this step, we use
+local internal replication checkpoint documents, that are updated both on target
+and source.</p>
+<p>Under normal conditions, an interactive purge request is already sent to every
+node containing a database shard’s replica, and applied on every replica.
+Internal replication of purges between nodes is just an extra step to ensure
+consistency between replicas, where all purge requests on one node are replayed
+on another node. In order not to replay the same purge request on a replica,
+each interactive purge request is tagged with a unique <code class="docutils literal notranslate"><span class="pre">uuid</span></code>. Internal
+replication filters out purge requests with UUIDs that already exist in the
+replica’s <code class="docutils literal notranslate"><span class="pre">purge_tree</span></code>, and applies only purge requests with UUIDs that don’t
+exist in the <code class="docutils literal notranslate"><span class="pre">purge_tree</span></code>. This is the reason why we needed to have two
+internal purge trees: 1) <code class="docutils literal notranslate"><span class="pre">purge_tree</span></code>: <code class="docutils literal notranslate"><span class="pre">{UUID</span> <span class="pre">-&gt;</span> <span class="pre">{PurgeSeq,</span> <span class="pre">DocId,</span> <span class="pre">Revs}}</span></code>
+allows to quickly find purge requests with UUIDs that already exist in the
+replica; 2) <code class="docutils literal notranslate"><span class="pre">purge_seq_tree</span></code>: <code class="docutils literal notranslate"><span class="pre">{PurgeSeq</span> <span class="pre">-&gt;</span> <span class="pre">{UUID,</span> <span class="pre">DocId,</span> <span class="pre">Revs}}</span></code> allows to
+iterate from a given <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> to collect all purge requests happened after
+this <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code>.</p>
+</section>
+<section id="indexes">
+<h2><span class="section-number">4.5.5. </span>Indexes<a class="headerlink" href="#indexes" title="Permalink to this heading">¶</a></h2>
+<p>Each purge request will bump up <code class="docutils literal notranslate"><span class="pre">update_seq</span></code> of the database, so that each
+secondary index is also updated in order to apply the purge requests to maintain
+consistency within the main database.</p>
+</section>
+<section id="config-settings">
+<h2><span class="section-number">4.5.6. </span>Config Settings<a class="headerlink" href="#config-settings" title="Permalink to this heading">¶</a></h2>
+<p>These settings can be updated in the default.ini or local.ini:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>max_document_id_number</p></td>
+<td><p>Allowed maximum number of documents in one
+purge request</p></td>
+<td><p>100</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_revisions_number</p></td>
+<td><p>Allowed maximum number of accumulated
+revisions in one purge request</p></td>
+<td><p>1000</p></td>
+</tr>
+<tr class="row-even"><td><p>allowed_purge_seq_lag</p></td>
+<td><p>Beside purged_infos_limit, allowed
+additional buffer to store purge requests</p></td>
+<td><p>100</p></td>
+</tr>
+<tr class="row-odd"><td><p>index_lag_warn_seconds</p></td>
+<td><p>Allowed durations when index is not
+updated for local purge checkpoint document</p></td>
+<td><p>86400</p></td>
+</tr>
+</tbody>
+</table>
+<p>During a database compaction,  we check all checkpoint purge docs. A client (an
+index or internal replication job) is allowed to have the last reported
+<code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> to be smaller than the current database shard’s <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> by
+the value of <code class="docutils literal notranslate"><span class="pre">(purged_infos_limit</span> <span class="pre">+</span> <span class="pre">allowed_purge_seq_lag)</span></code>.  If the client’s
+<code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> is even smaller, and the client has not checkpointed within
+<code class="docutils literal notranslate"><span class="pre">index_lag_warn_seconds</span></code>, it prevents compaction of purge trees and we have to
+issue the following log warning for this client:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Purge checkpoint &#39;_local/purge-mrview-9152d15c12011288629bcffba7693fd4’
+not updated in 86400 seconds in
+&lt;&lt;&quot;shards/00000000-1fffffff/testdb12.1491979089&quot;&gt;&gt;
+</pre></div>
+</div>
+<p>If this type of log warning occurs, check the client to see why the processing
+of purge requests is stalled in it.</p>
+<p>There is a mapping relationship between a design document of indexes and local
+checkpoint docs. If a design document of indexes is updated or deleted, the
+corresponding local checkpoint document should be also automatically deleted.
+But in an unexpected case, when a design doc was updated/deleted, but its
+checkpoint document still exists in a database, the following warning will be
+issued:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;Invalid purge doc &#39;&lt;&lt;&quot;_design/bar&quot;&gt;&gt;&#39; on database
+&lt;&lt;&quot;shards/00000000-1fffffff/testdb12.1491979089&quot;&gt;&gt;
+with purge_seq &#39;50&#39;&quot;
+</pre></div>
+</div>
+<p>If this type of log warning occurs, remove the local purge doc from a database.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sharding.html" class="btn btn-neutral float-left" title="4.4. Shard Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tls_erlang_distribution.html" class="btn btn-neutral float-right" title="4.6. TLS Erlang Distribution" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2.5. Pagination Recipe &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/ddocs/views/pagination.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="3.3. Search" href="../search.html" />
+    <link rel="prev" title="3.2.4. View Cookbook for SQL Jockeys" href="nosql.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Design Documents</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ddocs.html">3.1. Design Documents</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.2. Guide to Views</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="intro.html">3.2.1. Introduction to Views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collation.html">3.2.2. Views Collation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="joins.html">3.2.3. Joins With Views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nosql.html">3.2.4. View Cookbook for SQL Jockeys</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.2.5. Pagination Recipe</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-data">3.2.5.1. Example Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a-view">3.2.5.2. A View</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setup">3.2.5.3. Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#paging">3.2.5.4. Paging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#paging-alternate-method">3.2.5.5. Paging (Alternate Method)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jump-to-page">3.2.5.6. Jump to Page</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../search.html">3.3. Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nouveau.html">3.4. Nouveau</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">3. </span>Design Documents</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3.2. </span>Guide to Views</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.2.5. </span>Pagination Recipe</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/ddocs/views/pagination.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pagination-recipe">
+<span id="views-pagination"></span><h1><span class="section-number">3.2.5. </span>Pagination Recipe<a class="headerlink" href="#pagination-recipe" title="Permalink to this heading">¶</a></h1>
+<p>This recipe explains how to paginate over view results.
+Pagination is a user interface (UI) pattern that allows the display of a
+large number of rows (<cite>the result set</cite>) without loading all the rows into the
+UI at once. A fixed-size subset, the <cite>page</cite>, is displayed along with next and
+previous links or buttons that can move the <cite>viewport</cite> over the result set to
+an adjacent page.</p>
+<p>We assume you’re familiar with creating and querying documents and views as
+well as the multiple view query options.</p>
+<section id="example-data">
+<h2><span class="section-number">3.2.5.1. </span>Example Data<a class="headerlink" href="#example-data" title="Permalink to this heading">¶</a></h2>
+<p>To have some data to work with, we’ll create a list of bands,
+one document per band:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Biffy Clyro&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Foo Fighters&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Tool&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Nirvana&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Helmet&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Tenacious D&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Future of the Left&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;A Perfect Circle&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Silverchair&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Queens of the Stone Age&quot;</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Kerub&quot;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="a-view">
+<h2><span class="section-number">3.2.5.2. </span>A View<a class="headerlink" href="#a-view" title="Permalink to this heading">¶</a></h2>
+<p>We need a simple map function that gives us an alphabetical list of band
+names. This should be easy, but we’re adding extra smarts to filter out “The”
+and “A” in front of band names to put them into the right position:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^(A|The) /</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">emit</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The views result is an alphabetical list of band names. Now say we want to
+display band names five at a time and have a link pointing to the next five
+names that make up one page, and a link for the previous five,
+if we’re not on the first page.</p>
+<p>We learned how to use the <code class="docutils literal notranslate"><span class="pre">startkey</span></code>, <code class="docutils literal notranslate"><span class="pre">limit</span></code>, and <code class="docutils literal notranslate"><span class="pre">skip</span></code> parameters in
+earlier documents. We’ll use these again here. First, let’s have a look at
+the full result set:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;total_rows&quot;</span><span class="o">:</span><span class="mf">11</span><span class="p">,</span><span class="s2">&quot;offset&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span><span class="s2">&quot;rows&quot;</span><span class="o">:</span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;a0746072bba60a62b01209f467ca4fe2&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Biffy Clyro&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;b47d82284969f10cd1b6ea460ad62d00&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Foo Fighters&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;45ccde324611f86ad4932555dea7fce0&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Tenacious D&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;d7ab24bb3489a9010c7d1a2087a4a9e4&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Future of the Left&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ad2f85ef87f5a9a65db5b3a75a03cd82&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Helmet&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;a2f31cfa68118a6ae9d35444fcb1a3cf&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Nirvana&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;67373171d0f626b811bdc34e92e77901&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Kerub&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;3e1b84630c384f6aef1a5c50a81e4a34&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Perfect Circle&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;84a371a7b8414237fad1b6aaf68cd16a&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Queens of the Stone Age&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;dcdaf08242a4be7da1a36e25f4f0b022&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Silverchair&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;fd590d4ad53771db47b0406054f02243&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Tool&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">}</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+</section>
+<section id="setup">
+<h2><span class="section-number">3.2.5.3. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h2>
+<p>The mechanics of paging are very simple:</p>
+<ul class="simple">
+<li><p>Display first page</p></li>
+<li><p>If there are more rows to show, show next link</p></li>
+<li><p>Draw subsequent page</p></li>
+<li><p>If this is not the first page, show a previous link</p></li>
+<li><p>If there are more rows to show, show next link</p></li>
+</ul>
+<p>Or in a pseudo-JavaScript snippet:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Result</span><span class="p">();</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">getPage</span><span class="p">();</span>
+
+<span class="nx">page</span><span class="p">.</span><span class="nx">display</span><span class="p">();</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">hasPrev</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">page</span><span class="p">.</span><span class="nx">display_link</span><span class="p">(</span><span class="s1">&#39;prev&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">hasNext</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">page</span><span class="p">.</span><span class="nx">display_link</span><span class="p">(</span><span class="s1">&#39;next&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="paging">
+<h2><span class="section-number">3.2.5.4. </span>Paging<a class="headerlink" href="#paging" title="Permalink to this heading">¶</a></h2>
+<p>To get the first five rows from the view result, you use the <code class="docutils literal notranslate"><span class="pre">?limit=5</span></code>
+query parameter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="s1">&#39;http://adm:pass@127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5&#39;</span>
+</pre></div>
+</div>
+<p>The result:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;total_rows&quot;</span><span class="o">:</span><span class="mf">11</span><span class="p">,</span><span class="s2">&quot;offset&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span><span class="s2">&quot;rows&quot;</span><span class="o">:</span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;a0746072bba60a62b01209f467ca4fe2&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Biffy Clyro&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;b47d82284969f10cd1b6ea460ad62d00&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Foo Fighters&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;45ccde324611f86ad4932555dea7fce0&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Tenacious D&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;d7ab24bb3489a9010c7d1a2087a4a9e4&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Future of the Left&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ad2f85ef87f5a9a65db5b3a75a03cd82&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Helmet&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">}</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+<p>By comparing the <code class="docutils literal notranslate"><span class="pre">total_rows</span></code> value to our <code class="docutils literal notranslate"><span class="pre">limit</span></code> value,
+we can determine if there are more pages to display. We also know by the
+<cite>offset</cite> member that we are on the first page. We can calculate the value for
+<code class="docutils literal notranslate"><span class="pre">skip=</span></code> to get the results for the next page:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">rows_per_page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5</span><span class="p">;</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">offset</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">rows_per_page</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// == 1</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">skip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">rows_per_page</span><span class="p">;</span><span class="w"> </span><span class="c1">// == 5 for the first page, 10 for the second ...</span>
+</pre></div>
+</div>
+<p>So we query CouchDB with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="s1">&#39;http://adm:pass@127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5&amp;skip=5&#39;</span>
+</pre></div>
+</div>
+<p>Note we have to use <code class="docutils literal notranslate"><span class="pre">'</span></code> (single quotes) to escape the <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> character that is
+special to the shell we execute curl in.</p>
+<p>The result:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;total_rows&quot;</span><span class="o">:</span><span class="mf">11</span><span class="p">,</span><span class="s2">&quot;offset&quot;</span><span class="o">:</span><span class="mf">5</span><span class="p">,</span><span class="s2">&quot;rows&quot;</span><span class="o">:</span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;a2f31cfa68118a6ae9d35444fcb1a3cf&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Nirvana&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;67373171d0f626b811bdc34e92e77901&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Kerub&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;3e1b84630c384f6aef1a5c50a81e4a34&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Perfect Circle&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;84a371a7b8414237fad1b6aaf68cd16a&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Queens of the Stone Age&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;dcdaf08242a4be7da1a36e25f4f0b022&quot;</span><span class="p">,</span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="s2">&quot;Silverchair&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">}</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+<p>Implementing the <code class="docutils literal notranslate"><span class="pre">hasPrev()</span></code> and <code class="docutils literal notranslate"><span class="pre">hasNext()</span></code> method is pretty
+straightforward:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">hasPrev</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">hasNext</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">last_page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">total_rows</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">rows_per_page</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">        </span><span class="p">(</span><span class="nx">total_rows</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="nx">rows_per_page</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">last_page</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="paging-alternate-method">
+<h2><span class="section-number">3.2.5.5. </span>Paging (Alternate Method)<a class="headerlink" href="#paging-alternate-method" title="Permalink to this heading">¶</a></h2>
+<p>The method described above performed poorly with large skip values until
+CouchDB 1.2. Additionally, some use cases may call for the following
+alternate method even with newer versions of CouchDB. One such case is when
+duplicate results should be prevented. Using skip alone it is possible for
+new documents to be inserted during pagination which could change the offset
+of the start of the subsequent page.</p>
+<p>A correct solution is not much harder. Instead of slicing the result set
+into equally sized pages, we look at 10 rows at a time and use <code class="docutils literal notranslate"><span class="pre">startkey</span></code> to
+jump to the next 10 rows. We even use skip, but only with the value 1.</p>
+<p>Here is how it works:</p>
+<ul class="simple">
+<li><p>Request <cite>rows_per_page + 1</cite> rows from the view</p></li>
+<li><p>Display <cite>rows_per_page</cite> rows, <cite>store + 1</cite> row as <code class="docutils literal notranslate"><span class="pre">next_startkey</span></code> and
+<code class="docutils literal notranslate"><span class="pre">next_startkey_docid</span></code></p></li>
+<li><p>As page information, keep <code class="docutils literal notranslate"><span class="pre">startkey</span></code> and <code class="docutils literal notranslate"><span class="pre">next_startkey</span></code></p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">next_*</span></code> values to create the next link, and use the others to
+create the previous link</p></li>
+</ul>
+<p>The trick to finding the next page is pretty simple. Instead of requesting 10
+rows for a page, you request 11 rows, but display only 10 and use the values
+in the 11th row as the <code class="docutils literal notranslate"><span class="pre">startkey</span></code> for the next page. Populating the link to
+the previous page is as simple as carrying the current <code class="docutils literal notranslate"><span class="pre">startkey</span></code> over to the
+next page. If there’s no previous <code class="docutils literal notranslate"><span class="pre">startkey</span></code>, we are on the first page. We
+stop displaying the link to the next page if we get <cite>rows_per_page</cite> or less
+rows back. This is called linked list pagination, as we go from page to
+page, or list item to list item, instead of jumping directly to a
+pre-computed page. There is one caveat, though. Can you spot it?</p>
+<p>CouchDB view keys do not have to be unique; you can have multiple index
+entries read. What if you have more index entries for a key than rows that
+should be on a page? <code class="docutils literal notranslate"><span class="pre">startkey</span></code> jumps to the first row, and you’d be screwed
+if CouchDB didn’t have an additional parameter for you to use. All view keys
+with the same value are internally sorted by <cite>docid</cite>, that is, the ID of
+the document that created that view row. You can use the <code class="docutils literal notranslate"><span class="pre">startkey_docid</span></code>
+and <code class="docutils literal notranslate"><span class="pre">endkey_docid</span></code> parameters to get subsets of these rows. For
+pagination, we still don’t need <code class="docutils literal notranslate"><span class="pre">endkey_docid</span></code>, but <code class="docutils literal notranslate"><span class="pre">startkey_docid</span></code> is very
+handy. In addition to <code class="docutils literal notranslate"><span class="pre">startkey</span></code> and <code class="docutils literal notranslate"><span class="pre">limit</span></code>, you also use
+<code class="docutils literal notranslate"><span class="pre">startkey_docid</span></code> for pagination if, and only if, the extra row you fetch to
+find the next page has the same key as the current <code class="docutils literal notranslate"><span class="pre">startkey</span></code>.</p>
+<p>It is important to note that the <code class="docutils literal notranslate"><span class="pre">*_docid</span></code> parameters only work in addition to
+the <code class="docutils literal notranslate"><span class="pre">*key</span></code> parameters and are only useful to further narrow down the result set
+of a view for a single key. They do not work on their own (the one exception
+being the built-in <a class="reference internal" href="../../api/database/bulk-api.html#api-db-all-docs"><span class="std std-ref">_all_docs view</span></a>  that already sorts
+by document ID).</p>
+<p>The advantage of this approach is that all the key operations can be
+performed on the super-fast B-tree index behind the view. Looking up a page
+doesn’t include scanning through hundreds and thousands of rows unnecessarily.</p>
+</section>
+<section id="jump-to-page">
+<h2><span class="section-number">3.2.5.6. </span>Jump to Page<a class="headerlink" href="#jump-to-page" title="Permalink to this heading">¶</a></h2>
+<p>One drawback of the linked list style pagination is that you can’t
+pre-compute the rows for a particular page from the page number and the rows
+per page. Jumping to a specific page doesn’t really work. Our gut reaction,
+if that concern is raised, is, “Not even Google is doing that!” and we tend
+to get away with it. Google always pretends on the first page to find 10 more
+pages of results. Only if you click on the second page (something very few
+people actually do) might Google display a reduced set of pages. If you page
+through the results, you get links for the previous and next 10 pages,
+but no more. Pre-computing the necessary <code class="docutils literal notranslate"><span class="pre">startkey</span></code> and <code class="docutils literal notranslate"><span class="pre">startkey_docid</span></code>
+for 20 pages is a feasible operation and a pragmatic optimization to know the
+rows for every page in a result set that is potentially tens of thousands
+of rows long, or more.</p>
+<p>If you really do need to jump to a page over the full range of documents (we
+have seen applications that require that), you can still maintain an integer
+value index as the view index and take a hybrid approach at solving pagination.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nosql.html" class="btn btn-neutral float-left" title="3.2.4. View Cookbook for SQL Jockeys" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../search.html" class="btn btn-neutral float-right" title="3.3. Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

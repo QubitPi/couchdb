@@ -1,0 +1,661 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.5. Security &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/intro/security.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.6. Getting Started" href="tour.html" />
+    <link rel="prev" title="1.4. cURL: Your Command Line Friend" href="curl.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Introduction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">1.1. Technical Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="why.html">1.2. Why CouchDB?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="consistency.html">1.3. Eventual Consistency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="curl.html">1.4. cURL: Your Command Line Friend</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.5. Security</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#authentication">1.5.1. Authentication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-new-admin-user">1.5.1.1. Creating a New Admin User</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#basic-authentication">1.5.1.2. Basic Authentication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cookie-authentication">1.5.1.3. Cookie Authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#authentication-database">1.5.2. Authentication Database</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#users-documents">1.5.2.1. Users Documents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-new-user">1.5.2.2. Creating a New User</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#password-changing">1.5.2.3. Password Changing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#authorization">1.5.3. Authorization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tour.html">1.6. Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">1.7. The Core API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Introduction</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.5. </span>Security</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/intro/security.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="security">
+<span id="intro-security"></span><h1><span class="section-number">1.5. </span>Security<a class="headerlink" href="#security" title="Permalink to this heading">¶</a></h1>
+<p>In this document, we’ll look at the basic security mechanisms in CouchDB:
+<cite>Basic Authentication</cite> and <cite>Cookie Authentication</cite>. This is how CouchDB
+handles users and protects their credentials.</p>
+<section id="authentication">
+<h2><span class="section-number">1.5.1. </span>Authentication<a class="headerlink" href="#authentication" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB has the idea of an <em>admin user</em> (e.g. an administrator, a super user,
+or root) that is allowed to do anything to a CouchDB installation. By default,
+one admin user <strong>must</strong> be created for CouchDB to start up successfully.</p>
+<p>CouchDB also defines a set of requests that only admin users are allowed to
+do. If you have defined one or more specific admin users, CouchDB will ask for
+identification for certain requests:</p>
+<ul class="simple">
+<li><p>Creating a database (<a class="reference internal" href="../api/database/common.html#put--db" title="PUT /{db}"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/database</span></code></a>)</p></li>
+<li><p>Deleting a database (<a class="reference internal" href="../api/database/common.html#put--db" title="PUT /{db}"><code class="xref http http-put docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/database</span></code></a>)</p></li>
+<li><p>Setup a database security (<a class="reference internal" href="../api/database/security.html#put--db-_security" title="PUT /{db}/_security"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/database/_security</span></code></a>)</p></li>
+<li><p>Creating a design document (<a class="reference internal" href="../api/ddoc/common.html#put--db-_design-ddoc" title="PUT /{db}/_design/{ddoc}"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/database/_design/app</span></code></a>)</p></li>
+<li><p>Updating a design document (<a class="reference internal" href="../api/ddoc/common.html#put--db-_design-ddoc" title="PUT /{db}/_design/{ddoc}"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/database/_design/app?rev=1-4E2</span></code></a>)</p></li>
+<li><p>Deleting a design document (<a class="reference internal" href="../api/ddoc/common.html#delete--db-_design-ddoc" title="DELETE /{db}/_design/{ddoc}"><code class="xref http http-delete docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/database/_design/app?rev=2-6A7</span></code></a>)</p></li>
+<li><p>Triggering compaction (<a class="reference internal" href="../api/database/compact.html#post--db-_compact" title="POST /{db}/_compact"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/database/_compact</span></code></a>)</p></li>
+<li><p>Reading the task status list (<a class="reference internal" href="../api/server/common.html#get--_active_tasks" title="GET /_active_tasks"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/_active_tasks</span></code></a>)</p></li>
+<li><p>Restarting the server on a given node (<a class="reference internal" href="../api/server/common.html#post--_node-node-name-_restart" title="POST /_node/{node-name}/_restart"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/_node/{node-name}/_restart</span></code></a>)</p></li>
+<li><p>Reading the active configuration (<a class="reference internal" href="../api/server/configuration.html#get--_node-node-name-_config" title="GET /_node/{node-name}/_config"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/_node/{node-name}/_config</span></code></a>)</p></li>
+<li><p>Updating the active configuration (<a class="reference internal" href="../api/server/configuration.html#put--_node-node-name-_config-section-key" title="PUT /_node/{node-name}/_config/{section}/{key}"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/_node/{node-name}/_config/{section}/{key}</span></code></a>)</p></li>
+</ul>
+<section id="creating-a-new-admin-user">
+<h3><span class="section-number">1.5.1.1. </span>Creating a New Admin User<a class="headerlink" href="#creating-a-new-admin-user" title="Permalink to this heading">¶</a></h3>
+<p>If your installation process did not set up an admin user, you will have to add
+one to the configuration file by hand and restart CouchDB first. For the purposes of
+this example, we’ll create a default <code class="docutils literal notranslate"><span class="pre">admin</span></code> user with the password <code class="docutils literal notranslate"><span class="pre">password</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don’t just type in the following without thinking! Pick a good name for your
+administrator user that isn’t easily guessable, and pick a secure password.</p>
+</div>
+<p>To the end of your <code class="docutils literal notranslate"><span class="pre">etc/local.ini</span></code> file, after the <code class="docutils literal notranslate"><span class="pre">[admins]</span></code> line, add the text
+<code class="docutils literal notranslate"><span class="pre">admin</span> <span class="pre">=</span> <span class="pre">password</span></code>, so it looks like this:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[admins]</span>
+<span class="na">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">password</span>
+</pre></div>
+</div>
+<p>(Don’t worry about the password being in plain text; we’ll come back to this.)</p>
+<p>Now, restart CouchDB using the method appropriate for your operating system.
+You should now be able to access CouchDB using your new administrator account:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_up</span>
+<span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;ok&quot;</span><span class="p">,</span><span class="s2">&quot;seeds&quot;</span><span class="p">:{}}</span>
+</pre></div>
+</div>
+<p>Great!</p>
+<p>Let’s create an admin user through the HTTP API. We’ll call her <code class="docutils literal notranslate"><span class="pre">anna</span></code>, and
+her password is <code class="docutils literal notranslate"><span class="pre">secret</span></code>.  Note the double quotes in the following code; they
+are needed to denote a string value for the <a class="reference internal" href="../api/server/configuration.html#api-config"><span class="std std-ref">configuration API</span></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; HOST=&quot;http://admin:password@127.0.0.1:5984&quot;
+&gt; NODENAME=&quot;_local&quot;
+&gt; curl -X PUT $HOST/_node/$NODENAME/_config/admins/anna -d &#39;&quot;secret&quot;&#39;
+&quot;&quot;
+</pre></div>
+</div>
+<p>As per the <a class="reference internal" href="../api/server/configuration.html#api-config"><span class="std std-ref">_config</span></a> API’s behavior, we’re getting the previous value
+for the config item we just wrote. Since our admin user didn’t exist, we get an empty
+string.</p>
+<p>Please note that <code class="docutils literal notranslate"><span class="pre">_local</span></code> serves as an  alias for the local node name, so for all
+configuration URLs, <code class="docutils literal notranslate"><span class="pre">NODENAME</span></code> may be set to <code class="docutils literal notranslate"><span class="pre">_local</span></code>, to interact with the local
+node’s configuration.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../cluster/nodes.html#cluster-nodes"><span class="std std-ref">Node Management</span></a></p>
+</div>
+<section id="hashing-passwords">
+<h4><span class="section-number">1.5.1.1.1. </span>Hashing Passwords<a class="headerlink" href="#hashing-passwords" title="Permalink to this heading">¶</a></h4>
+<p>Seeing the plain-text password is scary, isn’t it? No worries, CouchDB doesn’t
+show the plain-text password anywhere. It gets hashed right away. Go ahead and
+look at your <code class="docutils literal notranslate"><span class="pre">local.ini</span></code> file now. You’ll see that CouchDB has rewritten the
+plain text passwords so they are hashed:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[admins]</span>
+<span class="na">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">-pbkdf2-71c01cb429088ac1a1e95f3482202622dc1e53fe,226701bece4ae0fc9a373a5e02bf5d07,10</span>
+<span class="na">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">-pbkdf2-2d86831c82b440b8887169bd2eebb356821d621b,5e11b9a9228414ab92541beeeacbf125,10</span>
+</pre></div>
+</div>
+<p>The hash is that big, ugly, long string that starts out with <code class="docutils literal notranslate"><span class="pre">-pbkdf2-</span></code>.</p>
+<p>To compare a plain-text password during authentication with the stored hash,
+the hashing algorithm is run and the resulting hash is compared to the stored
+hash. The probability of two identical hashes for different passwords is too
+insignificant to mention (c.f. <a class="reference external" href="http://en.wikipedia.org/wiki/Bruce_Schneier">Bruce Schneier</a>). Should the stored hash fall
+into the hands of an attacker, it is, by current standards, way too inconvenient
+(i.e., it’d take a lot of money and time) to find the plain-text password from
+the hash.</p>
+<p>When CouchDB starts up, it reads a set of <code class="docutils literal notranslate"><span class="pre">.ini</span></code> files with config settings. It
+loads these settings into an internal data store (not a database). The config
+API lets you read the current configuration as well as change it and create new
+entries. CouchDB writes any changes back to the <code class="docutils literal notranslate"><span class="pre">.ini</span></code> files.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.ini</span></code> files can also be edited by hand when CouchDB is not running.
+Instead of creating the admin user as we showed previously, you could have
+stopped CouchDB, opened your <code class="docutils literal notranslate"><span class="pre">local.ini</span></code>, added <code class="docutils literal notranslate"><span class="pre">anna</span> <span class="pre">=</span> <span class="pre">secret</span></code> to the
+<a class="reference internal" href="../config/auth.html#admins" title="[admins]"><code class="xref config config-section docutils literal notranslate"><span class="pre">admins</span></code></a>, and restarted CouchDB. Upon reading the new line from
+<code class="docutils literal notranslate"><span class="pre">local.ini</span></code>, CouchDB would run the hashing algorithm and write back the hash
+to <code class="docutils literal notranslate"><span class="pre">local.ini</span></code>, replacing the plain-text password — just as it did for our
+original <code class="docutils literal notranslate"><span class="pre">admin</span></code> user. To make sure CouchDB only hashes plain-text passwords
+and not an existing hash a second time, it prefixes the hash with <code class="docutils literal notranslate"><span class="pre">-pbkdf2-</span></code>,
+to distinguish between plain-text passwords and <a class="reference external" href="http://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> hashed passwords. This
+means your plain-text password can’t start with the characters <code class="docutils literal notranslate"><span class="pre">-pbkdf2-</span></code>,
+but that’s pretty unlikely to begin with.</p>
+</section>
+</section>
+<section id="basic-authentication">
+<span id="intro-security-basicauth"></span><h3><span class="section-number">1.5.1.2. </span>Basic Authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this heading">¶</a></h3>
+<p>CouchDB will not allow us to create new databases unless we give the correct admin user
+credentials. Let’s verify:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; HOST=&quot;http://127.0.0.1:5984&quot;
+&gt; curl -X PUT $HOST/somedatabase
+{&quot;error&quot;:&quot;unauthorized&quot;,&quot;reason&quot;:&quot;You are not a server admin.&quot;}
+</pre></div>
+</div>
+<p>That looks about right. Now we try again with the correct credentials:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; HOST=&quot;http://anna:secret@127.0.0.1:5984&quot;
+&gt; curl -X PUT $HOST/somedatabase
+{&quot;ok&quot;:true}
+</pre></div>
+</div>
+<p>If you have ever accessed a website or FTP server that was password-protected,
+the <code class="docutils literal notranslate"><span class="pre">username:password&#64;</span></code> URL variant should look familiar.</p>
+<p>If you are security conscious, the missing <code class="docutils literal notranslate"><span class="pre">s</span></code> in <code class="docutils literal notranslate"><span class="pre">http://</span></code> will make you
+nervous. We’re sending our password to CouchDB in plain text. This is a bad
+thing, right? Yes, but consider our scenario: CouchDB listens on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>
+on a development box that we’re the sole user of. Who could possibly sniff our
+password?</p>
+<p>If you are in a production environment, however, you need to reconsider. Will
+your CouchDB instance communicate over a public network? Even a LAN shared
+with other collocation customers is public. There are multiple ways to secure
+communication between you or your application and CouchDB that exceed the
+scope of this documentation. CouchDB as of version <a class="reference internal" href="../whatsnew/1.1.html#release-1-1-0"><span class="std std-ref">1.1.0</span></a>
+comes with <a class="reference internal" href="../config/http.html#config-ssl"><span class="std std-ref">SSL built in</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../api/server/authn.html#api-auth-basic"><span class="std std-ref">Basic Authentication API Reference</span></a></p>
+</div>
+</section>
+<section id="cookie-authentication">
+<span id="intro-security-cookie"></span><h3><span class="section-number">1.5.1.3. </span>Cookie Authentication<a class="headerlink" href="#cookie-authentication" title="Permalink to this heading">¶</a></h3>
+<p>Basic authentication that uses plain-text passwords is nice and convenient,
+but not very secure if no extra measures are taken. It is also a very poor
+user experience. If you use basic authentication to identify admins,
+your application’s users need to deal with an ugly, unstylable browser modal
+dialog that says non-professional at work more than anything else.</p>
+<p>To remedy some of these concerns, CouchDB supports cookie authentication.
+With cookie authentication your application doesn’t have to include the ugly
+login dialog that the users’ browsers come with. You can use a regular HTML
+form to submit logins to CouchDB. Upon receipt, CouchDB will generate a
+one-time token that the client can use in its next request to CouchDB. When
+CouchDB sees the token in a subsequent request, it will authenticate the user
+based on the token without the need to see the password again. By default,
+a token is valid for 10 minutes.</p>
+<p>To obtain the first token and thus authenticate a user for the first time,
+the username and password must be sent to the <a class="reference internal" href="../api/server/authn.html#api-auth-session"><span class="std std-ref">_session</span></a>
+API. The API is smart enough to decode HTML form submissions, so you don’t have
+to resort to any smarts in your application.</p>
+<p>If you are not using HTML forms to log in, you need to send an HTTP request
+that looks as if an HTML form generated it. Luckily, this is super simple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; HOST=&quot;http://127.0.0.1:5984&quot;
+&gt; curl -vX POST $HOST/_session \
+       -H &#39;Content-Type:application/x-www-form-urlencoded&#39; \
+       -d &#39;name=anna&amp;password=secret&#39;
+</pre></div>
+</div>
+<p>CouchDB replies, and we’ll give you some more detail:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">200</span> <span class="n">OK</span>
+<span class="o">&lt;</span> <span class="n">Set</span><span class="o">-</span><span class="n">Cookie</span><span class="p">:</span> <span class="n">AuthSession</span><span class="o">=</span><span class="n">YW5uYTo0QUIzOTdFQjrC4ipN</span><span class="o">-</span><span class="n">D</span><span class="o">-</span><span class="mi">53</span><span class="n">hw1sJepVzcVxnriEw</span><span class="p">;</span>
+<span class="o">&lt;</span> <span class="n">Version</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">Path</span><span class="o">=/</span><span class="p">;</span> <span class="n">HttpOnly</span>
+<span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span>
+<span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>A <a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> response code tells us all is well, a <a class="reference external" href="https://tools.ietf.org/html/rfc2109#section-4.2.2">Set-Cookie</a>
+header includes the token we can use for the next request, and the standard JSON
+response tells us again that the request was successful.</p>
+<p>Now we can use this token to make another request as the same user without
+sending the username and password again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; curl -vX PUT $HOST/mydatabase \
+       --cookie AuthSession=YW5uYTo0QUIzOTdFQjrC4ipN-D-53hw1sJepVzcVxnriEw \
+       -H &quot;X-CouchDB-WWW-Authenticate: Cookie&quot; \
+       -H &quot;Content-Type:application/x-www-form-urlencoded&quot;
+{&quot;ok&quot;:true}
+</pre></div>
+</div>
+<p>You can keep using this token for 10 minutes by default. After 10 minutes you
+need to authenticate your user again. The token lifetime can be configured
+with the timeout (in seconds) setting in the <a class="reference internal" href="../config/auth.html#config-chttpd-auth"><span class="std std-ref">chttpd_auth</span></a> configuration section.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../api/server/authn.html#api-auth-cookie"><span class="std std-ref">Cookie Authentication API Reference</span></a></p>
+</div>
+</section>
+</section>
+<section id="authentication-database">
+<h2><span class="section-number">1.5.2. </span>Authentication Database<a class="headerlink" href="#authentication-database" title="Permalink to this heading">¶</a></h2>
+<p>You may already note that CouchDB administrators are defined within the config
+file and are wondering if regular users are also stored there. No, they are not.
+CouchDB has a special <cite>authentication database</cite>, named <code class="docutils literal notranslate"><span class="pre">_users</span></code> by default,
+that stores all registered users as JSON documents.</p>
+<p>This special database is a <cite>system database</cite>. This means that while it shares
+the common <a class="reference internal" href="../api/database/index.html#api-database"><span class="std std-ref">database API</span></a>, there are some
+special security-related constraints applied. Below is a list of how the
+<cite>authentication database</cite> is different from the other databases.</p>
+<ul class="simple">
+<li><p>Only administrators may browse list of all documents
+(<a class="reference internal" href="../api/database/bulk-api.html#get--db-_all_docs" title="GET /{db}/_all_docs"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/_users/_all_docs</span></code></a>)</p></li>
+<li><p>Only administrators may listen to <a class="reference internal" href="../api/database/changes.html#changes"><span class="std std-ref">changes feed</span></a> (<a class="reference internal" href="../api/database/changes.html#get--db-_changes" title="GET /{db}/_changes"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/_users/_changes</span></code></a>)</p></li>
+<li><p>Only administrators may execute design functions like <a class="reference internal" href="../ddocs/ddocs.html#viewfun"><span class="std std-ref">views</span></a>.</p></li>
+<li><p>There is a special design document <code class="docutils literal notranslate"><span class="pre">_auth</span></code> that cannot be modified</p></li>
+<li><p>Every document except the <cite>design documents</cite> represent registered
+CouchDB users and belong to them</p></li>
+<li><p>By default, the <code class="docutils literal notranslate"><span class="pre">_security</span></code> settings of the <code class="docutils literal notranslate"><span class="pre">_users</span></code> database disallow
+users from accessing or modifying documents</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Settings can be changed so that users do have access to the <code class="docutils literal notranslate"><span class="pre">_users</span></code> database,
+but even then they may only access (<a class="reference internal" href="../api/document/common.html#get--db-docid" title="GET /{db}/{docid}"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/_users/org.couchdb.user:Jan</span></code></a>) or modify (<a class="reference internal" href="../api/document/common.html#put--db-docid" title="PUT /{db}/{docid}"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/_users/org.couchdb.user:Jan</span></code></a>) documents that they own. This will not be possible in CouchDB 4.0.</p>
+</div>
+<p>These draconian rules are necessary since CouchDB cares about its users’
+personal information and will not disclose it to just anyone. Often, user
+documents contain system information like <cite>login</cite>, <cite>password hash</cite> and <cite>roles</cite>,
+apart from sensitive personal information like real name, email, phone, special
+internal identifications and more. This is not information that you
+want to share with the World.</p>
+<section id="users-documents">
+<h3><span class="section-number">1.5.2.1. </span>Users Documents<a class="headerlink" href="#users-documents" title="Permalink to this heading">¶</a></h3>
+<p>Each CouchDB user is stored in document format. These documents contain
+several <em>mandatory</em> fields, that CouchDB needs for authentication:</p>
+<ul class="simple">
+<li><p><strong>_id</strong> (<em>string</em>): Document ID. Contains user’s login with special prefix
+<a class="reference internal" href="#org-couchdb-user"><span class="std std-ref">Why the org.couchdb.user: prefix?</span></a></p></li>
+<li><p><strong>derived_key</strong> (<em>string</em>): <a class="reference external" href="http://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> key derived from prf/salt/iterations.</p></li>
+<li><p><strong>name</strong> (<em>string</em>): User’s name aka login. <strong>Immutable</strong> e.g. you cannot
+rename an existing user - you have to create new one</p></li>
+<li><p><strong>roles</strong> (<em>array</em> of <em>string</em>): List of user roles. CouchDB doesn’t provide
+any built-in roles, so you’re free to define your own depending on your needs.
+However, you cannot set system roles like <code class="docutils literal notranslate"><span class="pre">_admin</span></code> there. Also, only
+administrators may assign roles to users - by default all users have no roles</p></li>
+<li><p><strong>password</strong> (<em>string</em>): A plaintext password can be provided, but will be replaced
+by hashed fields before the document is actually stored.</p></li>
+<li><p><strong>password_sha</strong> (<em>string</em>): Hashed password with salt. Used for <code class="docutils literal notranslate"><span class="pre">simple</span></code>
+<cite>password_scheme</cite></p></li>
+<li><p><strong>password_scheme</strong> (<em>string</em>): Password hashing scheme. May be <code class="docutils literal notranslate"><span class="pre">simple</span></code> or
+<code class="docutils literal notranslate"><span class="pre">pbkdf2</span></code></p></li>
+<li><p><strong>salt</strong> (<em>string</em>): Hash salt. Used for both <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">pbkdf2</span></code>
+<code class="docutils literal notranslate"><span class="pre">password_scheme</span></code> options.</p></li>
+<li><p><strong>iterations</strong> (<em>integer</em>): Number of iterations to derive key, used for <code class="docutils literal notranslate"><span class="pre">pbkdf2</span></code>
+<code class="docutils literal notranslate"><span class="pre">password_scheme</span></code> See the <a class="reference internal" href="../config/auth.html#config-chttpd-auth"><span class="std std-ref">configuration API</span></a>:: for details.</p></li>
+<li><p><strong>pbkdf2_prf</strong> (<em>string</em>): The PRF to use for <code class="docutils literal notranslate"><span class="pre">pbkdf2</span></code>. If missing, <code class="docutils literal notranslate"><span class="pre">sha</span></code> is
+assumed. Can be any of <code class="docutils literal notranslate"><span class="pre">sha</span></code>, <code class="docutils literal notranslate"><span class="pre">sha224</span></code>, <code class="docutils literal notranslate"><span class="pre">sha256</span></code>, <code class="docutils literal notranslate"><span class="pre">sha384</span></code>, <code class="docutils literal notranslate"><span class="pre">sha512</span></code>.</p></li>
+<li><p><strong>type</strong> (<em>string</em>): Document type. Constantly has the value <code class="docutils literal notranslate"><span class="pre">user</span></code></p></li>
+</ul>
+<p>Additionally, you may specify any custom fields that relate to the target
+user.</p>
+<section id="why-the-org-couchdb-user-prefix">
+<span id="org-couchdb-user"></span><h4><span class="section-number">1.5.2.1.1. </span>Why the <code class="docutils literal notranslate"><span class="pre">org.couchdb.user:</span></code> prefix?<a class="headerlink" href="#why-the-org-couchdb-user-prefix" title="Permalink to this heading">¶</a></h4>
+<p>The reason there is a special prefix before a user’s login name is to have
+namespaces that users belong to. This prefix is designed to prevent
+replication conflicts when you try merging two or more <cite>_user</cite> databases.</p>
+<p>For current CouchDB releases, all users belong to the same
+<code class="docutils literal notranslate"><span class="pre">org.couchdb.user</span></code> namespace and this cannot be changed. This may be changed
+in future releases.</p>
+</section>
+</section>
+<section id="creating-a-new-user">
+<h3><span class="section-number">1.5.2.2. </span>Creating a New User<a class="headerlink" href="#creating-a-new-user" title="Permalink to this heading">¶</a></h3>
+<p>Creating a new user is a very trivial operation. You just need to do a
+<a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.4">PUT</a> request with the user’s data to CouchDB. Let’s create a user with
+login <cite>jan</cite> and password <cite>apple</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="nd">@localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_users</span><span class="o">/</span><span class="n">org</span><span class="o">.</span><span class="n">couchdb</span><span class="o">.</span><span class="n">user</span><span class="p">:</span><span class="n">jan</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Accept: application/json&quot;</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;name&quot;: &quot;jan&quot;, &quot;password&quot;: &quot;apple&quot;, &quot;roles&quot;: [], &quot;type&quot;: &quot;user&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>This <cite>curl</cite> command will produce the following HTTP request:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">PUT</span> <span class="nn">/_users/org.couchdb.user:jan</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">62</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.31.0</span>
+</pre></div>
+</div>
+<p>And CouchDB responds with:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">83</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Fri, 27 Sep 2013 07:33:28 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;1-e0ebfb84005b920488fc7a8cc5470cc0&quot;</span>
+<span class="na">Location</span><span class="o">:</span> <span class="l">http://localhost:5984/_users/org.couchdb.user:jan</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP)</span>
+
+<span class="p">{</span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="s2">&quot;org.couchdb.user:jan&quot;</span><span class="p">,</span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="s2">&quot;1-e0ebfb84005b920488fc7a8cc5470cc0&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The document was successfully created! The user <cite>jan</cite> should now exist in our
+database. Let’s check if this is true:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_session</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;name=jan&amp;password=apple&#39;</span>
+</pre></div>
+</div>
+<p>CouchDB should respond with:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;jan&quot;</span><span class="p">,</span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="p">[]}</span>
+</pre></div>
+</div>
+<p>This means that the username was recognized and the password’s hash matches
+with the stored one. If we specify an incorrect login and/or password, CouchDB
+will notify us with the following error message:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="s2">&quot;unauthorized&quot;</span><span class="p">,</span><span class="s2">&quot;reason&quot;</span><span class="o">:</span><span class="s2">&quot;Name or password is incorrect.&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="password-changing">
+<h3><span class="section-number">1.5.2.3. </span>Password Changing<a class="headerlink" href="#password-changing" title="Permalink to this heading">¶</a></h3>
+<p>Let’s define what is password changing from the point of view of CouchDB and
+the authentication database. Since “users” are “documents”, this operation is
+just updating the document with a special field <code class="docutils literal notranslate"><span class="pre">password</span></code> which contains
+the <em>plain text password</em>. Scared? No need to be. The authentication database
+has a special internal hook on document update which looks for this field and
+replaces it with the <em>secured hash</em> depending on the chosen <code class="docutils literal notranslate"><span class="pre">password_scheme</span></code>.</p>
+<p>Summarizing the above process - we need to get the document’s content, add
+the <code class="docutils literal notranslate"><span class="pre">password</span></code> field with the new password in plain text and then store the
+JSON result to the authentication database.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="nd">@localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_users</span><span class="o">/</span><span class="n">org</span><span class="o">.</span><span class="n">couchdb</span><span class="o">.</span><span class="n">user</span><span class="p">:</span><span class="n">jan</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;org.couchdb.user:jan&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;_rev&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1-e0ebfb84005b920488fc7a8cc5470cc0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;derived_key&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;e579375db0e0c6a6fc79cd9e36a36859f71575c3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;iterations&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;jan&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;password_scheme&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pbkdf2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">    </span><span class="s2">&quot;salt&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1112283cf988a34f124200a050d308a1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here is our user’s document. We may strip hashes from the stored document to
+reduce the amount of posted data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="nd">@localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_users</span><span class="o">/</span><span class="n">org</span><span class="o">.</span><span class="n">couchdb</span><span class="o">.</span><span class="n">user</span><span class="p">:</span><span class="n">jan</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Accept: application/json&quot;</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;If-Match: 1-e0ebfb84005b920488fc7a8cc5470cc0&quot;</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;name&quot;:&quot;jan&quot;, &quot;roles&quot;:[], &quot;type&quot;:&quot;user&quot;, &quot;password&quot;:&quot;orange&quot;}&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;org.couchdb.user:jan&quot;</span><span class="p">,</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;2-ed293d3a0ae09f0c624f10538ef33c6f&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Updated! Now let’s check that the password was really changed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_session</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;name=jan&amp;password=apple&#39;</span>
+</pre></div>
+</div>
+<p>CouchDB should respond with:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="s2">&quot;unauthorized&quot;</span><span class="p">,</span><span class="s2">&quot;reason&quot;</span><span class="o">:</span><span class="s2">&quot;Name or password is incorrect.&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Looks like the password <code class="docutils literal notranslate"><span class="pre">apple</span></code> is wrong, what about <code class="docutils literal notranslate"><span class="pre">orange</span></code>?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_session</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;name=jan&amp;password=orange&#39;</span>
+</pre></div>
+</div>
+<p>CouchDB should respond with:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;jan&quot;</span><span class="p">,</span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="p">[]}</span>
+</pre></div>
+</div>
+<p>Hooray! You may wonder why this was so complex - we need to retrieve user’s
+document, add a special field to it, and post it back.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no password confirmation for API request: you should implement it
+in your application layer.</p>
+</div>
+</section>
+</section>
+<section id="authorization">
+<h2><span class="section-number">1.5.3. </span>Authorization<a class="headerlink" href="#authorization" title="Permalink to this heading">¶</a></h2>
+<p>Now that you have a few users who can log in, you probably want to set up some
+restrictions on what actions they can perform based on their identity and their
+roles.  Each database on a CouchDB server can contain its own set of
+authorization rules that specify which users are allowed to read and write
+documents, create design documents, and change certain database configuration
+parameters.  The authorization rules are set up by a server admin and can be
+modified at any time.</p>
+<p>Database authorization rules assign a user into one of two classes:</p>
+<ul class="simple">
+<li><p><cite>members</cite>, who are allowed to read all documents and create and modify any
+document except for design documents.</p></li>
+<li><p><cite>admins</cite>, who can read and write all types of documents, modify which users
+are members or admins, and set certain per-database configuration options.</p></li>
+</ul>
+<p>Note that a database admin is not the same as a server admin – the actions
+of a database admin are restricted to a specific database.</p>
+<p>All databases are created as admin-only by default. That is, only database
+admins may read or write. The default behavior can be configured with the
+<code class="docutils literal notranslate"><span class="pre">[couchdb]</span> <span class="pre">default_security</span></code> <a class="reference internal" href="../config/couchdb.html#config-couchdb"><span class="std std-ref">option</span></a>. If you set that
+option to <code class="docutils literal notranslate"><span class="pre">everyone</span></code>, HTTP requests that have no authentication credentials
+or have credentials for a normal user are treated as members, and those with
+server admin credentials are treated as database admins.</p>
+<p>You can also modify the permissions after the database is created by modifying the
+<a class="reference internal" href="../api/database/security.html#api-db-security"><span class="std std-ref">security</span></a> document in the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">mydatabase</span><span class="o">/</span><span class="n">_security</span> \
+     <span class="o">-</span><span class="n">u</span> <span class="n">anna</span><span class="p">:</span><span class="n">secret</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;admins&quot;: { &quot;names&quot;: [], &quot;roles&quot;: [] }, &quot;members&quot;: { &quot;names&quot;: [&quot;jan&quot;], &quot;roles&quot;: [] } }&#39;</span>
+</pre></div>
+</div>
+<p>The HTTP request to create or update the <cite>_security</cite> document must contain the
+credentials of a server admin.  CouchDB will respond with:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The database is now secured against anonymous reads and writes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">mydatabase</span><span class="o">/</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="s2">&quot;unauthorized&quot;</span><span class="p">,</span><span class="s2">&quot;reason&quot;</span><span class="o">:</span><span class="s2">&quot;You are not authorized to access this db.&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>You declared user “jan” as a member in this database, so he is able to read and
+write normal documents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">curl</span> <span class="o">-</span><span class="n">u</span> <span class="n">jan</span><span class="p">:</span><span class="n">orange</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">mydatabase</span><span class="o">/</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;db_name&quot;</span><span class="o">:</span><span class="s2">&quot;mydatabase&quot;</span><span class="p">,</span><span class="s2">&quot;doc_count&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span><span class="s2">&quot;doc_del_count&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span><span class="s2">&quot;update_seq&quot;</span><span class="o">:</span><span class="mf">3</span><span class="p">,</span><span class="s2">&quot;purge_seq&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span>
+<span class="s2">&quot;compact_running&quot;</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span><span class="s2">&quot;sizes&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="mf">272</span><span class="p">,</span><span class="s2">&quot;disk&quot;</span><span class="o">:</span><span class="mf">12376</span><span class="p">,</span><span class="s2">&quot;external&quot;</span><span class="o">:</span><span class="mf">350</span><span class="p">},</span>
+<span class="s2">&quot;instance_start_time&quot;</span><span class="o">:</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;disk_format_version&quot;</span><span class="o">:</span><span class="mf">6</span><span class="p">,</span><span class="s2">&quot;committed_update_seq&quot;</span><span class="o">:</span><span class="mf">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>If Jan attempted to create a design doc, however, CouchDB would return a
+401 Unauthorized error because the username “jan” is not in the list of
+admin names and the <cite>/_users/org.couchdb.user:jan</cite> document doesn’t contain
+a role that matches any of the declared admin roles.  If you want to promote
+Jan to an admin, you can update the security document to add <cite>“jan”</cite> to
+the <cite>names</cite> array under <cite>admin</cite>.  Keeping track of individual database
+admin usernames is tedious, though, so you would likely prefer to create a
+database admin role and assign that role to the <cite>org.couchdb.user:jan</cite> user
+document:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">mydatabase</span><span class="o">/</span><span class="n">_security</span> \
+     <span class="o">-</span><span class="n">u</span> <span class="n">anna</span><span class="p">:</span><span class="n">secret</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;admins&quot;: { &quot;names&quot;: [], &quot;roles&quot;: [&quot;mydatabase_admin&quot;] }, &quot;members&quot;: { &quot;names&quot;: [], &quot;roles&quot;: [] } }&#39;</span>
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="../api/database/security.html#api-db-security"><span class="std std-ref">_security document reference page</span></a> for
+additional details about specifying database members and admins.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="curl.html" class="btn btn-neutral float-left" title="1.4. cURL: Your Command Line Friend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tour.html" class="btn btn-neutral float-right" title="1.6. Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

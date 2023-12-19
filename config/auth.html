@@ -1,0 +1,828 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.7. Authentication and Authorization &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/config/auth.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.8. Compaction" href="compaction.html" />
+    <link rel="prev" title="3.6. CouchDB HTTP Server" href="http.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Introduction To Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb.html">3.2. Base Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">3.3. Configuring Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couch-peruser.html">3.4. Database Per User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk-monitor.html">3.5. Disk Monitor Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html">3.6. CouchDB HTTP Server</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.7. Authentication and Authorization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#server-administrators">3.7.1. Server Administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authentication-configuration">3.7.2. Authentication Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">3.8. Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexbuilds.html">3.9. Background Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ioq.html">3.10. IO Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">3.11. Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replicator.html">3.12. Replicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query-servers.html">3.13. Query Servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">3.14. Miscellaneous Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">3.15. Resharding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Configuration</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.7. </span>Authentication and Authorization</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/config/auth.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="authentication-and-authorization">
+<h1><span class="section-number">3.7. </span>Authentication and Authorization<a class="headerlink" href="#authentication-and-authorization" title="Permalink to this heading">¶</a></h1>
+<section id="server-administrators">
+<span id="config-admins"></span><h2><span class="section-number">3.7.1. </span>Server Administrators<a class="headerlink" href="#server-administrators" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="admins">
+<span class="sig-name descname"><span class="pre">[admins]</span></span><a class="headerlink" href="#admins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0.0: </span>CouchDB requires an admin account to start. If an admin account has not
+been created, CouchDB will print an error message and terminate.</p>
+<p>CouchDB server administrators and passwords are not stored in the
+<code class="docutils literal notranslate"><span class="pre">_users</span></code> database, but in the last <code class="docutils literal notranslate"><span class="pre">[admins]</span></code> section that CouchDB
+finds when loading its ini files. See :config:intro for details on config
+file order and behaviour. This file (which could be something like
+<code class="docutils literal notranslate"><span class="pre">/opt/couchdb/etc/local.ini</span></code> or
+<code class="docutils literal notranslate"><span class="pre">/opt/couchdb/etc/local.d/10-admins.ini</span></code> when CouchDB is installed from
+packages) should be appropriately secured and     readable only by system
+administrators:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[admins]</span>
+<span class="c1">;admin = mysecretpassword</span>
+<span class="na">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">-hashed-6d3c30241ba0aaa4e16c6ea99224f915687ed8cd,7f4a3e05e0cbc6f48a0035e3508eef90</span>
+<span class="na">architect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">-pbkdf2-43ecbd256a70a3a2f7de40d2374b6c3002918834,921a12f74df0c1052b3e562a23cd227f,10000</span>
+</pre></div>
+</div>
+<p>Administrators can be added directly to the <code class="docutils literal notranslate"><span class="pre">[admins]</span></code> section, and when
+CouchDB is restarted, the passwords will be salted and encrypted. You may
+also use the HTTP interface to create administrator accounts; this way,
+you don’t need to restart CouchDB, and there’s no need to temporarily store
+or transmit passwords in plaintext. The HTTP
+<code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config/admins</span></code> endpoint supports querying, deleting
+or creating new admin accounts:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/_node/nonode@nohost/_config/admins</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">196</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Fri, 30 Nov 2012 11:37:18 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;admin&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;-hashed-6d3c30241ba0aaa4e16c6ea99224f915687ed8cd,7f4a3e05e0cbc6f48a0035e3508eef90&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;architect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;-pbkdf2-43ecbd256a70a3a2f7de40d2374b6c3002918834,921a12f74df0c1052b3e562a23cd227f,10000&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you already have a salted, encrypted password string (for example, from
+an old ini file, or from a different CouchDB server), then you can store
+the “raw” encrypted string, without having CouchDB doubly encrypt it.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">PUT</span> <span class="nn">/_node/nonode@nohost/_config/admins/architect?raw=true</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">89</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="s2">&quot;-pbkdf2-43ecbd256a70a3a2f7de40d2374b6c3002918834,921a12f74df0c1052b3e562a23cd227f,10000&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">89</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Fri, 30 Nov 2012 11:39:18 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="s2">&quot;-pbkdf2-43ecbd256a70a3a2f7de40d2374b6c3002918834,921a12f74df0c1052b3e562a23cd227f,10000&quot;</span>
+</pre></div>
+</div>
+<p>Further details are available in <cite>security</cite>, including configuring the work
+factor for <code class="docutils literal notranslate"><span class="pre">PBKDF2</span></code>, and the algorithm itself at
+<a class="reference external" href="http://tools.ietf.org/html/rfc2898">PBKDF2 (RFC-2898)</a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.4: </span><cite>PBKDF2</cite> server-side hashed salted password support added, now as a
+synchronous call for the <code class="docutils literal notranslate"><span class="pre">_config/admins</span></code> API.</p>
+</div>
+</div>
+</section>
+<section id="authentication-configuration">
+<span id="config-chttpd-auth"></span><h2><span class="section-number">3.7.2. </span>Authentication Configuration<a class="headerlink" href="#authentication-configuration" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="chttpd">
+<span class="sig-name descname"><span class="pre">[chttpd]</span></span><a class="headerlink" href="#chttpd" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="chttpd/require_valid_user">
+<span class="sig-name descname"><span class="pre">require_valid_user</span></span><a class="headerlink" href="#chttpd/require_valid_user" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd] section</p>
+</div>
+<p>When this option is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, no requests are allowed from
+anonymous users. Everyone must be authenticated.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd]</span>
+<span class="na">require_valid_user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd/require_valid_user_except_for_up">
+<span class="sig-name descname"><span class="pre">require_valid_user_except_for_up</span></span><a class="headerlink" href="#chttpd/require_valid_user_except_for_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>When this option is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, no requests are allowed from
+anonymous users, <em>except</em> for the <code class="docutils literal notranslate"><span class="pre">/_up</span></code> endpoint. Everyone else must
+be authenticated.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd]</span>
+<span class="na">require_valid_user_except_for_up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="config section">
+<dt class="sig sig-object config" id="chttpd_auth">
+<span class="sig-name descname"><span class="pre">[chttpd_auth]</span></span><a class="headerlink" href="#chttpd_auth" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>These options were moved to [chttpd_auth] section:
+<cite>authentication_redirect</cite>, <cite>timeout</cite>,
+<cite>auth_cache_size</cite>, <cite>allow_persistent_cookies</cite>, <cite>iterations</cite>,
+<cite>min_iterations</cite>, <cite>max_iterations</cite>, <cite>secret</cite>, <cite>users_db_public</cite>,
+<cite>x_auth_roles</cite>, <cite>x_auth_token</cite>, <cite>x_auth_username</cite>,
+<cite>cookie_domain</cite>, <cite>same_site</cite>.</p>
+</div>
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/allow_persistent_cookies">
+<span class="sig-name descname"><span class="pre">allow_persistent_cookies</span></span><a class="headerlink" href="#chttpd_auth/allow_persistent_cookies" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, CouchDB will set the Max-Age and Expires attributes
+on the cookie, which causes user agents (like browsers) to preserve the cookie
+over restarts.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">allow_persistent_cookies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/cookie_domain">
+<span class="sig-name descname"><span class="pre">cookie_domain</span></span><a class="headerlink" href="#chttpd_auth/cookie_domain" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.1.1.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>Configures the <code class="docutils literal notranslate"><span class="pre">domain</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">AuthSession</span></code> cookie. By default the
+<code class="docutils literal notranslate"><span class="pre">domain</span></code> attribute is empty, resulting in the cookie being set on CouchDB’s domain.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">cookie_domain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">example.com</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/same_site">
+<span class="sig-name descname"><span class="pre">same_site</span></span><a class="headerlink" href="#chttpd_auth/same_site" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>When this option is set to a non-empty value, a <code class="docutils literal notranslate"><span class="pre">SameSite</span></code> attribute is added to
+the <code class="docutils literal notranslate"><span class="pre">AuthSession</span></code> cookie. Valid values are <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">lax</span></code> or <code class="docutils literal notranslate"><span class="pre">strict</span></code>.:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">same_site</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">strict</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/auth_cache_size">
+<span class="sig-name descname"><span class="pre">auth_cache_size</span></span><a class="headerlink" href="#chttpd_auth/auth_cache_size" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>Number of <a class="reference internal" href="../json-structure.html#userctx-object"><span class="std std-ref">User Context Object</span></a> to cache in memory, to reduce disk
+lookups.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">auth_cache_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">50</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/authentication_redirect">
+<span class="sig-name descname"><span class="pre">authentication_redirect</span></span><a class="headerlink" href="#chttpd_auth/authentication_redirect" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>Specifies the location for redirection on successful authentication if
+a <code class="docutils literal notranslate"><span class="pre">text/html</span></code> response is accepted by the client (via an <code class="docutils literal notranslate"><span class="pre">Accept</span></code>
+header).</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">authentication_redirect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/_utils/session.html</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/hash_algorithms">
+<span class="sig-name descname"><span class="pre">hash_algorithms</span></span><a class="headerlink" href="#chttpd_auth/hash_algorithms" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.3.</span></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Until CouchDB version 3.3.1, <a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a> used only the hash
+algorithm <code class="docutils literal notranslate"><span class="pre">sha1</span></code> as validation of
+<a class="reference internal" href="#chttpd_auth/x_auth_token" title="x_auth_token"><code class="xref config config-option docutils literal notranslate"><span class="pre">X-Auth-CouchDB-Token</span></code></a>.</p>
+</div>
+<p>Sets the HMAC hash algorithm used for cookie and proxy authentication. You can
+provide a comma-separated list of hash algorithms. New cookie sessions or
+session updates are calculated with the first hash algorithm. All values in the
+list can be used to decode the cookie session and the token
+<a class="reference internal" href="#chttpd_auth/x_auth_token" title="x_auth_token"><code class="xref config config-option docutils literal notranslate"><span class="pre">X-Auth-CouchDB-Token</span></code></a> for
+<a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">hash_algorithms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">sha256, sha</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can select any hash algorithm the version of erlang used in your CouchDB
+install supports. The common list of available hashes might be:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">sha, sha224, sha256, sha384, sha512</span>
+</pre></div>
+</div>
+<p>To retrieve a complete list of supported hash algorithms you can use our
+<code class="docutils literal notranslate"><span class="pre">bin/remsh</span></code> script and retrieve a full list of available hash algorithms
+with <code class="docutils literal notranslate"><span class="pre">crypto:supports(hashs).</span></code> or use the
+<a class="reference internal" href="../api/server/common.html#api-server-versions"><span class="std std-ref">_node/{node-name}/_versions</span></a> endpoint to retrieve the
+hashes.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend using the following hash algorithms:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">md4, md5</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/iterations">
+<span class="sig-name descname"><span class="pre">iterations</span></span><a class="headerlink" href="#chttpd_auth/iterations" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>The number of iterations for password hashing by the PBKDF2 algorithm.
+A higher  number provides better hash durability, but comes at a cost
+in performance for each request that requires authentication.
+When using hundreds of thousands of iterations, use session cookies, or the performance hit will be huge.
+(The internal hashing algorithm is SHA1, which affects the recommended number of iterations.)</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">iterations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">10000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/min_iterations">
+<span class="sig-name descname"><span class="pre">min_iterations</span></span><a class="headerlink" href="#chttpd_auth/min_iterations" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>The minimum number of iterations allowed for passwords hashed by the
+PBKDF2 algorithm. Any user with fewer iterations is forbidden.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">min_iterations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/max_iterations">
+<span class="sig-name descname"><span class="pre">max_iterations</span></span><a class="headerlink" href="#chttpd_auth/max_iterations" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>The maximum number of iterations allowed for passwords hashed by the
+PBKDF2 algorithm. Any user with greater iterations is forbidden.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">max_iterations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/password_regexp">
+<span class="sig-name descname"><span class="pre">password_regexp</span></span><a class="headerlink" href="#chttpd_auth/password_regexp" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.</span></p>
+</div>
+<p>A list of
+<a class="reference external" href="https://erlang.org/doc/man/re.html#regexp_syntax">Regular Expressions</a>
+to check new/changed passwords.
+When set, new user passwords must <strong>match</strong> all RegExp in this list.</p>
+<p>A RegExp can be paired with a <em>reason text</em>:
+<code class="docutils literal notranslate"><span class="pre">[{&quot;RegExp&quot;,</span> <span class="pre">&quot;reason</span> <span class="pre">text&quot;},</span> <span class="pre">...]</span></code>.
+If a RegExp doesn’t match, its <em>reason text</em> will be appended to the
+default reason of <code class="docutils literal notranslate"><span class="pre">Password</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">conform</span> <span class="pre">to</span> <span class="pre">requirements.</span></code></p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couch_httpd_auth]</span>
+<span class="c1">; Password must be 10 chars long and have one or more uppercase and</span>
+<span class="c1">; lowercase char and one or more numbers.</span>
+<span class="na">password_regexp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">[{&quot;.{10,}&quot;, &quot;Min length is 10 chars.&quot;}, &quot;[A-Z]+&quot;, &quot;[a-z]+&quot;, &quot;\\d+&quot;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/proxy_use_secret">
+<span class="sig-name descname"><span class="pre">proxy_use_secret</span></span><a class="headerlink" href="#chttpd_auth/proxy_use_secret" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>When this option is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the
+<a class="reference internal" href="#chttpd_auth/secret" title="secret"><code class="xref config config-option docutils literal notranslate"><span class="pre">chttpd_auth/secret</span></code></a> option is required for
+<a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">proxy_use_secret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/public_fields">
+<span class="sig-name descname"><span class="pre">public_fields</span></span><a class="headerlink" href="#chttpd_auth/public_fields" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>A comma-separated list of field names in user documents (in
+<a class="reference internal" href="couchdb.html#couchdb/users_db_suffix" title="users_db_suffix"><code class="xref config config-option docutils literal notranslate"><span class="pre">couchdb/users_db_suffix</span></code></a>) that can be read by any
+user. If unset or not specified, authenticated users can only retrieve
+their own document.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">public_fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">first_name, last_name, contacts, url</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">public_fields</span></code> allowlist for user document properties
+requires setting the <a class="reference internal" href="#chttpd_auth/users_db_public" title="users_db_public"><code class="xref config config-option docutils literal notranslate"><span class="pre">chttpd_auth/users_db_public</span></code></a>
+option to <code class="docutils literal notranslate"><span class="pre">true</span></code> (the latter option has no other purpose):</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">users_db_public</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/secret">
+<span class="sig-name descname"><span class="pre">secret</span></span><a class="headerlink" href="#chttpd_auth/secret" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>The secret token is used for <a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a> and for <a class="reference internal" href="../api/server/authn.html#api-auth-cookie"><span class="std std-ref">Cookie Authentication</span></a>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">secret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">92de07df7e7a3fe14808cef90a7cc0d91</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#chttpd_auth/timeout" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>Number of seconds since the last request before sessions will be
+expired.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">600</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/users_db_public">
+<span class="sig-name descname"><span class="pre">users_db_public</span></span><a class="headerlink" href="#chttpd_auth/users_db_public" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>Allow all users to view user documents. By default, only admins may
+browse all users documents, while users may browse only their own
+document.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">users_db_public</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/x_auth_roles">
+<span class="sig-name descname"><span class="pre">x_auth_roles</span></span><a class="headerlink" href="#chttpd_auth/x_auth_roles" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>The HTTP header name (<code class="docutils literal notranslate"><span class="pre">X-Auth-CouchDB-Roles</span></code> by default) that
+contains the list of a user’s roles, separated by a comma. Used for
+<a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">x_auth_roles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">X-Auth-CouchDB-Roles</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/x_auth_token">
+<span class="sig-name descname"><span class="pre">x_auth_token</span></span><a class="headerlink" href="#chttpd_auth/x_auth_token" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>The HTTP header name (<code class="docutils literal notranslate"><span class="pre">X-Auth-CouchDB-Token</span></code> by default) containing
+the token used to authenticate the authorization. This token is an
+<cite>HMAC-SHA1</cite> created from the <a class="reference internal" href="#chttpd_auth/secret" title="secret"><code class="xref config config-option docutils literal notranslate"><span class="pre">chttpd_auth/secret</span></code></a> and
+<a class="reference internal" href="#chttpd_auth/x_auth_username" title="x_auth_username"><code class="xref config config-option docutils literal notranslate"><span class="pre">chttpd_auth/x_auth_username</span></code></a>. The secret key should be
+the same on the client and the CouchDB node. This token is optional if
+the value of the <a class="reference internal" href="#chttpd_auth/proxy_use_secret" title="proxy_use_secret"><code class="xref config config-option docutils literal notranslate"><span class="pre">chttpd_auth/proxy_use_secret</span></code></a> option is
+not <code class="docutils literal notranslate"><span class="pre">true</span></code>. Used for <a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">x_auth_token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">X-Auth-CouchDB-Token</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="chttpd_auth/x_auth_username">
+<span class="sig-name descname"><span class="pre">x_auth_username</span></span><a class="headerlink" href="#chttpd_auth/x_auth_username" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>moved from [couch_httpd_auth] to [chttpd_auth] section</p>
+</div>
+<p>The HTTP header name (<code class="docutils literal notranslate"><span class="pre">X-Auth-CouchDB-UserName</span></code> by default)
+containing the username. Used for <a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd_auth]</span>
+<span class="na">x_auth_username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">X-Auth-CouchDB-UserName</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="config section">
+<dt class="sig sig-object config" id="jwt_auth">
+<span class="sig-name descname"><span class="pre">[jwt_auth]</span></span><a class="headerlink" href="#jwt_auth" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="jwt_auth/required_claims">
+<span class="sig-name descname"><span class="pre">required_claims</span></span><a class="headerlink" href="#jwt_auth/required_claims" title="Permalink to this definition">¶</a></dt>
+<dd><p>This parameter is a comma-separated list of additional mandatory JWT claims
+that must be present in any presented JWT token. A <a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a>
+is sent if any are missing.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[jwt_auth]</span>
+<span class="w">    </span><span class="na">required_claims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">exp,iat</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="jwt_auth/roles_claim_name">
+<span class="sig-name descname"><span class="pre">roles_claim_name</span></span><a class="headerlink" href="#jwt_auth/roles_claim_name" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> is deprecated in CouchDB 3.3, and will be removed later.
+Please migrate to <code class="docutils literal notranslate"><span class="pre">roles_claim_path</span></code>.</p>
+</div>
+<p>If presented, it is used as the CouchDB user’s roles
+list as long as the JWT token is valid. The default value for <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code>
+is <code class="docutils literal notranslate"><span class="pre">_couchdb.roles</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Values for <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> can only be top-level attributes in the JWT
+token. If <code class="docutils literal notranslate"><span class="pre">roles_claim_path</span></code> is set, then <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> is ignored!</p>
+</div>
+<p>Let’s assume, we have the following configuration:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[jwt_auth]</span>
+<span class="na">roles_claim_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">my-couchdb.roles</span>
+</pre></div>
+</div>
+<p>CouchDB will search for the attribute <code class="docutils literal notranslate"><span class="pre">my-couchdb.roles</span></code> in the JWT token.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;my-couchdb.roles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;role_1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;role_2&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="jwt_auth/roles_claim_path">
+<span class="sig-name descname"><span class="pre">roles_claim_path</span></span><a class="headerlink" href="#jwt_auth/roles_claim_path" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.3.</span></p>
+</div>
+<p>This parameter was introduced to overcome disadvantages of <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code>,
+because it is not possible with <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> to map nested role
+attributes in the JWT token.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">roles_claim_path</span></code> is set, then <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> is ignored!</p>
+</div>
+<p>Now it is possible the read a nested roles claim from JWT tokens into CouchDB. As
+always, there is some theory at the beginning to get things up and running. Don’t
+get scared now, it’s really short and easy. Honestly!</p>
+<p>There are only two characters with a special meaning. These are</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.</span></code> for nesting json attributes and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">\.</span></code> to skip nesting</p></li>
+</ul>
+</div></blockquote>
+<p>That’s it. Really.</p>
+<p>Let’s assume there is the following data-payload in the JWT token:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;resource_access&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;security.settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;account&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;roles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="s2">&quot;manage-account&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;view-profile&quot;</span>
+<span class="w">                </span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now, let’s define the config variable <code class="docutils literal notranslate"><span class="pre">roles_claim_path</span></code> for this example. It
+should look like this:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">roles_claim_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">resource_access.security\.settings.account.roles</span>
+</pre></div>
+</div>
+<p>If an attribute has a <code class="docutils literal notranslate"><span class="pre">.</span></code> in the key like <code class="docutils literal notranslate"><span class="pre">security.settings</span></code>, you have to
+escape it in the config parameter with <code class="docutils literal notranslate"><span class="pre">\.</span></code>. If you use a <code class="docutils literal notranslate"><span class="pre">.</span></code> then it gets
+interpreted as a nested sub-key. Let’s illustrate the behavior with a second
+example. There is the following config parameter for <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> (by the
+way it was the default value if you didn’t configured it):</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">roles_claim_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">_couchdb.roles</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CouchDB doesn’t set any default or implicit value for <code class="docutils literal notranslate"><span class="pre">roles_claim_path</span></code>.</p>
+</div>
+<p>To migrate from <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> to <code class="docutils literal notranslate"><span class="pre">roles_claim_path</span></code> you need to change
+the parameter name and escape the <code class="docutils literal notranslate"><span class="pre">.</span></code> to prevent CouchDB to read this as a
+nested JSON key.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">roles_claim_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">_couchdb\.roles</span>
+</pre></div>
+</div>
+<p>Let’s assume your JWT token have the following data-payload for your couchdb
+roles claim:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;_couchdb.roles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;accounting-role&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;view-role&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you did everything right, the response from the <code class="docutils literal notranslate"><span class="pre">_session</span></code> endpoint should
+look something like this:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/_session</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+<span class="na">Authorization</span><span class="o">:</span> <span class="l">Bearer &lt;JWT token&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;userCtx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;roles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;accounting-role&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;view-role&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;authentication_handlers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;jwt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;proxy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cookie&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;default&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;authenticated&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jwt&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>That’s all, you are done with the migration from <code class="docutils literal notranslate"><span class="pre">roles_claim_name</span></code> to
+<code class="docutils literal notranslate"><span class="pre">roles_claim_path</span></code> Easy, isn’t it?</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="http.html" class="btn btn-neutral float-left" title="3.6. CouchDB HTTP Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compaction.html" class="btn btn-neutral float-right" title="3.8. Compaction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

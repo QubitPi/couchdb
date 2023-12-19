@@ -1,0 +1,481 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.6. Reverse Proxies &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/best-practices/reverse-proxies.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Installation" href="../install/index.html" />
+    <link rel="prev" title="4.5. View recommendations" href="views.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Best Practices</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="documents.html">4.1. Document Design Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="forms.html">4.2. Document submission using HTML Forms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iso-date.html">4.3. Using an ISO Formatted Date for Document IDs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsdevel.html">4.4. JavaScript development tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html">4.5. View recommendations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.6. Reverse Proxies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reverse-proxying-with-haproxy">4.6.1. Reverse proxying with HAProxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reverse-proxying-with-nginx">4.6.2. Reverse proxying with nginx</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-configuration">4.6.2.1. Basic Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reverse-proxying-couchdb-in-a-subdirectory-with-nginx">4.6.2.2. Reverse proxying CouchDB in a subdirectory with nginx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#authentication-with-nginx-as-a-reverse-proxy">4.6.2.3. Authentication with nginx as a reverse proxy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ssl-with-nginx">4.6.2.4. SSL with nginx</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reverse-proxying-with-caddy-2">4.6.3. Reverse Proxying with Caddy 2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.6.3.1. Basic configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reverse-proxying-couchdb-in-a-subdirectory-with-caddy-2">4.6.3.2. Reverse proxying CouchDB in a subdirectory with Caddy 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reverse-proxying-load-balancing-for-couchdb-clusters">4.6.3.3. Reverse proxying + load balancing for CouchDB clusters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#authentication-with-caddy-2-as-a-reverse-proxy">4.6.3.4. Authentication with Caddy 2 as a reverse proxy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reverse-proxying-with-apache-http-server">4.6.4. Reverse Proxying with Apache HTTP Server</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.6.4.1. Basic Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">4. </span>Best Practices</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4.6. </span>Reverse Proxies</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/best-practices/reverse-proxies.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reverse-proxies">
+<span id="best-practices-reverse-proxies"></span><h1><span class="section-number">4.6. </span>Reverse Proxies<a class="headerlink" href="#reverse-proxies" title="Permalink to this heading">¶</a></h1>
+<section id="reverse-proxying-with-haproxy">
+<h2><span class="section-number">4.6.1. </span>Reverse proxying with HAProxy<a class="headerlink" href="#reverse-proxying-with-haproxy" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB recommends the use of <a class="reference external" href="http://haproxy.org/">HAProxy</a> as a load balancer and reverse proxy.
+The team’s experience with using it in production has shown it to be superior
+for configuration and monitoring capabilities, as well as overall performance.</p>
+<p>CouchDB’s sample haproxy configuration is present in the <a class="reference external" href="https://github.com/apache/couchdb/blob/main/rel/haproxy.cfg">code repository</a> and
+release tarball as <code class="docutils literal notranslate"><span class="pre">rel/haproxy.cfg</span></code>. It is included below. This example
+is for a 3 node CouchDB cluster:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>global
+    maxconn 512
+    spread-checks 5
+
+defaults
+    mode http
+    log global
+    monitor-uri /_haproxy_health_check
+    option log-health-checks
+    option httplog
+    balance roundrobin
+    option forwardfor
+    option redispatch
+    retries 4
+    option http-server-close
+    timeout client 150000
+    timeout server 3600000
+    timeout connect 500
+
+    stats enable
+    stats uri /_haproxy_stats
+    # stats auth admin:admin # Uncomment for basic auth
+
+frontend http-in
+     # This requires HAProxy 1.5.x
+     # bind *:$HAPROXY_PORT
+     bind *:5984
+     default_backend couchdbs
+
+backend couchdbs
+    option httpchk GET /_up
+    http-check disable-on-404
+    server couchdb1 x.x.x.x:5984 check inter 5s
+    server couchdb2 x.x.x.x:5984 check inter 5s
+    server couchdb3 x.x.x.x:5984 check inter 5s
+</pre></div>
+</div>
+</section>
+<section id="reverse-proxying-with-nginx">
+<h2><span class="section-number">4.6.2. </span>Reverse proxying with nginx<a class="headerlink" href="#reverse-proxying-with-nginx" title="Permalink to this heading">¶</a></h2>
+<section id="basic-configuration">
+<h3><span class="section-number">4.6.2.1. </span>Basic Configuration<a class="headerlink" href="#basic-configuration" title="Permalink to this heading">¶</a></h3>
+<p>Here’s a basic excerpt from an nginx config file in
+<code class="docutils literal notranslate"><span class="pre">&lt;nginx</span> <span class="pre">config</span> <span class="pre">directory&gt;/sites-available/default</span></code>. This will proxy all
+requests from <code class="docutils literal notranslate"><span class="pre">http://domain.com/...</span></code> to <code class="docutils literal notranslate"><span class="pre">http://localhost:5984/...</span></code></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>location / {
+    proxy_pass http://localhost:5984;
+    proxy_redirect off;
+    proxy_buffering off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+</pre></div>
+</div>
+<p>Proxy buffering <strong>must</strong> be disabled, or continuous replication will not
+function correctly behind nginx.</p>
+</section>
+<section id="reverse-proxying-couchdb-in-a-subdirectory-with-nginx">
+<h3><span class="section-number">4.6.2.2. </span>Reverse proxying CouchDB in a subdirectory with nginx<a class="headerlink" href="#reverse-proxying-couchdb-in-a-subdirectory-with-nginx" title="Permalink to this heading">¶</a></h3>
+<p>It can be useful to provide CouchDB as a subdirectory of your overall domain,
+especially to avoid CORS concerns. Here’s an excerpt of a basic nginx
+configuration that proxies the URL <code class="docutils literal notranslate"><span class="pre">http://domain.com/couchdb</span></code> to
+<code class="docutils literal notranslate"><span class="pre">http://localhost:5984</span></code> so that requests appended to the subdirectory, such
+as <code class="docutils literal notranslate"><span class="pre">http://domain.com/couchdb/db1/doc1</span></code> are proxied to
+<code class="docutils literal notranslate"><span class="pre">http://localhost:5984/db1/doc1</span></code>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>location /couchdb {
+    rewrite ^ $request_uri;
+    rewrite ^/couchdb/(.*) /$1 break;
+    proxy_pass http://localhost:5984$uri;
+    proxy_redirect off;
+    proxy_buffering off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+</pre></div>
+</div>
+<p>Session based replication is default functionality since CouchDB 2.3.0. To enable session based replication with reverse proxied CouchDB in a subdirectory.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>location /_session {
+    proxy_pass http://localhost:5984/_session;
+    proxy_redirect off;
+    proxy_buffering off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+</pre></div>
+</div>
+</section>
+<section id="authentication-with-nginx-as-a-reverse-proxy">
+<h3><span class="section-number">4.6.2.3. </span>Authentication with nginx as a reverse proxy<a class="headerlink" href="#authentication-with-nginx-as-a-reverse-proxy" title="Permalink to this heading">¶</a></h3>
+<p>Here’s a sample config setting with basic authentication enabled, placing
+CouchDB in the <code class="docutils literal notranslate"><span class="pre">/couchdb</span></code> subdirectory:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>location /couchdb {
+    auth_basic &quot;Restricted&quot;;
+    auth_basic_user_file htpasswd;
+    rewrite /couchdb/(.*) /$1 break;
+    proxy_pass http://localhost:5984;
+    proxy_redirect off;
+    proxy_buffering off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Authorization &quot;&quot;;
+}
+</pre></div>
+</div>
+<p>This setup leans entirely on nginx performing authorization, and forwarding
+requests to CouchDB with no authentication (with CouchDB in Admin Party mode),
+which isn’t sufficient in CouchDB 3.0 anymore as Admin Party has been removed.
+You’d need to at the very least hard-code user credentials into this version
+with headers.</p>
+<p>For a better solution, see <a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a>.</p>
+</section>
+<section id="ssl-with-nginx">
+<h3><span class="section-number">4.6.2.4. </span>SSL with nginx<a class="headerlink" href="#ssl-with-nginx" title="Permalink to this heading">¶</a></h3>
+<p>In order to enable SSL, just enable the nginx SSL module, and add another
+proxy header:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ssl on;
+ssl_certificate PATH_TO_YOUR_PUBLIC_KEY.pem;
+ssl_certificate_key PATH_TO_YOUR_PRIVATE_KEY.key;
+ssl_protocols SSLv3;
+ssl_session_cache shared:SSL:1m;
+
+location / {
+    proxy_pass http://localhost:5984;
+    proxy_redirect off;
+    proxy_set_header Host $host;
+    proxy_buffering off;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Ssl on;
+}
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">X-Forwarded-Ssl</span></code> header tells CouchDB that it should use the <code class="docutils literal notranslate"><span class="pre">https</span></code>
+scheme instead of the <code class="docutils literal notranslate"><span class="pre">http</span></code> scheme. Otherwise, all CouchDB-generated
+redirects will fail.</p>
+</section>
+</section>
+<section id="reverse-proxying-with-caddy-2">
+<h2><span class="section-number">4.6.3. </span>Reverse Proxying with Caddy 2<a class="headerlink" href="#reverse-proxying-with-caddy-2" title="Permalink to this heading">¶</a></h2>
+<p>Caddy is <code class="docutils literal notranslate"><span class="pre">https-by-default</span></code>, and will automatically acquire, install,
+activate and, when necessary, renew a trusted SSL certificate for you
+- all in the background.
+Certificates are issued by the <strong>Let’s Encrypt</strong> certificate authority.</p>
+<section id="id1">
+<h3><span class="section-number">4.6.3.1. </span>Basic configuration<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<p>Here’s a basic excerpt from a Caddyfile in
+<code class="docutils literal notranslate"><span class="pre">/etc/caddy/Caddyfile</span></code>. This will proxy all
+requests from <code class="docutils literal notranslate"><span class="pre">http(s)://domain.com/...</span></code> to <code class="docutils literal notranslate"><span class="pre">http://localhost:5984/...</span></code></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>domain.com {
+
+   reverse_proxy localhost:5984
+
+}
+</pre></div>
+</div>
+</section>
+<section id="reverse-proxying-couchdb-in-a-subdirectory-with-caddy-2">
+<h3><span class="section-number">4.6.3.2. </span>Reverse proxying CouchDB in a subdirectory with Caddy 2<a class="headerlink" href="#reverse-proxying-couchdb-in-a-subdirectory-with-caddy-2" title="Permalink to this heading">¶</a></h3>
+<p>It can be useful to provide CouchDB as a subdirectory of your overall domain,
+especially to avoid CORS concerns. Here’s an excerpt of a basic Caddy
+configuration that proxies the URL <code class="docutils literal notranslate"><span class="pre">http(s)://domain.com/couchdb</span></code> to
+<code class="docutils literal notranslate"><span class="pre">http://localhost:5984</span></code> so that requests appended to the subdirectory, such
+as <code class="docutils literal notranslate"><span class="pre">http(s)://domain.com/couchdb/db1/doc1</span></code> are proxied to
+<code class="docutils literal notranslate"><span class="pre">http://localhost:5984/db1/doc1</span></code>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>domain.com {
+
+    reverse_proxy /couchdb/* localhost:5984
+
+}
+</pre></div>
+</div>
+</section>
+<section id="reverse-proxying-load-balancing-for-couchdb-clusters">
+<h3><span class="section-number">4.6.3.3. </span>Reverse proxying + load balancing for CouchDB clusters<a class="headerlink" href="#reverse-proxying-load-balancing-for-couchdb-clusters" title="Permalink to this heading">¶</a></h3>
+<p>Here’s a basic excerpt from a Caddyfile in
+<code class="docutils literal notranslate"><span class="pre">/&lt;path&gt;/&lt;to&gt;/&lt;site&gt;/Caddyfile</span></code>. This will proxy and evenly distribute all
+requests from <code class="docutils literal notranslate"><span class="pre">http(s)://domain.com/...</span></code> among 3 CouchDB cluster nodes
+at <code class="docutils literal notranslate"><span class="pre">localhost:15984</span></code>, <code class="docutils literal notranslate"><span class="pre">localhost:25984</span></code> and <code class="docutils literal notranslate"><span class="pre">localhost:35984</span></code>.</p>
+<p>Caddy will check the status, i.e. health, of each node every 5 seconds;
+if a node goes down, Caddy will avoid proxying requests to that node until it
+comes back online.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>domain.com {
+
+    reverse_proxy http://localhost:15984 http://localhost:25984 http://localhost:35984 {
+    lb_policy round_robin
+    lb_try_interval 500ms
+
+    health_interval 5s
+    }
+
+}
+</pre></div>
+</div>
+</section>
+<section id="authentication-with-caddy-2-as-a-reverse-proxy">
+<h3><span class="section-number">4.6.3.4. </span>Authentication with Caddy 2 as a reverse proxy<a class="headerlink" href="#authentication-with-caddy-2-as-a-reverse-proxy" title="Permalink to this heading">¶</a></h3>
+<p>Here’s a sample config setting with basic authentication enabled, placing
+CouchDB in the <code class="docutils literal notranslate"><span class="pre">/couchdb</span></code> subdirectory:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>domain.com {
+
+    basicauth /couchdb/* {
+        couch_username couchdb_hashed_password_base64
+    }
+
+    reverse_proxy /couchdb/* localhost:5984
+
+}
+</pre></div>
+</div>
+<p>This setup leans entirely on nginx performing authorization, and forwarding
+requests to CouchDB with no authentication (with CouchDB in Admin Party mode),
+which isn’t sufficient in CouchDB 3.0 anymore as Admin Party has been removed.
+You’d need to at the very least hard-code user credentials into this version
+with headers.</p>
+<p>For a better solution, see <a class="reference internal" href="../api/server/authn.html#api-auth-proxy"><span class="std std-ref">Proxy Authentication</span></a>.</p>
+</section>
+</section>
+<section id="reverse-proxying-with-apache-http-server">
+<h2><span class="section-number">4.6.4. </span>Reverse Proxying with Apache HTTP Server<a class="headerlink" href="#reverse-proxying-with-apache-http-server" title="Permalink to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As of this writing, there is no way to fully disable the buffering between
+Apache HTTPD Server and CouchDB. This may present problems with continuous
+replication. The Apache CouchDB team strongly recommend the use of an
+alternative reverse proxy such as <code class="docutils literal notranslate"><span class="pre">haproxy</span></code> or <code class="docutils literal notranslate"><span class="pre">nginx</span></code>, as described
+earlier in this section.</p>
+</div>
+<section id="id2">
+<h3><span class="section-number">4.6.4.1. </span>Basic Configuration<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p>Here’s a basic excerpt for using a <code class="docutils literal notranslate"><span class="pre">VirtualHost</span></code> block config to use Apache
+as a reverse proxy for CouchDB. You need at least to configure Apache with the
+<code class="docutils literal notranslate"><span class="pre">--enable-proxy</span> <span class="pre">--enable-proxy-http</span></code> options and use a version equal to or
+higher than Apache 2.2.7 in order to use the <code class="docutils literal notranslate"><span class="pre">nocanon</span></code> option in the
+<code class="docutils literal notranslate"><span class="pre">ProxyPass</span></code> directive. The <code class="docutils literal notranslate"><span class="pre">ProxyPass</span></code> directive adds the <code class="docutils literal notranslate"><span class="pre">X-Forwarded-For</span></code>
+header needed by CouchDB, and the <code class="docutils literal notranslate"><span class="pre">ProxyPreserveHost</span></code> directive ensures the
+original client <code class="docutils literal notranslate"><span class="pre">Host</span></code> header is preserved.</p>
+<div class="highlight-apacheconf notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;VirtualHost</span><span class="w"> </span><span class="s">*:80</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nb">ServerAdmin</span><span class="w"> </span>webmaster@dummy-host.example.com
+<span class="w">   </span><span class="nb">DocumentRoot</span><span class="w"> </span><span class="s2">&quot;/opt/websites/web/www/dummy&quot;</span>
+<span class="w">   </span><span class="nb">ServerName</span><span class="w"> </span>couchdb.localhost
+<span class="w">   </span><span class="nb">AllowEncodedSlashes</span><span class="w"> </span><span class="k">On</span>
+<span class="w">   </span><span class="nb">ProxyRequests</span><span class="w"> </span><span class="k">Off</span>
+<span class="w">   </span><span class="nb">KeepAlive</span><span class="w"> </span><span class="k">Off</span>
+<span class="w">   </span><span class="nt">&lt;Proxy</span><span class="w"> </span><span class="s">*</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nb">Order</span><span class="w"> </span>deny,allow
+<span class="w">      </span><span class="nb">Deny</span><span class="w"> </span>from<span class="w"> </span><span class="k">all</span>
+<span class="w">      </span><span class="nb">Allow</span><span class="w"> </span>from<span class="w"> </span><span class="m">127.0.0.1</span>
+<span class="w">   </span><span class="nt">&lt;/Proxy&gt;</span>
+<span class="w">   </span><span class="nb">ProxyPass</span><span class="w"> </span>/<span class="w"> </span>http://localhost:5984<span class="w"> </span>nocanon
+<span class="w">   </span><span class="nb">ProxyPassReverse</span><span class="w"> </span>/<span class="w"> </span>http://localhost:5984
+<span class="w">   </span><span class="nb">ProxyPreserveHost</span><span class="w"> </span><span class="k">On</span>
+<span class="w">   </span><span class="nb">ErrorLog</span><span class="w"> </span><span class="s2">&quot;logs/couchdb.localhost-error_log&quot;</span>
+<span class="w">   </span><span class="nb">CustomLog</span><span class="w"> </span><span class="s2">&quot;logs/couchdb.localhost-access_log&quot;</span><span class="w"> </span>common
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="views.html" class="btn btn-neutral float-left" title="4.5. View recommendations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../install/index.html" class="btn btn-neutral float-right" title="1. Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

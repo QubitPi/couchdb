@@ -1,0 +1,287 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.7. Search Plugin Installation &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/install/search.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.8. Nouveau Server Installation" href="nouveau.html" />
+    <link rel="prev" title="1.6. Installation on Kubernetes" href="kubernetes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Installation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="unix.html">1.1. Installation on Unix-like systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">1.2. Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mac.html">1.3. Installation on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="freebsd.html">1.4. Installation on FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html">1.5. Installation via Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kubernetes.html">1.6. Installation on Kubernetes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.7. Search Plugin Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-binary-packages">1.7.1. Installation of Binary Packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chef">1.7.2. Chef</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kubernetes">1.7.3. Kubernetes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-details">1.7.4. Additional Details</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nouveau.html">1.8. Nouveau Server Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrading.html">1.9. Upgrading from prior CouchDB releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">1.10. Troubleshooting an Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Installation</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.7. </span>Search Plugin Installation</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/install/search.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="search-plugin-installation">
+<span id="install-search"></span><h1><span class="section-number">1.7. </span>Search Plugin Installation<a class="headerlink" href="#search-plugin-installation" title="Permalink to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.</span></p>
+</div>
+<p>CouchDB can build and query full-text search indexes using an external Java
+service that embeds <a class="reference external" href="http://lucene.apache.org">Apache Lucene</a>. Typically, this
+service is installed on the same host as CouchDB and communicates with it over
+the loopback network.</p>
+<p>The search plugin is runtime-compatible with Java JDKs 6, 7 and 8. Building a
+release from source requires JDK 6. <strong>It will not work with any newer version of
+Java.</strong> Sorry about that.</p>
+<section id="installation-of-binary-packages">
+<h2><span class="section-number">1.7.1. </span>Installation of Binary Packages<a class="headerlink" href="#installation-of-binary-packages" title="Permalink to this heading">¶</a></h2>
+<p>Binary packages that bundle all the necessary dependencies of the search plugin are
+available on <a class="reference external" href="https://github.com/cloudant-labs/clouseau/releases">GitHub</a>.  The files in each release should be unpacked into a directory on
+the Java classpath. If you do not have a classpath already set, or you wish to explicitly
+set the classpath location for Clouseau, then add the line:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">-classpath &#39;/path/to/clouseau/*&#39;</span>
+</pre></div>
+</div>
+<p>to the server command below. If clouseau is installed in <code class="docutils literal notranslate"><span class="pre">/opt/clouseau</span></code> the line would be:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">-classpath &#39;/opt/clouseau/*&#39;</span>
+</pre></div>
+</div>
+<p>The service expects to find a couple of configuration files
+conventionally called <code class="docutils literal notranslate"><span class="pre">clouseau.ini</span></code> and <code class="docutils literal notranslate"><span class="pre">log4j.properties</span></code> with the following
+content:</p>
+<p><strong>clouseau.ini</strong>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[clouseau]</span>
+
+<span class="c1">; the name of the Erlang node created by the service, leave this unchanged</span>
+<span class="na">name</span><span class="o">=</span><span class="s">clouseau@127.0.0.1</span>
+
+<span class="c1">; set this to the same distributed Erlang cookie used by the CouchDB nodes</span>
+<span class="na">cookie</span><span class="o">=</span><span class="s">brumbrum</span>
+
+<span class="c1">; the path where you would like to store the search index files</span>
+<span class="na">dir</span><span class="o">=</span><span class="s">/path/to/index/storage</span>
+
+<span class="c1">; the number of search indexes that can be open simultaneously</span>
+<span class="na">max_indexes_open</span><span class="o">=</span><span class="s">500</span>
+</pre></div>
+</div>
+<p><strong>log4j.properties</strong>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">log4j.rootLogger</span><span class="o">=</span><span class="s">debug, CONSOLE</span>
+<span class="na">log4j.appender.CONSOLE</span><span class="o">=</span><span class="s">org.apache.log4j.ConsoleAppender</span>
+<span class="na">log4j.appender.CONSOLE.layout</span><span class="o">=</span><span class="s">org.apache.log4j.PatternLayout</span>
+<span class="na">log4j.appender.CONSOLE.layout.ConversionPattern</span><span class="o">=</span><span class="s">%d{ISO8601} %c [%p] %m%n</span>
+</pre></div>
+</div>
+<p>Once these files are in place the service can be started with an invocation like
+the following:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">java -server \</span>
+<span class="w">     </span><span class="na">-Xmx2G \</span>
+<span class="w">     </span><span class="na">-Dsun.net.inetaddr.ttl</span><span class="o">=</span><span class="s">30 </span>\
+<span class="w">     </span><span class="s">-Dsun.net.inetaddr.negative.ttl=30 </span>\
+<span class="w">     </span><span class="s">-Dlog4j.configuration=file:/path/to/log4j.properties </span>\
+<span class="w">     </span><span class="s">-XX:OnOutOfMemoryError=&quot;kill -9 %p&quot; </span>\
+<span class="w">     </span><span class="s">-XX:+UseConcMarkSweepGC </span>\
+<span class="w">     </span><span class="s">-XX:+CMSParallelRemarkEnabled </span>\
+<span class="w">     </span><span class="s">com.cloudant.clouseau.Main </span>\
+<span class="w">     </span><span class="s">/path/to/clouseau.ini</span>
+</pre></div>
+</div>
+</section>
+<section id="chef">
+<h2><span class="section-number">1.7.2. </span>Chef<a class="headerlink" href="#chef" title="Permalink to this heading">¶</a></h2>
+<p>The CouchDB <a class="reference external" href="https://supermarket.chef.io/cookbooks/couchdb">cookbook</a> can build the search plugin from source and install it
+on a server alongside CouchDB.</p>
+</section>
+<section id="kubernetes">
+<h2><span class="section-number">1.7.3. </span>Kubernetes<a class="headerlink" href="#kubernetes" title="Permalink to this heading">¶</a></h2>
+<p>Users running CouchDB on Kubernetes via the <a class="reference external" href="https://github.com/apache/couchdb-helm">Helm chart</a> can add the search
+service to each CouchDB Pod by setting <code class="docutils literal notranslate"><span class="pre">enableSearch:</span> <span class="pre">true</span></code> in the chart
+values.</p>
+</section>
+<section id="additional-details">
+<h2><span class="section-number">1.7.4. </span>Additional Details<a class="headerlink" href="#additional-details" title="Permalink to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../ddocs/search.html#ddoc-search"><span class="std std-ref">Search User Guide</span></a> provides detailed information on
+creating and querying full-text indexes using this plugin.</p>
+<p>The source code for the plugin and additional configuration documentation is
+available on GitHub at <a class="reference external" href="https://github.com/cloudant-labs/clouseau">https://github.com/cloudant-labs/clouseau</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kubernetes.html" class="btn btn-neutral float-left" title="1.6. Installation on Kubernetes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nouveau.html" class="btn btn-neutral float-right" title="1.8. Nouveau Server Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

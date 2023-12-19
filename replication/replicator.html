@@ -1,0 +1,956 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.2. Replicator Database &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/replication/replicator.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.3. Replication and conflict model" href="conflicts.html" />
+    <link rel="prev" title="2.1. Introduction to Replication" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. Replication</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">2.1. Introduction to Replication</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.2. Replicator Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">2.2.1. Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documents-describing-the-same-replication">2.2.2. Documents describing the same replication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replication-scheduler">2.2.3. Replication Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replication-states">2.2.4. Replication states</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#states-descriptions">2.2.4.1. States descriptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#normal-vs-continuous-replications">2.2.4.2. Normal vs Continuous Replications</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#compatibility-mode">2.2.5. Compatibility Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#canceling-replications">2.2.6. Canceling replications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-restart">2.2.7. Server restart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clustering">2.2.8. Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-replicator-databases">2.2.9. Additional Replicator Databases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fair-share-job-scheduling">2.2.10. Fair Share Job Scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replicating-the-replicator-database">2.2.11. Replicating the replicator database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#delegations">2.2.12. Delegations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#selector-objects">2.2.13. Selector Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#specifying-usernames-and-passwords">2.2.14. Specifying Usernames and Passwords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replicate-winning-revisions-only">2.2.15. Replicate Winning Revisions Only</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="conflicts.html">2.3. Replication and conflict model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="protocol.html">2.4. CouchDB Replication Protocol</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">2. </span>Replication</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2.2. </span>Replicator Database</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/replication/replicator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="replicator-database">
+<span id="replicator"></span><h1><span class="section-number">2.2. </span>Replicator Database<a class="headerlink" href="#replicator-database" title="Permalink to this heading">¶</a></h1>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.1.0: </span>Scheduling replicator was introduced.
+Replication states, by default are not written back to documents
+anymore. There are new replication job states and new API endpoints
+<code class="docutils literal notranslate"><span class="pre">_scheduler/jobs</span></code> and <code class="docutils literal notranslate"><span class="pre">_scheduler/docs</span></code>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2.0: </span>Fair share scheduling was introduced. Multiple
+<code class="docutils literal notranslate"><span class="pre">_replicator</span></code> databases get an equal chance (configurable) of running
+their jobs. Previously replication jobs were scheduled without any regard of
+their originating database.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.3.0: </span><code class="docutils literal notranslate"><span class="pre">winning_revs_only:</span> <span class="pre">true</span></code> replicator option to
+replicate the winning document revisions.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> database works like any other in CouchDB, but
+documents added to it will trigger replications. Create (<code class="docutils literal notranslate"><span class="pre">PUT</span></code> or
+<code class="docutils literal notranslate"><span class="pre">POST</span></code>) a document to start replication. <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> a replication
+document to cancel an ongoing replication.</p>
+<p>These documents have exactly the same content as the JSON objects we used to
+<code class="docutils literal notranslate"><span class="pre">POST</span></code> to <code class="docutils literal notranslate"><span class="pre">_replicate</span></code> (fields <code class="docutils literal notranslate"><span class="pre">source</span></code>, <code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">create_target</span></code>,
+<code class="docutils literal notranslate"><span class="pre">create_target_params</span></code>, <code class="docutils literal notranslate"><span class="pre">continuous</span></code>, <code class="docutils literal notranslate"><span class="pre">doc_ids</span></code>, <code class="docutils literal notranslate"><span class="pre">filter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">query_params</span></code>, <code class="docutils literal notranslate"><span class="pre">use_checkpoints</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoint_interval</span></code>).</p>
+<p>Replication documents can have a user defined <code class="docutils literal notranslate"><span class="pre">_id</span></code> (handy for finding
+a specific replication request later). Design Documents (and <code class="docutils literal notranslate"><span class="pre">_local</span></code>
+documents) added to the replicator database are ignored.</p>
+<p>The default replicator database is <code class="docutils literal notranslate"><span class="pre">_replicator</span></code>. Additional
+replicator databases can be created. To be recognized as such by the
+system, their database names should end with <code class="docutils literal notranslate"><span class="pre">/_replicator</span></code>.</p>
+<section id="basics">
+<h2><span class="section-number">2.2.1. </span>Basics<a class="headerlink" href="#basics" title="Permalink to this heading">¶</a></h2>
+<p>Let’s say you POST the following document into <code class="docutils literal notranslate"><span class="pre">_replicator</span></code>:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;my_rep&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@myserver.com/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5984/bar&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;auth&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;basic&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;username&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;adm&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;password&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pass&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;create_target&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the couch log you’ll see 2 entries like these:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[notice] 2017-04-05T17:16:19.646716Z node1@127.0.0.1 &lt;0.29432.0&gt; -------- Replication `&quot;a81a78e822837e66df423d54279c15fe+continuous+create_target&quot;` is using:
+    4 worker processes
+    a worker batch size of 500
+    20 HTTP connections
+    a connection timeout of 30000 milliseconds
+    10 retries per request
+    socket options are: [{keepalive,true},{nodelay,false}]
+[notice] 2017-04-05T17:16:19.646759Z node1@127.0.0.1 &lt;0.29432.0&gt; -------- Document `my_rep` triggered replication `a81a78e822837e66df423d54279c15fe+continuous+create_target`
+</pre></div>
+</div>
+<p>Replication state of this document can then be queried from
+<code class="docutils literal notranslate"><span class="pre">http://adm:pass&#64;localhost:5984/_scheduler/docs/_replicator/my_rep</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_replicator&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;doc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_rep&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;error_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a81a78e822837e66df423d54279c15fe+continuous+create_target&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;revisions_checked&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;missing_revisions_found&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;docs_read&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;docs_written&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;changes_pending&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;doc_write_failures&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;checkpointed_source_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;source_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;through_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;last_updated&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T19:18:15Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;node&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node1@127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;source_proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;target_proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://myserver.com/foo/&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T19:18:15Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;running&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5984/bar/&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The state is <code class="docutils literal notranslate"><span class="pre">running</span></code>. That means replicator has scheduled this
+replication job to run. Replication document contents stay the same.
+Previously, before version 2.1, it was updated with the <code class="docutils literal notranslate"><span class="pre">triggered</span></code>
+state.</p>
+<p>The replication job will also appear in</p>
+<p><code class="docutils literal notranslate"><span class="pre">http://adm:pass&#64;localhost:5984/_scheduler/jobs</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;jobs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_replicator&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;doc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_rep&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T19:18:15Z&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;started&quot;</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T19:18:15Z&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;added&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a81a78e822837e66df423d54279c15fe+continuous+create_target&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;changes_pending&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;checkpointed_source_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;doc_write_failures&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;docs_read&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;docs_written&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;missing_revisions_found&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;revisions_checked&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;source_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;through_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;node&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node1@127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;0.1174.0&gt;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://myserver.com/foo/&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T19:18:15Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5984/bar/&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">_scheduler/jobs</span></code> shows more information, such as a detailed history of
+state changes. If a persistent replication has not yet started,
+has failed, or is completed, information about its state can only be found
+in <code class="docutils literal notranslate"><span class="pre">_scheduler/docs</span></code>. Keep in mind that some replication documents could be
+invalid and could not become a replication job. Others might be delayed
+because they are fetching data from a slow source database.</p>
+<p>If there is an error, for example if the source database is missing, the
+replication job will crash and retry after a wait period. Each
+successive crash will result in a longer waiting period.</p>
+<p>For example, POST-ing this document</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;my_rep_crashing&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@myserver.com/missing&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5984/bar&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;auth&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;basic&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;username&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;adm&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;password&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pass&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;create_target&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>when source database is missing, will result in periodic starts and
+crashes with an increasingly larger interval. The <code class="docutils literal notranslate"><span class="pre">history</span></code> list from
+<code class="docutils literal notranslate"><span class="pre">_scheduler/jobs</span></code> for this replication would look something like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;db_not_found: could not open http://adm:*****@localhost:5984/missing/&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T20:55:10Z&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;crashed&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T20:55:10Z&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;started&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;db_not_found: could not open http://adm:*****@localhost:5984/missing/&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T20:47:10Z&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;crashed&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T20:47:10Z&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;started&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">_scheduler/docs</span></code> shows a shorter summary:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_replicator&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;doc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_rep_crashing&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;error_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cb78391640ed34e9578e638d9bb00e44+create_target&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">           </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;db_not_found: could not open http://myserver.com/missing/&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;last_updated&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T20:55:10Z&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;node&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node1@127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;source_proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;target_proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://myserver.com/missing/&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T20:38:34Z&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;crashing&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5984/bar/&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Repeated crashes are described as a <code class="docutils literal notranslate"><span class="pre">crashing</span></code> state. <code class="docutils literal notranslate"><span class="pre">-ing</span></code> suffix
+implies this is a temporary state. User at any moment could create the
+missing database and then replication job could return back to the
+normal.</p>
+</section>
+<section id="documents-describing-the-same-replication">
+<h2><span class="section-number">2.2.2. </span>Documents describing the same replication<a class="headerlink" href="#documents-describing-the-same-replication" title="Permalink to this heading">¶</a></h2>
+<p>Let’s suppose 2 documents are added to the <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> database in
+the following order:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;my_rep&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@myserver.com/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://adm:pass@localhost:5984/bar&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;create_target&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>and</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;my_rep_dup&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@myserver.com/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://adm:pass@localhost:5984/bar&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;create_target&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Both describe exactly the same replication (only their <code class="docutils literal notranslate"><span class="pre">_ids</span></code> differ).
+In this case document <code class="docutils literal notranslate"><span class="pre">my_rep</span></code> triggers the replication, while
+<code class="docutils literal notranslate"><span class="pre">my_rep_dup`</span></code> will fail. Inspecting <code class="docutils literal notranslate"><span class="pre">_scheduler/docs</span></code> explains
+exactly why it failed:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_replicator&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;doc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_rep_dup&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;error_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Replication `a81a78e822837e66df423d54279c15fe+continuous+create_target` specified by document `my_rep_dup` already started, triggered by document `my_rep` from db `_replicator`&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;last_updated&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T21:41:51Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://myserver.com/foo/&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-04-05T21:41:51Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;failed&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://user:****@localhost:5984/bar&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Notice the state for this replication is <code class="docutils literal notranslate"><span class="pre">failed</span></code>. Unlike
+<code class="docutils literal notranslate"><span class="pre">crashing</span></code>, <code class="docutils literal notranslate"><span class="pre">failed</span></code> state is terminal. As long as both documents
+are present the replicator will not retry to run <code class="docutils literal notranslate"><span class="pre">my_rep_dup</span></code>
+replication. Another reason could be malformed documents. For example if
+worker process count is specified as a string (<code class="docutils literal notranslate"><span class="pre">&quot;worker_processes&quot;:</span> <span class="pre">&quot;a</span>
+<span class="pre">few&quot;</span></code>) instead of an integer, failure will occur.</p>
+</section>
+<section id="replication-scheduler">
+<h2><span class="section-number">2.2.3. </span>Replication Scheduler<a class="headerlink" href="#replication-scheduler" title="Permalink to this heading">¶</a></h2>
+<p>Once replication jobs are created they are managed by the scheduler. The
+scheduler is the replication component which periodically stops some
+jobs and starts others. This behavior makes it possible to have a
+larger number of jobs than the cluster could run simultaneously.
+Replication jobs which keep failing will be penalized and forced to
+wait. The wait time increases exponentially with each consecutive
+failure.</p>
+<p>When deciding which jobs to stop and which to start, the scheduler uses
+a round-robin algorithm to ensure fairness. Jobs which have been running
+the longest time will be stopped, and jobs which have been waiting the
+longest time will be started.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Non-continuous (normal) replication are treated differently
+once they start running. See <a class="reference internal" href="#normal-vs-continuous-replications"><span class="std std-ref">Normal vs Continuous Replications</span></a> section for more information.</p>
+</div>
+<p>The behavior of the scheduler can configured via <code class="docutils literal notranslate"><span class="pre">max_jobs</span></code>,
+<code class="docutils literal notranslate"><span class="pre">interval</span></code> and <code class="docutils literal notranslate"><span class="pre">max_churn</span></code> options. See <a class="reference internal" href="../config/replicator.html#config-replicator"><span class="std std-ref">Replicator
+configuration section</span></a> for additional information.</p>
+</section>
+<section id="replication-states">
+<span id="replicator-states"></span><h2><span class="section-number">2.2.4. </span>Replication states<a class="headerlink" href="#replication-states" title="Permalink to this heading">¶</a></h2>
+<p>Replication jobs during their life-cycle pass through various states.
+This is a diagram of all the states and transitions between them:</p>
+<figure class="align-center" id="id2">
+<img alt="Replication state diagram" src="../_images/replication-state-diagram.svg" /><figcaption>
+<p><span class="caption-text">Replication state diagram</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Blue and yellow shapes represent replication job states.</p>
+<p>Trapezoidal shapes represent external APIs, that’s how users interact
+with the replicator. Writing documents to <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> is the
+preferred way of creating replications, but posting to the
+<code class="docutils literal notranslate"><span class="pre">_replicate</span></code> HTTP endpoint is also supported.</p>
+<p>Six-sided shapes are internal API boundaries. They are optional for this
+diagram and are only shown as additional information to help clarify how the
+replicator works. There are two processing stages: the first is where
+replication documents are parsed and become replication jobs, and the second is
+the scheduler itself. The scheduler runs replication jobs, periodically
+stopping and starting some. Jobs posted via the <code class="docutils literal notranslate"><span class="pre">_replicate</span></code> endpoint bypass
+the first component and go straight to the scheduler.</p>
+<section id="states-descriptions">
+<h3><span class="section-number">2.2.4.1. </span>States descriptions<a class="headerlink" href="#states-descriptions" title="Permalink to this heading">¶</a></h3>
+<p>Before explaining the details of each state, it is worth noticing that
+color and shape of each state in the diagram:</p>
+<p><cite>Blue</cite> vs <cite>yellow</cite> partitions states into “healthy” and “unhealthy”,
+respectively. Unhealthy states indicate something has gone wrong and it
+might need user’s attention.</p>
+<p><cite>Rectangle</cite> vs <cite>oval</cite> separates “terminal” states from “non-terminal”
+ones. Terminal states are those which will not transition to other
+states any more. Informally, jobs in a terminal state will not be
+retried and don’t consume memory or CPU resources.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Initializing</span></code>: Indicates replicator has noticed the change from
+the replication document. Jobs should transition quickly through this
+state. Being stuck here for a while could mean there is an internal
+error.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Failed</span></code>: Replication document could not be processed and turned
+into a valid replication job for the scheduler. This state is
+terminal and requires user intervention to fix the problem. A typical
+reason for ending up in this state is a malformed document. For
+example, specifying an integer for a parameter which accepts a
+boolean. Another reason for failure could be specifying a duplicate
+replication. A duplicate replication is a replication with identical
+parameters but a different document ID.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Error</span></code>: Replication document update could not be turned into a
+replication job. Unlike the <code class="docutils literal notranslate"><span class="pre">Failed</span></code> state, this one is temporary,
+and replicator will keep retrying periodically. There is an
+exponential backoff applied in case of consecutive failures. The main
+reason this state exists is to handle filtered replications with
+custom user functions. Filter function content is needed in order to
+calculate the replication ID. A replication job could not be created
+until the function code is retrieved. Because retrieval happens over
+the network, temporary failures have to be handled.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Running</span></code>: Replication job is running normally. This means, there
+might be a change feed open, and if changes are noticed, they would
+be processed and posted to the target. Job is still considered
+<code class="docutils literal notranslate"><span class="pre">Running</span></code> even if its workers are currently not streaming changes
+from source to target and are just waiting on the change feed.
+Continuous replications will most likely end up in this state.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Pending</span></code>: Replication job is not running and is waiting its turn.
+This state is reached when the number of replication jobs added to
+the scheduler exceeds <code class="docutils literal notranslate"><span class="pre">replicator.max_jobs</span></code>. In that case scheduler
+will periodically stop and start subsets of jobs trying to give each
+one a fair chance at making progress.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Crashing</span></code>: Replication job has been successfully added to the
+replication scheduler. However an error was encountered during the
+last run. Error could be a network failure, a missing source
+database, a permissions error, etc. Repeated consecutive crashes
+result in an exponential backoff. This state is considered temporary
+(non-terminal) and replication jobs will be periodically retried.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Completed</span></code>: This is a terminal, successful state for
+non-continuous replications. Once in this state the replication is
+“forgotten” by the scheduler and it doesn’t consume any more CPU or
+memory resources. Continuous replication jobs will never reach this
+state.</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Maximum backoff interval for states <code class="docutils literal notranslate"><span class="pre">Error</span></code> and <code class="docutils literal notranslate"><span class="pre">Crashing</span></code>
+is calculated based on the <code class="docutils literal notranslate"><span class="pre">replicator.max_history</span></code> option.
+See <a class="reference internal" href="../config/replicator.html#config-replicator"><span class="std std-ref">Replicator configuration section</span></a>
+for additional information.</p>
+</div>
+</section>
+<section id="normal-vs-continuous-replications">
+<span id="id1"></span><h3><span class="section-number">2.2.4.2. </span>Normal vs Continuous Replications<a class="headerlink" href="#normal-vs-continuous-replications" title="Permalink to this heading">¶</a></h3>
+<p>Normal (non-continuous) replications once started will be allowed to run
+to completion. That behavior is to preserve their semantics of
+replicating a snapshot of the source database to the target. For example
+if new documents are added to the source after the replication are
+started, those updates should not show up on the target database.
+Stopping and restring a normal replication would violate that
+constraint.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When there is a mix of continuous and normal replications,
+once normal replication are scheduled to run, they might temporarily
+starve continuous replication jobs.</p>
+</div>
+<p>However, normal replications will still be stopped and rescheduled if an
+operator reduces the value for the maximum number of replications. This
+is so that if an operator decides replications are overwhelming a node
+that it has the ability to recover. Any stopped replications will be
+resubmitted to the queue to be rescheduled.</p>
+</section>
+</section>
+<section id="compatibility-mode">
+<h2><span class="section-number">2.2.5. </span>Compatibility Mode<a class="headerlink" href="#compatibility-mode" title="Permalink to this heading">¶</a></h2>
+<p>Previous version of CouchDB replicator wrote state updates back to
+replication documents. In cases where user code programmatically read
+those states, there is compatibility mode enabled via a configuration
+setting:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">replicator</span><span class="p">]</span>
+<span class="n">update_docs</span> <span class="o">=</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>In this mode replicator will continue to write state updates to the
+documents.</p>
+<p>To effectively disable the scheduling behavior, which periodically stop
+and starts jobs, set <code class="docutils literal notranslate"><span class="pre">max_jobs</span></code> configuration setting to a large
+number. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">replicator</span><span class="p">]</span>
+<span class="n">max_jobs</span> <span class="o">=</span> <span class="mi">9999999</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../config/replicator.html#config-replicator"><span class="std std-ref">Replicator configuration section</span></a> for
+other replicator configuration options.</p>
+</section>
+<section id="canceling-replications">
+<h2><span class="section-number">2.2.6. </span>Canceling replications<a class="headerlink" href="#canceling-replications" title="Permalink to this heading">¶</a></h2>
+<p>To cancel a replication simply <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> the document which triggered
+the replication. To update a replication, for example, change the number
+of worker or the source, simply update the document with new data. If
+there is extra application-specific data in the replication documents,
+that data is ignored by the replicator.</p>
+</section>
+<section id="server-restart">
+<h2><span class="section-number">2.2.7. </span>Server restart<a class="headerlink" href="#server-restart" title="Permalink to this heading">¶</a></h2>
+<p>When CouchDB is restarted, it checks its <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> databases and
+restarts replications described by documents if they are not already in
+in a <code class="docutils literal notranslate"><span class="pre">completed</span></code> or <code class="docutils literal notranslate"><span class="pre">failed</span></code> state. If they are, they are ignored.</p>
+</section>
+<section id="clustering">
+<h2><span class="section-number">2.2.8. </span>Clustering<a class="headerlink" href="#clustering" title="Permalink to this heading">¶</a></h2>
+<p>In a cluster, replication jobs are balanced evenly among all the nodes
+nodes such that a replication job runs on only one node at a time.</p>
+<p>Every time there is a cluster membership change, that is when nodes are
+added or removed, as it happens in a rolling reboot, replicator
+application will notice the change, rescan all the document and running
+replication, and re-evaluate their cluster placement in light of the new
+set of live nodes. This mechanism also provides replication fail-over in
+case a node fails. Replication jobs started from replication documents
+(but not those started from <code class="docutils literal notranslate"><span class="pre">_replicate</span></code> HTTP endpoint) will
+automatically migrate one of the live nodes.</p>
+</section>
+<section id="additional-replicator-databases">
+<h2><span class="section-number">2.2.9. </span>Additional Replicator Databases<a class="headerlink" href="#additional-replicator-databases" title="Permalink to this heading">¶</a></h2>
+<p>Imagine replicator database (<code class="docutils literal notranslate"><span class="pre">_replicator</span></code>) has these two documents
+which represent pull replications from servers A and B:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;rep_from_A&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@aserver.com:5984/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5984/foo_a&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;auth&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;basic&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;username&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;adm&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;password&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pass&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;rep_from_B&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@bserver.com:5984/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:5984/foo_b&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;auth&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;basic&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;username&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;adm&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;password&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pass&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now without stopping and restarting CouchDB, add another replicator
+database. For example <code class="docutils literal notranslate"><span class="pre">another/_replicator</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://adm:pass@localhost:5984/another%2F_replicator/
+<span class="o">{</span><span class="s2">&quot;ok&quot;</span>:true<span class="o">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">/</span></code> (%2F) character in a database name, when used in a URL, should be escaped.</p>
+</div>
+<p>Then add a replication document to the new replicator database:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;rep_from_X&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@xserver.com:5984/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://adm:pass@localhost:5984/foo_x&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>From now on, there are three replications active in the system: two
+replications from A and B, and a new one from X.</p>
+<p>Then remove the additional replicator database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://adm:pass@localhost:5984/another%2F_replicator/
+<span class="o">{</span><span class="s2">&quot;ok&quot;</span>:true<span class="o">}</span>
+</pre></div>
+</div>
+<p>After this operation, replication pulling from server X will be stopped
+and the replications in the <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> database (pulling from
+servers A and B) will continue.</p>
+</section>
+<section id="fair-share-job-scheduling">
+<h2><span class="section-number">2.2.10. </span>Fair Share Job Scheduling<a class="headerlink" href="#fair-share-job-scheduling" title="Permalink to this heading">¶</a></h2>
+<p>When multiple <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> databases are used, and the total number
+of jobs on any node is greater than <code class="docutils literal notranslate"><span class="pre">max_jobs</span></code>, replication jobs
+will be scheduled such that each of the <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> databases by
+default get an equal chance of running their jobs.</p>
+<p>This is accomplished by assigning a number of “shares” to each
+<code class="docutils literal notranslate"><span class="pre">_replicator</span></code> database and then automatically adjusting the
+proportion of running jobs to match each database’s proportion of
+shares. By default, each <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> database is assigned 100
+shares. It is possible to alter the share assignments for each
+individual <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> database in the <a class="reference internal" href="../config/replicator.html#config-replicator-shares"><span class="std std-ref">[replicator.shares]</span></a> configuration section.</p>
+<p>The fair share behavior is perhaps easier described with a set of
+examples. Each example assumes the default of <code class="docutils literal notranslate"><span class="pre">max_jobs</span> <span class="pre">=</span> <span class="pre">500</span></code>, and
+two replicator databases: <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> and <code class="docutils literal notranslate"><span class="pre">another/_replicator</span></code>.</p>
+<p>Example 1: If <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> has 1000 jobs and
+<code class="docutils literal notranslate"><span class="pre">another/_replicator</span></code> has 10, the scheduler will run about 490 jobs
+from <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> and 10 jobs from <code class="docutils literal notranslate"><span class="pre">another/_replicator</span></code>.</p>
+<p>Example 2: If <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> has 200 jobs and <code class="docutils literal notranslate"><span class="pre">another/_replicator</span></code>
+also has 200 jobs, all 400 jobs will get to run as the sum of all the
+jobs is less than the <code class="docutils literal notranslate"><span class="pre">max_jobs</span></code> limit.</p>
+<p>Example 3: If both replicator databases have 1000 jobs each, the
+scheduler will run about 250 jobs from each database on average.</p>
+<p>Example 4: If both replicator databases have 1000 jobs each, but
+<code class="docutils literal notranslate"><span class="pre">_replicator</span></code> was assigned 400 shares, then on average the scheduler
+would run about 400 jobs from <code class="docutils literal notranslate"><span class="pre">_replicator</span></code> and 100 jobs from
+<code class="docutils literal notranslate"><span class="pre">_another/replicator</span></code>.</p>
+<p>The proportions described in the examples are approximate and might
+oscillate a bit, and also might take anywhere from tens of minutes to
+an hour to converge.</p>
+</section>
+<section id="replicating-the-replicator-database">
+<h2><span class="section-number">2.2.11. </span>Replicating the replicator database<a class="headerlink" href="#replicating-the-replicator-database" title="Permalink to this heading">¶</a></h2>
+<p>Imagine you have in server C a replicator database with the two
+following pull replication documents in it:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">     </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;rep_from_A&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@aserver.com:5984/foo&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://adm:pass@localhost:5984/foo_a&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">     </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;rep_from_B&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@bserver.com:5984/foo&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://adm:pass@localhost:5984/foo_b&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now you would like to have the same pull replications going on in server
+D, that is, you would like to have server D pull replicating from
+servers A and B. You have two options:</p>
+<ul class="simple">
+<li><p>Explicitly add two documents to server’s D replicator database</p></li>
+<li><p>Replicate server’s C replicator database into server’s D replicator
+database</p></li>
+</ul>
+<p>Both alternatives accomplish exactly the same goal.</p>
+</section>
+<section id="delegations">
+<h2><span class="section-number">2.2.12. </span>Delegations<a class="headerlink" href="#delegations" title="Permalink to this heading">¶</a></h2>
+<p>Replication documents can have a custom <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> property. This
+property defines the user context under which a replication runs. For
+the old way of triggering a replication (POSTing to <code class="docutils literal notranslate"><span class="pre">/_replicate/</span></code>),
+this property is not needed. That’s because information about the
+authenticated user is readily available during the replication, which is
+not persistent in that case. Now, with the replicator database, the
+problem is that information about which user is starting a particular
+replication is only present when the replication document is written.
+The information in the replication document and the replication itself
+are persistent, however. This implementation detail implies that in the
+case of a non-admin user, a <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> property containing the user’s
+name and a subset of their roles must be defined in the replication
+document. This is enforced by the document update validation function
+present in the default design document of the replicator database. The
+validation function also ensures that non-admin users are unable to set
+the value of the user context’s <code class="docutils literal notranslate"><span class="pre">name</span></code> property to anything other than
+their own user name. The same principle applies for roles.</p>
+<p>For admins, the <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> property is optional, and if it’s missing
+it defaults to a user context with name <code class="docutils literal notranslate"><span class="pre">null</span></code> and an empty list of
+roles, which means design documents won’t be written to local targets.
+If writing design documents to local targets is desired, the role
+<code class="docutils literal notranslate"><span class="pre">_admin</span></code> must be present in the user context’s list of roles.</p>
+<p>Also, for admins the <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> property can be used to trigger a
+replication on behalf of another user. This is the user context that
+will be passed to local target database document validation functions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> property only has effect for local endpoints.</p>
+</div>
+<p>Example delegated replication document:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;my_rep&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://user:password@bserver.com:5984/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://adm:pass@localhost:5984/bar&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;continuous&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;user_ctx&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;joe&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;erlanger&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;researcher&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As stated before, the <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> property is optional for admins,
+while being mandatory for regular (non-admin) users. When the roles
+property of <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> is missing, it defaults to the empty list
+<code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p>
+</section>
+<section id="selector-objects">
+<span id="selectorobj"></span><h2><span class="section-number">2.2.13. </span>Selector Objects<a class="headerlink" href="#selector-objects" title="Permalink to this heading">¶</a></h2>
+<p>Including a Selector Object in the replication document enables you to
+use a query expression to determine if a document should be included in
+the replication.</p>
+<p>The selector specifies fields in the document, and provides an expression
+to evaluate with the field content or other data. If the expression resolves
+to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the document is replicated.</p>
+<p>The selector object must:</p>
+<ul class="simple">
+<li><p>Be structured as valid JSON.</p></li>
+<li><p>Contain a valid query expression.</p></li>
+</ul>
+<p>The syntax for a selector is the same as the
+<a class="reference internal" href="../api/database/find.html#find-selectors"><span class="std std-ref">selectorsyntax</span></a> used for <a class="reference internal" href="../api/database/find.html#api-db-find"><span class="std std-ref">_find</span></a>.</p>
+<p>Using a selector is significantly more efficient than using a JavaScript
+filter function, and is the recommended option if filtering on document
+attributes only.</p>
+</section>
+<section id="specifying-usernames-and-passwords">
+<h2><span class="section-number">2.2.14. </span>Specifying Usernames and Passwords<a class="headerlink" href="#specifying-usernames-and-passwords" title="Permalink to this heading">¶</a></h2>
+<p>There are multiple ways to specify usernames and passwords for replication endpoints:</p>
+<blockquote>
+<div><ul>
+<li><p>In an <code class="docutils literal notranslate"><span class="pre">{&quot;auth&quot;:</span> <span class="pre">{&quot;basic&quot;:</span> <span class="pre">...}}</span></code> object:</p>
+<blockquote>
+<div><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.0.</span></p>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://someurl.com/mydb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;auth&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;basic&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;username&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;$username&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;password&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;$password&quot;</span>
+<span class="w">             </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the prefererred format as it allows including characters like <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>, <code class="docutils literal notranslate"><span class="pre">:</span></code>
+and others in the username and password fields.</p>
+</li>
+<li><p>In the userinfo part of the endpoint URL. This allows for a more compact
+endpoint represention however, it prevents using characters like <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> and <code class="docutils literal notranslate"><span class="pre">:</span></code>
+in usernames or passwords:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://adm:pass@localhost:5984/bar&quot;</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Specifying credentials in the userinfo part of the URL is deprecated as per
+<a class="reference external" href="https://datatracker.ietf.org/doc/html/rfc3986#section-3.2.1">RFC3986</a>.
+CouchDB still supports this way of specifying credentials and doesn’t yet
+have a target release when support will be removed.</p>
+</li>
+<li><p>In an <code class="docutils literal notranslate"><span class="pre">&quot;Authorization:</span> <span class="pre">Basic</span> <span class="pre">$b64encoded_username_and_password&quot;</span></code> header:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;target&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;http://someurl.com/mydb&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;headers&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;Authorization&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Basic dXNlcjpwYXNz&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This method has the downside of the going through the extra step of base64
+encoding. In addition, it could give the impression that it encrypts or
+hides the credentials so it could encourage invadvertent sharing and
+leaking credentials.</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>When credentials are provided in multiple forms, they are selected in the following order:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;auth&quot;:</span> <span class="pre">{&quot;basic&quot;:</span> <span class="pre">{...}}</span></code> object</p></li>
+<li><p>URL userinfo</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Authorization:</span> <span class="pre">Basic</span> <span class="pre">...&quot;</span></code> header.</p></li>
+</ul>
+</div></blockquote>
+<p>First, the <code class="docutils literal notranslate"><span class="pre">auth</span></code> object is checked, and if credentials are defined there,
+they are used. If they are not, then URL userinfo is checked. If credentials
+are found there, then those credentials are used, otherwise basic auth header
+is used.</p>
+</section>
+<section id="replicate-winning-revisions-only">
+<h2><span class="section-number">2.2.15. </span>Replicate Winning Revisions Only<a class="headerlink" href="#replicate-winning-revisions-only" title="Permalink to this heading">¶</a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">winning_revs_only:</span> <span class="pre">true</span></code> option to replicate “winning” document
+revisions only. These are the revisions that would be returned by the <code class="docutils literal notranslate"><span class="pre">GET</span>
+<span class="pre">db/doc</span></code> API endpoint by default, or appear in the <code class="docutils literal notranslate"><span class="pre">_changes</span></code> feed with the
+default parameters.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">http://couchdb:5984/_replicate</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;winning_revs_only&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="nt">&quot;source&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://source:5984/recipes&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;target&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://target:5984/recipes&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Replication with this mode discards conflicting revisions, so it could be one
+way to remove conflicts through replication.</p>
+<p>Replication IDs and checkpoint IDs, generated by <code class="docutils literal notranslate"><span class="pre">winning_revs_only:</span> <span class="pre">true</span></code>
+replications will be different than those generated by default, so it is
+possible to first replicate the winning revisions, then later, to
+“backfill” the rest of the revisions with a regular replication job.</p>
+<p><code class="docutils literal notranslate"><span class="pre">winning_revs_only:</span> <span class="pre">true</span></code> option can be combined with filters or other
+options like <code class="docutils literal notranslate"><span class="pre">continuous:</span> <span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">create_target:</span> <span class="pre">true</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="2.1. Introduction to Replication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="conflicts.html" class="btn btn-neutral float-right" title="2.3. Replication and conflict model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.7. Troubleshooting CouchDB 3 with WeatherReport &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/cluster/troubleshooting.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Maintenance" href="../maintenance/index.html" />
+    <link rel="prev" title="4.6. TLS Erlang Distribution" href="tls_erlang_distribution.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Cluster Management</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="theory.html">4.1. Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes.html">4.2. Node Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databases.html">4.3. Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharding.html">4.4. Shard Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="purging.html">4.5. Clustered Purge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tls_erlang_distribution.html">4.6. TLS Erlang Distribution</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.7. Troubleshooting CouchDB 3 with WeatherReport</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">4.7.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">4.7.2. Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">4. </span>Cluster Management</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4.7. </span>Troubleshooting CouchDB 3 with WeatherReport</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cluster/troubleshooting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="troubleshooting-couchdb-3-with-weatherreport">
+<span id="cluster-troubleshooting"></span><h1><span class="section-number">4.7. </span>Troubleshooting CouchDB 3 with WeatherReport<a class="headerlink" href="#troubleshooting-couchdb-3-with-weatherreport" title="Permalink to this heading">¶</a></h1>
+<section id="overview">
+<span id="cluster-troubleshooting-overview"></span><h2><span class="section-number">4.7.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>WeatherReport is an OTP application and set of tools that diagnoses
+common problems which could affect a CouchDB version 3 node or cluster
+(version 4 or later is not supported). It is accessed via the
+<code class="docutils literal notranslate"><span class="pre">weatherreport</span></code> command line escript.</p>
+<p>Here is a basic example of using <code class="docutils literal notranslate"><span class="pre">weatherreport</span></code> followed immediately
+by the command’s output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>weatherreport<span class="w"> </span>--etc<span class="w"> </span>/path/to/etc
+<span class="o">[</span>warning<span class="o">]</span><span class="w"> </span>Cluster<span class="w"> </span>member<span class="w"> </span>node3@127.0.0.1<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>this<span class="w"> </span>node.<span class="w"> </span>Please<span class="w"> </span>check<span class="w"> </span>whether<span class="w"> </span>it<span class="w"> </span>is<span class="w"> </span>down.
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<span id="cluster-troubleshooting-usage"></span><h2><span class="section-number">4.7.2. </span>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
+<p>For most cases, you can just run the <code class="docutils literal notranslate"><span class="pre">weatherreport</span></code> command as
+shown above.  However, sometimes you might want to know some extra
+detail, or run only specific checks. For that, there are command-line
+options. Execute <code class="docutils literal notranslate"><span class="pre">weatherreport</span> <span class="pre">--help</span></code> to learn more about these
+options:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>weatherreport<span class="w"> </span>--help
+Usage:<span class="w"> </span>weatherreport<span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>&lt;path&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>-d<span class="w"> </span>&lt;level&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>-e<span class="o">]</span><span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-l<span class="o">]</span><span class="w"> </span><span class="o">[</span>check_name<span class="w"> </span>...<span class="o">]</span>
+
+<span class="w">  </span>-c,<span class="w"> </span>--etc<span class="w">                 </span>Path<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>CouchDB<span class="w"> </span>configuration<span class="w"> </span>directory
+<span class="w">  </span>-d,<span class="w"> </span>--level<span class="w">               </span>Minimum<span class="w"> </span>message<span class="w"> </span>severity<span class="w"> </span>level<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span>notice<span class="o">)</span>
+<span class="w">  </span>-l,<span class="w"> </span>--list<span class="w">                </span>Describe<span class="w"> </span>available<span class="w"> </span>diagnostic<span class="w"> </span>tasks
+<span class="w">  </span>-e,<span class="w"> </span>--expert<span class="w">              </span>Perform<span class="w"> </span>more<span class="w"> </span>detailed<span class="w"> </span>diagnostics
+<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">                </span>Display<span class="w"> </span>help/usage
+<span class="w">  </span>check_name<span class="w">                </span>A<span class="w"> </span>specific<span class="w"> </span>check<span class="w"> </span>to<span class="w"> </span>run
+</pre></div>
+</div>
+<p>To get an idea of what checks will be run, use the <cite>–list</cite> option:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>weatherreport<span class="w"> </span>--list
+Available<span class="w"> </span>diagnostic<span class="w"> </span>checks:
+
+<span class="w">  </span>custodian<span class="w">            </span>Shard<span class="w"> </span>safety/liveness<span class="w"> </span>checks
+<span class="w">  </span>disk<span class="w">                 </span>Data<span class="w"> </span>directory<span class="w"> </span>permissions<span class="w"> </span>and<span class="w"> </span>atime
+<span class="w">  </span>internal_replication<span class="w"> </span>Check<span class="w"> </span>the<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>pending<span class="w"> </span>internal<span class="w"> </span>replication<span class="w"> </span><span class="nb">jobs</span>
+<span class="w">  </span>ioq<span class="w">                  </span>Check<span class="w"> </span>the<span class="w"> </span>total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>active<span class="w"> </span>IOQ<span class="w"> </span>requests
+<span class="w">  </span>mem3_sync<span class="w">            </span>Check<span class="w"> </span>there<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>registered<span class="w"> </span>mem3_sync<span class="w"> </span>process
+<span class="w">  </span>membership<span class="w">           </span>Cluster<span class="w"> </span>membership<span class="w"> </span>validity
+<span class="w">  </span>memory_use<span class="w">           </span>Measure<span class="w"> </span>memory<span class="w"> </span>usage
+<span class="w">  </span>message_queues<span class="w">       </span>Check<span class="w"> </span><span class="k">for</span><span class="w"> </span>processes<span class="w"> </span>with<span class="w"> </span>large<span class="w"> </span>mailboxes
+<span class="w">  </span>node_stats<span class="w">           </span>Check<span class="w"> </span>useful<span class="w"> </span>erlang<span class="w"> </span>statistics<span class="w"> </span><span class="k">for</span><span class="w"> </span>diagnostics
+<span class="w">  </span>nodes_connected<span class="w">      </span>Cluster<span class="w"> </span>node<span class="w"> </span>liveness
+<span class="w">  </span>process_calls<span class="w">        </span>Check<span class="w"> </span><span class="k">for</span><span class="w"> </span>large<span class="w"> </span>numbers<span class="w"> </span>of<span class="w"> </span>processes<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>same<span class="w"> </span>current/initial<span class="w"> </span>call
+<span class="w">  </span>process_memory<span class="w">       </span>Check<span class="w"> </span><span class="k">for</span><span class="w"> </span>processes<span class="w"> </span>with<span class="w"> </span>high<span class="w"> </span>memory<span class="w"> </span>usage
+<span class="w">  </span>safe_to_rebuild<span class="w">      </span>Check<span class="w"> </span>whether<span class="w"> </span>the<span class="w"> </span>node<span class="w"> </span>can<span class="w"> </span>safely<span class="w"> </span>be<span class="w"> </span>taken<span class="w"> </span>out<span class="w"> </span>of<span class="w"> </span>service
+<span class="w">  </span>search<span class="w">               </span>Check<span class="w"> </span>the<span class="w"> </span><span class="nb">local</span><span class="w"> </span>search<span class="w"> </span>node<span class="w"> </span>is<span class="w"> </span>responsive
+<span class="w">  </span>tcp_queues<span class="w">           </span>Measure<span class="w"> </span>the<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>tcp<span class="w"> </span>queues<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>kernel
+</pre></div>
+</div>
+<p>If you want all the gory details about what WeatherReport is doing,
+you can run the checks at a more verbose logging level with
+the <code class="docutils literal notranslate"><span class="pre">--level</span></code> option:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>weatherreport<span class="w"> </span>--etc<span class="w"> </span>/path/to/etc<span class="w"> </span>--level<span class="w"> </span>debug
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Not<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span><span class="nb">local</span><span class="w"> </span>cluster<span class="w"> </span>node,<span class="w"> </span>trying<span class="w"> </span>to<span class="w"> </span>connect.<span class="w"> </span>alive:false<span class="w"> </span>connect_failed:undefined
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Starting<span class="w"> </span>distributed<span class="w"> </span>Erlang.
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Connected<span class="w"> </span>to<span class="w"> </span><span class="nb">local</span><span class="w"> </span>cluster<span class="w"> </span>node<span class="w"> </span><span class="s1">&#39;node1@127.0.0.1&#39;</span>.
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Local<span class="w"> </span>RPC:<span class="w"> </span>mem3:nodes<span class="o">([])</span><span class="w"> </span><span class="o">[</span><span class="m">5000</span><span class="o">]</span>
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Local<span class="w"> </span>RPC:<span class="w"> </span>os:getpid<span class="o">([])</span><span class="w"> </span><span class="o">[</span><span class="m">5000</span><span class="o">]</span>
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Running<span class="w"> </span>shell<span class="w"> </span>command:<span class="w"> </span>ps<span class="w"> </span>-o<span class="w"> </span>pmem,rss<span class="w"> </span>-p<span class="w"> </span><span class="m">73905</span>
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Shell<span class="w"> </span><span class="nb">command</span><span class="w"> </span>output:
+%MEM<span class="w">    </span>RSS
+<span class="m">0</span>.3<span class="w">  </span><span class="m">25116</span>
+
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Local<span class="w"> </span>RPC:<span class="w"> </span>erlang:nodes<span class="o">([])</span><span class="w"> </span><span class="o">[</span><span class="m">5000</span><span class="o">]</span>
+<span class="o">[</span>debug<span class="o">]</span><span class="w"> </span>Local<span class="w"> </span>RPC:<span class="w"> </span>mem3:nodes<span class="o">([])</span><span class="w"> </span><span class="o">[</span><span class="m">5000</span><span class="o">]</span>
+<span class="o">[</span>warning<span class="o">]</span><span class="w"> </span>Cluster<span class="w"> </span>member<span class="w"> </span>node3@127.0.0.1<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>this<span class="w"> </span>node.<span class="w"> </span>Please<span class="w"> </span>check<span class="w"> </span>whether<span class="w"> </span>it<span class="w"> </span>is<span class="w"> </span>down.
+<span class="o">[</span>info<span class="o">]</span><span class="w"> </span>Process<span class="w"> </span>is<span class="w"> </span>using<span class="w"> </span><span class="m">0</span>.3%<span class="w"> </span>of<span class="w"> </span>available<span class="w"> </span>RAM,<span class="w"> </span>totalling<span class="w"> </span><span class="m">25116</span><span class="w"> </span>KB<span class="w"> </span>of<span class="w"> </span>real<span class="w"> </span>memory.
+</pre></div>
+</div>
+<p>Most times you’ll want to use the defaults, but any syslog severity
+name will do (from most to least verbose): <code class="docutils literal notranslate"><span class="pre">debug,</span> <span class="pre">info,</span> <span class="pre">notice,</span>
+<span class="pre">warning,</span> <span class="pre">error,</span> <span class="pre">critical,</span> <span class="pre">alert,</span> <span class="pre">emergency</span></code>.</p>
+<p>Finally, if you want to run just a single diagnostic or a list of
+specific ones, you can pass their name(s):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>weatherreport<span class="w"> </span>--etc<span class="w"> </span>/path/to/etc<span class="w"> </span>nodes_connected
+<span class="o">[</span>warning<span class="o">]</span><span class="w"> </span>Cluster<span class="w"> </span>member<span class="w"> </span>node3@127.0.0.1<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>this<span class="w"> </span>node.<span class="w"> </span>Please<span class="w"> </span>check<span class="w"> </span>whether<span class="w"> </span>it<span class="w"> </span>is<span class="w"> </span>down.
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tls_erlang_distribution.html" class="btn btn-neutral float-left" title="4.6. TLS Erlang Distribution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../maintenance/index.html" class="btn btn-neutral float-right" title="5. Maintenance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

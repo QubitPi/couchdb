@@ -1,0 +1,530 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.13. Query Servers &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/config/query-servers.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.14. Miscellaneous Parameters" href="misc.html" />
+    <link rel="prev" title="3.12. Replicator" href="replicator.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Introduction To Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb.html">3.2. Base Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">3.3. Configuring Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couch-peruser.html">3.4. Database Per User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk-monitor.html">3.5. Disk Monitor Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html">3.6. CouchDB HTTP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html">3.7. Authentication and Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">3.8. Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexbuilds.html">3.9. Background Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ioq.html">3.10. IO Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">3.11. Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replicator.html">3.12. Replicator</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.13. Query Servers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#query-servers-definition">3.13.1. Query Servers Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-servers-configuration">3.13.2. Query Servers Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#native-erlang-query-server">3.13.3. Native Erlang Query Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#search">3.13.4. Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nouveau">3.13.5. Nouveau</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mango">3.13.6. Mango</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">3.14. Miscellaneous Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">3.15. Resharding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Configuration</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.13. </span>Query Servers</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/config/query-servers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="query-servers">
+<h1><span class="section-number">3.13. </span>Query Servers<a class="headerlink" href="#query-servers" title="Permalink to this heading">¶</a></h1>
+<section id="query-servers-definition">
+<span id="config-query-servers"></span><h2><span class="section-number">3.13.1. </span>Query Servers Definition<a class="headerlink" href="#query-servers-definition" title="Permalink to this heading">¶</a></h2>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.3: </span>Changed configuration method for Query Servers
+and Native Query Servers.</p>
+</div>
+<p>CouchDB delegates computation of <a class="reference internal" href="../ddocs/ddocs.html#ddocs"><span class="std std-ref">design documents</span></a> functions
+to external query servers. The external query server is a special OS
+process which communicates with CouchDB over standard input/output using a
+very simple line-based protocol with JSON messages.</p>
+<p>An external query server may be defined with environment variables following
+this pattern:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">COUCHDB_QUERY_SERVER_LANGUAGE</span><span class="o">=</span><span class="s">&quot;PATH ARGS&quot;</span>
+</pre></div>
+</div>
+<p>Where:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">LANGUAGE</span></code>: is a programming language which code this query server may
+execute. For instance, there are <cite>PYTHON</cite>, <cite>RUBY</cite>, <cite>CLOJURE</cite> and other
+query servers in the wild. This value in <em>lowercase</em> is also used for <code class="docutils literal notranslate"><span class="pre">ddoc</span></code>
+field <code class="docutils literal notranslate"><span class="pre">language</span></code> to determine which query server processes the functions.</p>
+<p>Note, that you may set up multiple query servers for the same programming
+language, but you have to name them differently (like <cite>PYTHONDEV</cite> etc.).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PATH</span></code>: is a system path to the executable binary program that runs the
+query server.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ARGS</span></code>: optionally, you may specify additional command line arguments
+for the executable <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></li>
+</ul>
+<p>The default query server is written in <a class="reference internal" href="../query-server/javascript.html#query-server-js"><span class="std std-ref">JavaScript</span></a>,
+running via <a class="reference external" href="https://spidermonkey.dev/">Mozilla SpiderMonkey</a>. It requires no special environment
+settings to enable, but is the equivalent of these two variables:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">COUCHDB_QUERY_SERVER_JAVASCRIPT</span><span class="o">=</span><span class="s">&quot;/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main.js&quot;</span>
+<span class="na">COUCHDB_QUERY_SERVER_COFFEESCRIPT</span><span class="o">=</span><span class="s">&quot;/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main-coffee.js&quot;</span>
+</pre></div>
+</div>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">couchjs</span></code> limits the max runtime allocation to 64MiB.
+If you run into out of memory issue in your ddoc functions,
+you can adjust the memory limitation (here, increasing to 512 MiB):</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">COUCHDB_QUERY_SERVER_JAVASCRIPT</span><span class="o">=</span><span class="s">&quot;/usr/bin/couchjs -S 536870912 /usr/share/server/main.js&quot;</span>
+</pre></div>
+</div>
+<p>For more info about the available options, please consult <code class="docutils literal notranslate"><span class="pre">couchjs</span> <span class="pre">-h</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CouchDB versions 3.0.0 to 3.2.2 included a performance regression for
+custom reduce functions. CouchDB 3.3.0 and later come with an experimental
+fix to this issue that is included in a separate <code class="docutils literal notranslate"><span class="pre">.js</span></code> file.</p>
+<p>To enable the fix, you need to define a custom <code class="docutils literal notranslate"><span class="pre">COUCHDB_QUERY_SERVER_JAVASCRIPT</span></code>
+environment variable as outlined above. The path to <code class="docutils literal notranslate"><span class="pre">couchjs</span></code> needs to
+remain the same as you find it on your <code class="docutils literal notranslate"><span class="pre">couchdb</span></code> file, and the path to
+<code class="docutils literal notranslate"><span class="pre">main.js</span></code> needs to be set to <code class="docutils literal notranslate"><span class="pre">/path/to/couchdb/share/server/main-ast-bypass.js</span></code>.</p>
+<p>With a default installation on Linux systems, this is going to be
+<code class="docutils literal notranslate"><span class="pre">COUCHDB_QUERY_SERVER_JAVASCRIPT=&quot;/opt/couchdb/bin/couchjs</span> <span class="pre">/opt/couchdb/share/server/main-ast-bypass.js&quot;</span></code></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference internal" href="../api/database/find.html#api-db-find"><span class="std std-ref">Mango Query Server</span></a> is a declarative language
+that requires <em>no programming</em>, allowing for easier indexing and finding
+of data in documents.</p>
+<p>The <a class="reference internal" href="#config-native-query-servers"><span class="std std-ref">Native Erlang Query Server</span></a>
+allows running <cite>ddocs</cite> written in Erlang natively, bypassing
+stdio communication and JSON serialization/deserialization round trip
+overhead.</p>
+</div>
+</section>
+<section id="query-servers-configuration">
+<span id="config-query-server-config"></span><h2><span class="section-number">3.13.2. </span>Query Servers Configuration<a class="headerlink" href="#query-servers-configuration" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="query_server_config">
+<span class="sig-name descname"><span class="pre">[query_server_config]</span></span><a class="headerlink" href="#query_server_config" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="query_server_config/commit_freq">
+<span class="sig-name descname"><span class="pre">commit_freq</span></span><a class="headerlink" href="#query_server_config/commit_freq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the delay in seconds before view index changes are committed
+to disk. The default value is <code class="docutils literal notranslate"><span class="pre">5</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[query_server_config]</span>
+<span class="na">commit_freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="query_server_config/os_process_limit">
+<span class="sig-name descname"><span class="pre">os_process_limit</span></span><a class="headerlink" href="#query_server_config/os_process_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hard limit on the number of OS processes usable by Query
+Servers. The default value is <code class="docutils literal notranslate"><span class="pre">100</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[query_server_config]</span>
+<span class="na">os_process_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100</span>
+</pre></div>
+</div>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">os_process_limit</span></code> too low can result in starvation of
+Query Servers, and manifest in <code class="docutils literal notranslate"><span class="pre">os_process_timeout</span></code> errors,
+while setting it too high can potentially use too many system
+resources. Production settings are typically 10-20 times the
+default value.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="query_server_config/os_process_soft_limit">
+<span class="sig-name descname"><span class="pre">os_process_soft_limit</span></span><a class="headerlink" href="#query_server_config/os_process_soft_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Soft limit on the number of OS processes usable by Query
+Servers. The default value is <code class="docutils literal notranslate"><span class="pre">100</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[query_server_config]</span>
+<span class="na">os_process_soft_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100</span>
+</pre></div>
+</div>
+<p>Idle OS processes are closed until the total reaches the soft
+limit.</p>
+<p>For example, if the hard limit is 200 and the soft limit is
+100, the total number of OS processes will never exceed 200,
+and CouchDB will close all idle OS processes until it reaches
+100, at which point it will leave the rest intact, even if
+some are idle.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="query_server_config/reduce_limit">
+<span class="sig-name descname"><span class="pre">reduce_limit</span></span><a class="headerlink" href="#query_server_config/reduce_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controls <cite>Reduce overflow</cite> error that raises when output of
+<a class="reference internal" href="../ddocs/ddocs.html#reducefun"><span class="std std-ref">reduce functions</span></a> is too big:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[query_server_config]</span>
+<span class="na">reduce_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+<p>Normally, you don’t have to disable (by setting <code class="docutils literal notranslate"><span class="pre">false</span></code> value) this
+option since main propose of <cite>reduce</cite> functions is to <em>reduce</em> the
+input.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="native-erlang-query-server">
+<span id="config-native-query-servers"></span><h2><span class="section-number">3.13.3. </span>Native Erlang Query Server<a class="headerlink" href="#native-erlang-query-server" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="native_query_servers">
+<span class="sig-name descname"><span class="pre">[native_query_servers]</span></span><a class="headerlink" href="#native_query_servers" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Due to security restrictions, the Erlang query server is disabled by
+default.</p>
+<p>Unlike the JavaScript query server, the Erlang one does not run in a
+sandbox mode. This means that Erlang code has full access to your OS,
+file system and network, which may lead to security issues. While Erlang
+functions are faster than JavaScript ones, you need to be careful
+about running them, especially if they were written by someone else.</p>
+</div>
+<p>CouchDB has a native Erlang query server, allowing you to write your
+map/reduce functions in Erlang.</p>
+<p>First, you’ll need to edit your <cite>local.ini</cite> to include a
+<code class="docutils literal notranslate"><span class="pre">[native_query_servers]</span></code> section:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[native_query_servers]</span>
+<span class="na">enable_erlang_query_server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+<p>To see these changes you will also need to restart the server.</p>
+<p>Let’s try an example of map/reduce functions which count the total
+documents at each number of revisions (there are x many documents at
+version “1”, and y documents at “2”… etc). Add a few documents to the
+database, then enter the following functions as a view:</p>
+<div class="highlight-erlang notranslate"><div class="highlight"><pre><span></span><span class="c">%% Map Function</span>
+<span class="k">fun</span><span class="p">({</span><span class="nv">Doc</span><span class="p">})</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">    </span><span class="o">&lt;&lt;</span><span class="nv">K</span><span class="p">,_</span><span class="o">/</span><span class="n">binary</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">proplists</span><span class="p">:</span><span class="nf">get_value</span><span class="p">(</span><span class="o">&lt;&lt;</span><span class="s">&quot;_rev&quot;</span><span class="o">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="nv">Doc</span><span class="p">,</span><span class="w"> </span><span class="n">null</span><span class="p">),</span>
+<span class="w">    </span><span class="nv">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">proplists</span><span class="p">:</span><span class="nf">get_value</span><span class="p">(</span><span class="o">&lt;&lt;</span><span class="s">&quot;_id&quot;</span><span class="o">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="nv">Doc</span><span class="p">,</span><span class="w"> </span><span class="n">null</span><span class="p">),</span>
+<span class="w">    </span><span class="nv">Emit</span><span class="p">(</span><span class="o">&lt;&lt;</span><span class="nv">K</span><span class="o">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="nv">V</span><span class="p">)</span>
+<span class="k">end</span><span class="p">.</span>
+
+<span class="c">%% Reduce Function</span>
+<span class="k">fun</span><span class="p">(</span><span class="nv">Keys</span><span class="p">,</span><span class="w"> </span><span class="nv">Values</span><span class="p">,</span><span class="w"> </span><span class="nv">ReReduce</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb">length</span><span class="p">(</span><span class="nv">Values</span><span class="p">)</span><span class="w"> </span><span class="k">end</span><span class="p">.</span>
+</pre></div>
+</div>
+<p>If all has gone well, after running the view you should see a list of the
+total number of documents at each revision number.</p>
+<p>Additional examples are on the <a class="reference external" href="https://lists.apache.org/thread.html/9b5f2837bd32189385bb82eee44aec243f2ecacc6e907ffe0e1e03d3&#64;1360091211&#64;%3Cuser.couchdb.apache.org%3E">users&#64;couchdb.apache.org mailing list</a>.</p>
+</dd></dl>
+
+</section>
+<section id="search">
+<span id="config-search"></span><h2><span class="section-number">3.13.4. </span>Search<a class="headerlink" href="#search" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB’s search subsystem can be configured via the <code class="docutils literal notranslate"><span class="pre">dreyfus</span></code> configuration section.</p>
+<dl class="config section">
+<dt class="sig sig-object config" id="dreyfus">
+<span class="sig-name descname"><span class="pre">[dreyfus]</span></span><a class="headerlink" href="#dreyfus" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="dreyfus/name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dreyfus/name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name and location of the Clouseau Java service required to enable Search
+functionality. Defaults to <code class="docutils literal notranslate"><span class="pre">clouseau&#64;127.0.0.1</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="dreyfus/retry_limit">
+<span class="sig-name descname"><span class="pre">retry_limit</span></span><a class="headerlink" href="#dreyfus/retry_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>CouchDB will try to reconnect to Clouseau using a bounded exponential backoff with
+the following number of iterations. Defaults to <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="dreyfus/limit">
+<span class="sig-name descname"><span class="pre">limit</span></span><a class="headerlink" href="#dreyfus/limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of results returned from a global search query if no limit is
+specified. Defaults to <code class="docutils literal notranslate"><span class="pre">25</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="dreyfus/limit_partitions">
+<span class="sig-name descname"><span class="pre">limit_partitions</span></span><a class="headerlink" href="#dreyfus/limit_partitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of results returned from a search on a partition of a database if no
+limit is specified. Defaults to <code class="docutils literal notranslate"><span class="pre">2000</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="dreyfus/max_limit">
+<span class="sig-name descname"><span class="pre">max_limit</span></span><a class="headerlink" href="#dreyfus/max_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of results that can be returned from a global search query (or
+any search query on a database without user-defined partitions). Attempts to set
+<code class="docutils literal notranslate"><span class="pre">?limit=N</span> <span class="pre">higher</span></code> than this value will be rejected. Defaults to <code class="docutils literal notranslate"><span class="pre">200</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="dreyfus/max_limit_partitions">
+<span class="sig-name descname"><span class="pre">max_limit_partitions</span></span><a class="headerlink" href="#dreyfus/max_limit_partitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of results that can be returned when searching a partition of a
+database. Attempts to set <code class="docutils literal notranslate"><span class="pre">?limit=N</span></code> higher than this value will be rejected. If
+this config setting is not defined, CouchDB will use the value of <code class="docutils literal notranslate"><span class="pre">max_limit</span></code>
+instead. If neither is defined, the default is <code class="docutils literal notranslate"><span class="pre">2000</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="nouveau">
+<h2><span class="section-number">3.13.5. </span>Nouveau<a class="headerlink" href="#nouveau" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB’s experimental search subsystem can be configured via the
+<code class="docutils literal notranslate"><span class="pre">nouveau</span></code> configuration section.</p>
+<dl class="config section">
+<dt class="sig sig-object config" id="nouveau">
+<span class="sig-name descname"><span class="pre">[nouveau]</span></span><a class="headerlink" href="#nouveau" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="nouveau/enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><a class="headerlink" href="#nouveau/enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to <code class="docutils literal notranslate"><span class="pre">true</span></code> to enable Nouveau. If disabled, all nouveau
+endpoints return 404 Not Found.  Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="nouveau/url">
+<span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#nouveau/url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL to a running nouveau server. Defaults to
+<code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8080</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="nouveau/max_sessions">
+<span class="sig-name descname"><span class="pre">max_sessions</span></span><a class="headerlink" href="#nouveau/max_sessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nouveau will configure ibrowse max_sessions to this value for
+the configured <code class="docutils literal notranslate"><span class="pre">url</span></code>.  Defaults to <code class="docutils literal notranslate"><span class="pre">100</span></code>.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="nouveau/max_pipeline_size">
+<span class="sig-name descname"><span class="pre">max_pipeline_size</span></span><a class="headerlink" href="#nouveau/max_pipeline_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nouveau will configure ibrowse max_pipeline_size to this value
+for the configured <code class="docutils literal notranslate"><span class="pre">url</span></code>.  Defaults to <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="mango">
+<span id="config-mango"></span><h2><span class="section-number">3.13.6. </span>Mango<a class="headerlink" href="#mango" title="Permalink to this heading">¶</a></h2>
+<p>Mango is the Query Engine that services the <a class="reference internal" href="../api/database/find.html#api-db-find"><span class="std std-ref">_find</span></a>, endpoint.</p>
+<dl class="config section">
+<dt class="sig sig-object config" id="mango">
+<span class="sig-name descname"><span class="pre">[mango]</span></span><a class="headerlink" href="#mango" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="mango/index_all_disabled">
+<span class="sig-name descname"><span class="pre">index_all_disabled</span></span><a class="headerlink" href="#mango/index_all_disabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to <code class="docutils literal notranslate"><span class="pre">true</span></code> to disable the “index all fields” text index. This can lead
+to out of memory issues when there are documents with nested array fields.
+Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[mango]</span>
+<span class="na">index_all_disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="mango/default_limit">
+<span class="sig-name descname"><span class="pre">default_limit</span></span><a class="headerlink" href="#mango/default_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the default number of results that will be returned in a
+<a class="reference internal" href="../api/database/find.html#api-db-find"><span class="std std-ref">_find</span></a> response. Individual requests can override this
+by setting <code class="docutils literal notranslate"><span class="pre">limit</span></code> directly in the query parameters.
+Defaults to <code class="docutils literal notranslate"><span class="pre">25</span></code>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[mango]</span>
+<span class="na">default_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">25</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="mango/index_scan_warning_threshold">
+<span class="sig-name descname"><span class="pre">index_scan_warning_threshold</span></span><a class="headerlink" href="#mango/index_scan_warning_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>This sets the ratio between documents scanned and results matched that
+will generate a warning in the _find response. For example, if a query
+requires reading 100 documents to return 10 rows, a warning will be
+generated if this value is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">10</span></code>. Setting the value to <code class="docutils literal notranslate"><span class="pre">0</span></code> disables the warning.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[mango]</span>
+<span class="na">index_scan_warning_threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="replicator.html" class="btn btn-neutral float-left" title="3.12. Replicator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="misc.html" class="btn btn-neutral float-right" title="3.14. Miscellaneous Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

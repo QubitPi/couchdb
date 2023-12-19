@@ -1,0 +1,262 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.9. Background Indexing &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/config/indexbuilds.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.10. IO Queue" href="ioq.html" />
+    <link rel="prev" title="3.8. Compaction" href="compaction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Introduction To Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb.html">3.2. Base Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">3.3. Configuring Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couch-peruser.html">3.4. Database Per User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk-monitor.html">3.5. Disk Monitor Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html">3.6. CouchDB HTTP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html">3.7. Authentication and Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">3.8. Compaction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.9. Background Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ioq.html">3.10. IO Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">3.11. Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replicator.html">3.12. Replicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query-servers.html">3.13. Query Servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">3.14. Miscellaneous Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">3.15. Resharding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Configuration</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.9. </span>Background Indexing</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/config/indexbuilds.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="background-indexing">
+<span id="config-index-builds"></span><h1><span class="section-number">3.9. </span>Background Indexing<a class="headerlink" href="#background-indexing" title="Permalink to this heading">¶</a></h1>
+<p>Secondary indexes in CouchDB are not updated during document write operations. In order to
+avoid high latencies when reading indexes following a large block of writes, CouchDB
+automatically kicks off background jobs to keep secondary indexes “warm”. The daemon
+responsible for this process is internally known as “ken” and can be configured using the
+following settings.</p>
+<dl class="config section">
+<dt class="sig sig-object config" id="ken">
+<span class="sig-name descname"><span class="pre">[ken]</span></span><a class="headerlink" href="#ken" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="ken/batch_channels">
+<span class="sig-name descname"><span class="pre">batch_channels</span></span><a class="headerlink" href="#ken/batch_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This setting controls the number of background view builds that can be running in
+parallel at any given time. The default is 20.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="ken/incremental_channels">
+<span class="sig-name descname"><span class="pre">incremental_channels</span></span><a class="headerlink" href="#ken/incremental_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>It is possible for all the slots in the normal build system to be occupied by
+long-running index rebuilds (e.g. if new design documents are posted to several
+databases simultaneously). In order to avoid already-built indexes from falling
+behind when this occurs, CouchDB will allow for a number of short background
+indexing jobs to run even when all slots are full. This setting controls how many
+additional short jobs are allowed to run concurrently with the main jobs. The
+default is 80.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="ken/max_incremental_updates">
+<span class="sig-name descname"><span class="pre">max_incremental_updates</span></span><a class="headerlink" href="#ken/max_incremental_updates" title="Permalink to this definition">¶</a></dt>
+<dd><p>CouchDB estimates whether an indexing job is “incremental” or not by looking at
+the difference in sequence numbers between the current index and the main
+database. If the difference is larger than the threshold defined here the
+background job will only be allowed to run in the main queue. Defaults to 1000.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="config section">
+<dt class="sig sig-object config" id="ken.ignore">
+<span class="sig-name descname"><span class="pre">[ken.ignore]</span></span><a class="headerlink" href="#ken.ignore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Entries in this configuration section can be used to tell the background indexer to skip
+over specific database shard files. The key must be the exact name of the shard with the
+<code class="docutils literal notranslate"><span class="pre">.couch</span></code> suffix omitted, for example:</p>
+<blockquote>
+<div><div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[ken.ignore]</span>
+<span class="na">shards/00000000-1fffffff/mydb.1567719095</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In case when you’d like to skip all views from a ddoc, you may add
+<code class="docutils literal notranslate"><span class="pre">autoupdate:</span> <span class="pre">false</span></code> to the ddoc. All views of that ddoc will then be skipped.</p>
+<p>More at <a class="reference internal" href="../api/ddoc/common.html#put--db-_design-ddoc" title="PUT /{db}/_design/{ddoc}"><code class="xref http http-put docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/{db}/_design/{ddoc}</span></code></a>.</p>
+</div>
+</div></blockquote>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="compaction.html" class="btn btn-neutral float-left" title="3.8. Compaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ioq.html" class="btn btn-neutral float-right" title="3.10. IO Queue" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

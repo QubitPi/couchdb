@@ -1,0 +1,925 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.3.12. /{db}/_changes &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/database/changes.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.3.13. /{db}/_compact" href="compact.html" />
+    <link rel="prev" title="1.3.9. /{db}/_shards" href="shard.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/index.html">1.2. Server</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">1.3. Databases</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common.html">1.3.1. <code class="docutils literal notranslate"><span class="pre">/{db}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html">1.3.2. <code class="docutils literal notranslate"><span class="pre">/{db}/_all_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-design-docs">1.3.3. <code class="docutils literal notranslate"><span class="pre">/{db}/_design_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-bulk-get">1.3.4. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_get</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-bulk-docs">1.3.5. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html">1.3.6. <code class="docutils literal notranslate"><span class="pre">/{db}/_find</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-index">1.3.7. <code class="docutils literal notranslate"><span class="pre">/{db}/_index</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-explain">1.3.8. <code class="docutils literal notranslate"><span class="pre">/{db}/_explain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html">1.3.9. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-shards-docid">1.3.10. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards/{docid}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-sync-shards">1.3.11. <code class="docutils literal notranslate"><span class="pre">/{db}/_sync_shards</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1.3.12. <code class="docutils literal notranslate"><span class="pre">/{db}/_changes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#changes-feeds">1.3.12.1. Changes Feeds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filtering">1.3.12.2. Filtering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html">1.3.13. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-compact-ddoc">1.3.14. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact/{ddoc}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-ensure-full-commit">1.3.15. <code class="docutils literal notranslate"><span class="pre">/{db}/_ensure_full_commit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-view-cleanup">1.3.16. <code class="docutils literal notranslate"><span class="pre">/{db}/_view_cleanup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="security.html">1.3.17. <code class="docutils literal notranslate"><span class="pre">/{db}/_security</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html">1.3.18. <code class="docutils literal notranslate"><span class="pre">/{db}/_purge</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-purged-infos">1.3.19. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-purged-infos-limit">1.3.20. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos_limit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-missing-revs">1.3.21. <code class="docutils literal notranslate"><span class="pre">/{db}/_missing_revs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-revs-diff">1.3.22. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_diff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-revs-limit">1.3.23. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_limit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../document/index.html">1.4. Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ddoc/index.html">1.5. Design Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../local.html">1.7. Local (non-replicating) Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">1. </span>API Reference</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1.3. </span>Databases</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.3.12. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_changes</span></code></li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/database/changes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="db-changes">
+<span id="api-db-changes"></span><h1><span class="section-number">1.3.12. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_changes</span></code><a class="headerlink" href="#db-changes" title="Permalink to this heading">¶</a></h1>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_changes">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_changes</span></span><a class="headerlink" href="#get--db-_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a sorted list of changes made to documents in the database, in time
+order of application, can be obtained from the database’s <code class="docutils literal notranslate"><span class="pre">_changes</span></code>
+resource. Only the most recent change for a given document is guaranteed to
+be provided, for example if a document has had fields added, and then
+deleted, an API client checking for changes will not necessarily receive
+the intermediate state of added documents.</p>
+<p>This can be used to listen for update and modifications to the database for
+post processing or synchronization, and for practical purposes,
+a continuously connected <code class="docutils literal notranslate"><span class="pre">_changes</span></code> feed is a reasonable approach for
+generating a real-time log for most applications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/event-stream</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/TR/eventsource/#last-event-id">Last-Event-ID</a></span> – ID of the last events received by the server on a
+previous connection. Overrides <code class="docutils literal notranslate"><span class="pre">since</span></code> query parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc_ids</strong> (<em>array</em>) – List of document IDs to filter the changes feed as
+valid JSON array. Used with <a class="reference internal" href="#changes-filter-doc-ids"><span class="std std-ref">_doc_ids</span></a>
+filter. Since <a class="reference external" href="http://stackoverflow.com/a/417184/965635">length of URL is limited</a>, it is better to use
+<a class="reference internal" href="#post--db-_changes" title="POST /{db}/_changes"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/{db}/_changes</span></code></a> instead.</p></li>
+<li><p><strong>conflicts</strong> (<em>boolean</em>) – Includes <cite>conflicts</cite> information in response.
+Ignored if <cite>include_docs</cite> isn’t <code class="docutils literal notranslate"><span class="pre">true</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>descending</strong> (<em>boolean</em>) – Return the change results in descending sequence
+order (most recent change first). Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>feed</strong> (<em>string</em>) – <ul>
+<li><p><strong>normal</strong> Specifies <a class="reference internal" href="#changes-normal"><span class="std std-ref">Normal Polling Mode</span></a>. All past changes are returned
+immediately. <em>Default.</em></p></li>
+<li><p><strong>longpoll</strong> Specifies <a class="reference internal" href="#changes-longpoll"><span class="std std-ref">Long Polling Mode</span></a>. Waits until at least one change
+has occurred, sends the change, then closes the
+connection. Most commonly used in conjunction with
+<code class="docutils literal notranslate"><span class="pre">since=now</span></code>, to wait for the next change.</p></li>
+<li><p><strong>continuous</strong> Sets <a class="reference internal" href="#changes-continuous"><span class="std std-ref">Continuous Mode</span></a>. Sends a line of JSON per
+event. Keeps the socket open until <code class="docutils literal notranslate"><span class="pre">timeout</span></code>.</p></li>
+<li><p><strong>eventsource</strong> Sets <a class="reference internal" href="#changes-eventsource"><span class="std std-ref">Event Source Mode</span></a>. Works the same as Continuous
+Mode, but sends the events in <a class="reference external" href="http://dev.w3.org/html5/eventsource/">EventSource</a> format.</p></li>
+</ul>
+</p></li>
+<li><p><strong>filter</strong> (<em>string</em>) – Reference to a <a class="reference internal" href="../../ddocs/ddocs.html#filterfun"><span class="std std-ref">filter function</span></a>
+from a design document that will filter whole stream emitting only
+filtered events. See the section <a class="reference external" href="http://guide.couchdb.org/draft/notifications.html">Change Notifications in the book
+CouchDB The Definitive Guide</a> for more information.</p></li>
+<li><p><strong>heartbeat</strong> (<em>number</em>) – Period in <em>milliseconds</em> after which an empty
+line is sent in the results. Only applicable for <a class="reference internal" href="#changes-longpoll"><span class="std std-ref">longpoll</span></a>, <a class="reference internal" href="#changes-continuous"><span class="std std-ref">continuous</span></a>, and
+<a class="reference internal" href="#changes-eventsource"><span class="std std-ref">eventsource</span></a> feeds. Overrides any timeout
+to keep the feed alive indefinitely. Default is <code class="docutils literal notranslate"><span class="pre">60000</span></code>. May be
+<code class="docutils literal notranslate"><span class="pre">true</span></code> to use default value.</p></li>
+<li><p><strong>include_docs</strong> (<em>boolean</em>) – Include the associated document with each
+result. If there are conflicts, only the winning revision is returned.
+Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>attachments</strong> (<em>boolean</em>) – Include the Base64-encoded content of
+<a class="reference internal" href="../document/common.html#api-doc-attachments"><span class="std std-ref">attachments</span></a> in the documents that
+are included if <code class="docutils literal notranslate"><span class="pre">include_docs</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">include_docs</span></code>
+isn’t <code class="docutils literal notranslate"><span class="pre">true</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>att_encoding_info</strong> (<em>boolean</em>) – Include encoding information in attachment
+stubs if <code class="docutils literal notranslate"><span class="pre">include_docs</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code> and the particular attachment is
+compressed. Ignored if <code class="docutils literal notranslate"><span class="pre">include_docs</span></code> isn’t <code class="docutils literal notranslate"><span class="pre">true</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>last-event-id</strong> (<em>number</em>) – Alias of <cite>Last-Event-ID</cite> header.</p></li>
+<li><p><strong>limit</strong> (<em>number</em>) – Limit number of result rows to the specified value
+(note that using <code class="docutils literal notranslate"><span class="pre">0</span></code> here has the same effect as <code class="docutils literal notranslate"><span class="pre">1</span></code>).</p></li>
+<li><p><strong>since</strong> – Start the results from the change immediately after the given
+update sequence. Can be valid update sequence or <code class="docutils literal notranslate"><span class="pre">now</span></code> value.
+Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>style</strong> (<em>string</em>) – Specifies how many revisions are returned in
+the changes array. The default, <code class="docutils literal notranslate"><span class="pre">main_only</span></code>, will only return
+the current “winning” revision; <code class="docutils literal notranslate"><span class="pre">all_docs</span></code> will return all leaf
+revisions (including conflicts and deleted former conflicts).</p></li>
+<li><p><strong>timeout</strong> (<em>number</em>) – Maximum period in <em>milliseconds</em> to wait for a change
+before the response is sent, even if there are no results.
+Only applicable for <a class="reference internal" href="#changes-longpoll"><span class="std std-ref">longpoll</span></a> or
+<a class="reference internal" href="#changes-continuous"><span class="std std-ref">continuous</span></a> feeds.
+Default value is specified by <a class="reference internal" href="../../config/http.html#chttpd/changes_timeout" title="changes_timeout"><code class="xref config config-option docutils literal notranslate"><span class="pre">chttpd/changes_timeout</span></code></a>
+configuration option. Note that <code class="docutils literal notranslate"><span class="pre">60000</span></code> value is also the default
+maximum timeout to prevent undetected dead connections.</p></li>
+<li><p><strong>view</strong> (<em>string</em>) – Allows to use view functions as filters. Documents
+counted as “passed” for view filter in case if map function emits
+at least one record for them.
+See <a class="reference internal" href="#changes-filter-view"><span class="std std-ref">_view</span></a> for more info.</p></li>
+<li><p><strong>seq_interval</strong> (<em>number</em>) – When fetching changes in a batch, setting the
+<em>seq_interval</em> parameter tells CouchDB to only calculate the update seq
+with every Nth result returned. By setting <strong>seq_interval=&lt;batch size&gt;</strong>
+, where <code class="docutils literal notranslate"><span class="pre">&lt;batch</span> <span class="pre">size&gt;</span></code> is the number of results requested per batch,
+load can be reduced on the source CouchDB database; computing the seq
+value across many shards (esp. in highly-sharded databases) is expensive
+in a heavily loaded CouchDB cluster.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7234#section-5.2">Cache-Control</a></span> – <code class="docutils literal notranslate"><span class="pre">no-cache</span></code> if changes feed is
+<a class="reference internal" href="#changes-eventsource"><span class="std std-ref">eventsource</span></a></p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/event-stream</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a></span> – Response hash if changes feed is <cite>normal</cite></p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.1">Transfer-Encoding</a></span> – <code class="docutils literal notranslate"><span class="pre">chunked</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>last_seq</strong> (<em>json</em>) – Last change update sequence</p></li>
+<li><p><strong>pending</strong> (<em>number</em>) – Count of remaining items in the feed</p></li>
+<li><p><strong>results</strong> (<em>array</em>) – Changes made to a database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad request</p></li>
+</ul>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">results</span></code> field of database changes:</p>
+<dl class="field-list simple">
+<dt class="field-odd">JSON Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>changes</strong> (<em>array</em>) – List of document’s leaves with single field <code class="docutils literal notranslate"><span class="pre">rev</span></code>.</p></li>
+<li><p><strong>id</strong> (<em>string</em>) – Document ID.</p></li>
+<li><p><strong>seq</strong> (<em>json</em>) – Update sequence.</p></li>
+<li><p><strong>deleted</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">true</span></code> if the document is deleted.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_changes?style=all_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 00:54:58 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;6ASLEKEMSRABT0O5XY9UPO9Z&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;last_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5-g1AAAAIreJyVkEsKwjAURZ-toI5cgq5A0sQ0OrI70XyppcaRY92J7kR3ojupaSPUUgotgRd4yTlwbw4A0zRUMLdnpaMkwmyF3Ily9xBwEIuiKLI05KOTW0wkV4rruP29UyGWbordzwKVxWBNOGMKZhertDlarbr5pOT3DV4gudUC9-MPJX9tpEAYx4TQASns2E24ucuJ7rXJSL1BbEgf3vTwpmedCZkYa7Pulck7Xt7x_usFU2aIHOD4eEfVTVA5KMGUkqhNZV-8_o5i&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pending&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-7051cbe5c8faecd085a3fa619e6e6337&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;6478c2ae800dfc387396d14e1fc39626&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3-g1AAAAG3eJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MSGXAqSVIAkkn2IFUZzIkMuUAee5pRqnGiuXkKA2dpXkpqWmZeagpu_Q4g_fGEbEkAqaqH2sIItsXAyMjM2NgUUwdOU_JYgCRDA5ACGjQfn30QlQsgKvcjfGaQZmaUmmZClM8gZhyAmHGfsG0PICrBPmQC22ZqbGRqamyIqSsLAAArcXo&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3-7379b9e515b161226c6559d90c4dc49f&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;deleted&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5bbc9ca465f1b0fcd62362168a7c8831&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4-g1AAAAHXeJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBMZc4EC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HqQ_kQG3qgSQqnoUtxoYGZkZG5uS4NY8FiDJ0ACkgAbNx2cfROUCiMr9CJ8ZpJkZpaaZEOUziBkHIGbcJ2zbA4hKsA-ZwLaZGhuZmhobYurKAgCz33kh&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;6-460637e73a6288cb24d532bf91f32969&quot;</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5-eeaa298781f60b7bcae0c91bdedd1b87&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;729eb57437745e506b333068fff665ae&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5-g1AAAAIReJyVkE0OgjAQRkcwUVceQU9g-mOpruQm2tI2SLCuXOtN9CZ6E70JFmpCCCFCmkyTdt6bfJMDwDQNFcztWWkcY8JXyB2cu49AgFwURZGloRid3MMkEUoJHbXbOxVy6arc_SxQWQzRVHCuYHaxSpuj1aqbj0t-3-AlSrZakn78oeSvjRSIkIhSNiCFHbsKN3c50b02mURvEB-yD296eNOzzoRMRLRZ98rkHS_veGcC_nR-fGe1gaCaxihhjOI2lX0BhniHaA&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.11.0: </span>added <code class="docutils literal notranslate"><span class="pre">include_docs</span></code> parameter</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.2.0: </span>added <code class="docutils literal notranslate"><span class="pre">view</span></code> parameter and special value <cite>_view</cite>
+for <code class="docutils literal notranslate"><span class="pre">filter</span></code> one</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.3.0: </span><code class="docutils literal notranslate"><span class="pre">since</span></code> parameter could take <cite>now</cite> value to start
+listen changes since current seq number.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.3.0: </span><code class="docutils literal notranslate"><span class="pre">eventsource</span></code> feed type added.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.4.0: </span>Support <code class="docutils literal notranslate"><span class="pre">Last-Event-ID</span></code> header.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.6.0: </span>added <code class="docutils literal notranslate"><span class="pre">attachments</span></code> and <code class="docutils literal notranslate"><span class="pre">att_encoding_info</span></code>
+parameters</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0.0: </span>update sequences can be any valid json object,
+added <code class="docutils literal notranslate"><span class="pre">seq_interval</span></code></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the specified replicas of the shards in any given since value are
+unavailable, alternative replicas are selected, and the last known
+checkpoint between them is used. If this happens, you might see changes
+again that you have previously seen. Therefore, an application making use
+of the <code class="docutils literal notranslate"><span class="pre">_changes</span></code> feed should be ‘idempotent’, that is, able to receive the
+same data multiple times, safely.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Cloudant Sync and PouchDB already optimize the replication process by
+setting <code class="docutils literal notranslate"><span class="pre">seq_interval</span></code> parameter to the number of results expected per
+batch. This parameter increases throughput by reducing latency between
+sequential requests in bulk document transfers. This has resulted in up to
+a 20% replication performance improvement in highly-sharded databases.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">attachments</span></code> parameter to include attachments in the changes
+feed is not recommended for large attachment sizes. Also note that the
+Base64-encoding that is used leads to a 33% overhead (i.e. one third) in
+transfer size for attachments.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The results returned by <cite>_changes</cite> are partially ordered. In other words,
+the order is not guaranteed to be preserved for multiple calls.</p>
+</div>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_changes">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_changes</span></span><a class="headerlink" href="#post--db-_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requests the database changes feed in the same way as
+<a class="reference internal" href="#get--db-_changes" title="GET /{db}/_changes"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{db}/_changes</span></code></a> does, but is widely used with
+<code class="docutils literal notranslate"><span class="pre">?filter=_doc_ids</span></code> query parameter and allows one to pass a larger list of
+document IDs to filter.</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/recipes/_changes?filter=_doc_ids</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">40</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;doc_ids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;SpaghettiWithMeatballs&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 28 Sep 2013 07:23:09 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;ARIHFWL3I7PIS0SPVTFU6TLR2&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;last_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5-g1AAAAIreJyVkEsKwjAURZ-toI5cgq5A0sQ0OrI70XyppcaRY92J7kR3ojupaSPUUgotgRd4yTlwbw4A0zRUMLdnpaMkwmyF3Ily9xBwEIuiKLI05KOTW0wkV4rruP29UyGWbordzwKVxWBNOGMKZhertDlarbr5pOT3DV4gudUC9-MPJX9tpEAYx4TQASns2E24ucuJ7rXJSL1BbEgf3vTwpmedCZkYa7Pulck7Xt7x_usFU2aIHOD4eEfVTVA5KMGUkqhNZV8_o5i&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pending&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;13-bcb9d6388b60fd1e960d9ec4e8e3f29e&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SpaghettiWithMeatballs&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w">  </span><span class="s2">&quot;5-g1AAAAIReJyVkE0OgjAQRkcwUVceQU9g-mOpruQm2tI2SLCuXOtN9CZ6E70JFmpCCCFCmkyTdt6bfJMDwDQNFcztWWkcY8JXyB2cu49AgFwURZGloRid3MMkEUoJHbXbOxVy6arc_SxQWQzRVHCuYHaxSpuj1aqbj0t-3-AlSrZakn78oeSvjRSIkIhSNiCFHbsKN3c50b02mURvEB-yD296eNOzzoRMRLRZ98rkHS_veGcC_nR-fGe1gaCaxihhjOI2lX0BhniHaA&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="changes-feeds">
+<span id="changes"></span><h2><span class="section-number">1.3.12.1. </span>Changes Feeds<a class="headerlink" href="#changes-feeds" title="Permalink to this heading">¶</a></h2>
+<section id="polling">
+<span id="changes-normal"></span><h3><span class="section-number">1.3.12.1.1. </span>Polling<a class="headerlink" href="#polling" title="Permalink to this heading">¶</a></h3>
+<p>By default all changes are immediately returned within the JSON body:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">somedatabase</span><span class="o">/</span><span class="n">_changes</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="o">:</span><span class="p">[</span>
+<span class="p">{</span><span class="s2">&quot;seq&quot;</span><span class="o">:</span><span class="s2">&quot;1-g1AAAAF9eJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P__7MSGXAqSVIAkkn2IFUZzIkMuUAee5pRqnGiuXkKA2dpXkpqWmZeagpu_Q4g_fGEbEkAqaqH2sIItsXAyMjM2NgUUwdOU_JYgCRDA5ACGjQfn30QlQsgKvcTVnkAovI-YZUPICpBvs0CAN1eY_c&quot;</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;fresh&quot;</span><span class="p">,</span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="p">[{</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;1-967a00dff5e02add41819138abb3284d&quot;</span><span class="p">}]},</span>
+<span class="p">{</span><span class="s2">&quot;seq&quot;</span><span class="o">:</span><span class="s2">&quot;3-g1AAAAG3eJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MSGXAqSVIAkkn2IFUZzIkMuUAee5pRqnGiuXkKA2dpXkpqWmZeagpu_Q4g_fGEbEkAqaqH2sIItsXAyMjM2NgUUwdOU_JYgCRDA5ACGjQfn30QlQsgKvcjfGaQZmaUmmZClM8gZhyAmHGfsG0PICrBPmQC22ZqbGRqamyIqSsLAAArcXo&quot;</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;updated&quot;</span><span class="p">,</span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="p">[{</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;2-7051cbe5c8faecd085a3fa619e6e6337CFCmkyTdt6bfJMDwDQNFcztWWkcY8JXyB2cu49AgFwURZGloRid3MMkEUoJHbXbOxVy6arc_SxQWQzRVHCuYHaxSpuj1aqbj0t-3-AlSrZakn78oeSvjRSIkIhSNiCFHbsKN3c50b02mURvEB-yD296eNOzzoRMRLRZ98rkHS_veGcC_nR-fGe1gaCaxihhjOI2lX0BhniHaA&quot;</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;deleted&quot;</span><span class="p">,</span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="p">[{</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;2-eec205a9d413992850a6e32678485900&quot;</span><span class="p">}],</span><span class="s2">&quot;deleted&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">}</span>
+<span class="p">],</span>
+<span class="s2">&quot;last_seq&quot;</span><span class="o">:</span><span class="s2">&quot;5-g1AAAAIreJyVkEsKwjAURZ-toI5cgq5A0sQ0OrI70XyppcaRY92J7kR3ojupaSPUUgotgRd4yTlwbw4A0zRUMLdnpaMkwmyF3Ily9xBwEIuiKLI05KOTW0wkV4rruP29UyGWbordzwKVxWBNOGMKZhertDlarbr5pOT3DV4gudUC9-MPJX9tpEAYx4TQASns2E24ucuJ7rXJSL1BbEgf3vTwpmedCZkYa7Pulck7Xt7x_usFU2aIHOD4eEfVTVA5KMGUkqhNZV-8_o5i&quot;</span><span class="p">,</span>
+<span class="s2">&quot;pending&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">results</span></code> is the list of changes in sequential order. New and changed
+documents only differ in the value of the rev; deleted documents include the
+<code class="docutils literal notranslate"><span class="pre">&quot;deleted&quot;:</span> <span class="pre">true</span></code> attribute. (In the <code class="docutils literal notranslate"><span class="pre">style=all_docs</span> <span class="pre">mode</span></code>, deleted applies
+only to the current/winning revision. The other revisions listed might be
+deleted even if there is no deleted property; you have to <code class="docutils literal notranslate"><span class="pre">GET</span></code> them
+individually to make sure.)</p>
+<p><code class="docutils literal notranslate"><span class="pre">last_seq</span></code> is the update sequence of the last update returned (Equivalent
+to the last item in the results).</p>
+<p>Sending a <code class="docutils literal notranslate"><span class="pre">since</span></code> param in the query string skips all changes up to and
+including the given update sequence:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/somedatabase/_changes?since=4-g1AAAAHXeJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBMZc4EC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HqQ_kQG3qgSQqnoUtxoYGZkZG5uS4NY8FiDJ0ACkgAbNx2cfROUCiMr9CJ8ZpJkZpaaZEOUziBkHIGbcJ2zbA4hKsA-ZwLaZGhuZmhobYurKAgCz33kh</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p>The return structure for <code class="docutils literal notranslate"><span class="pre">normal</span></code> and <code class="docutils literal notranslate"><span class="pre">longpoll</span></code> modes is a JSON
+array of changes objects, and the last update sequence.</p>
+<p>In the return format for <code class="docutils literal notranslate"><span class="pre">continuous</span></code> mode, the server sends a <code class="docutils literal notranslate"><span class="pre">CRLF</span></code>
+(carriage-return, linefeed) delimited line for each change. Each line
+contains the <cite>JSON object</cite> described above.</p>
+<p>You can also request the full contents of each document change (instead
+of just the change notification) by using the <code class="docutils literal notranslate"><span class="pre">include_docs</span></code> parameter.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;last_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;5-g1AAAAIreJyVkEsKwjAURZ-toI5cgq5A0sQ0OrI70XyppcaRY92J7kR3ojupaSPUUgotgRd4yTlwbw4A0zRUMLdnpaMkwmyF3Ily9xBwEIuiKLI05KOTW0wkV4rruP29UyGWbordzwKVxWBNOGMKZhertDlarbr5pOT3DV4gudUC9-MPJX9tpEAYx4TQASns2E24ucuJ7rXJSL1BbEgf3vTwpmedCZkYa7Pulck7Xt7x_usFU2aIHOD4eEfVTVA5KMGUkqhNZV-8_o5i&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;pending&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;results&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2-eec205a9d413992850a6e32678485900&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;deleted&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;deleted&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;seq&quot;</span><span class="o">:</span><span class="w">  </span><span class="s2">&quot;5-g1AAAAIReJyVkE0OgjAQRkcwUVceQU9g-mOpruQm2tI2SLCuXOtN9CZ6E70JFmpCCCFCmkyTdt6bfJMDwDQNFcztWWkcY8JXyB2cu49AgFwURZGloRid3MMkEUoJHbXbOxVy6arc_SxQWQzRVHCuYHaxSpuj1aqbj0t-3-AlSrZakn78oeSvjRSIkIhSNiCFHbsKN3c50b02mURvEByD296eNOzzoRMRLRZ98rkHS_veGcC_nR-fGe1gaCaxihhjOI2lX0BhniHaA&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="long-polling">
+<span id="changes-longpoll"></span><h3><span class="section-number">1.3.12.1.2. </span>Long Polling<a class="headerlink" href="#long-polling" title="Permalink to this heading">¶</a></h3>
+<p>The <cite>longpoll</cite> feed, probably most applicable for a browser, is a more
+efficient form of polling that waits for a change to occur before the response
+is sent. <cite>longpoll</cite> avoids the need to frequently poll CouchDB to discover
+nothing has changed!</p>
+<p>The request to the server will remain open until a change is made on the
+database and is subsequently transferred, and then the connection will close.
+This is low load for both server and client.</p>
+<p>The response is basically the same JSON as is sent for the <cite>normal</cite> feed.</p>
+<p>Because the wait for a change can be significant you can set a
+timeout before the connection is automatically closed (the
+<code class="docutils literal notranslate"><span class="pre">timeout</span></code> argument). You can also set a heartbeat interval (using
+the <code class="docutils literal notranslate"><span class="pre">heartbeat</span></code> query argument), which sends a newline to keep the
+connection active.</p>
+<p>Keep in mind that <code class="docutils literal notranslate"><span class="pre">heartbeat</span></code> means “Send a linefeed every <code class="docutils literal notranslate"><span class="pre">x</span></code> ms
+if no change arrives, and hold the connection indefinitely” while <code class="docutils literal notranslate"><span class="pre">timeout</span></code>
+means “Hold this connection open for <code class="docutils literal notranslate"><span class="pre">x</span></code> ms, and if no change arrives in that
+time, close the socket.”  <code class="docutils literal notranslate"><span class="pre">heartbeat</span></code> overrides <code class="docutils literal notranslate"><span class="pre">timeout</span></code>.</p>
+</section>
+<section id="continuous">
+<span id="changes-continuous"></span><h3><span class="section-number">1.3.12.1.3. </span>Continuous<a class="headerlink" href="#continuous" title="Permalink to this heading">¶</a></h3>
+<p>Continually polling the CouchDB server is not ideal - setting up new HTTP
+connections just to tell the client that nothing happened puts unnecessary
+strain on CouchDB.</p>
+<p>A continuous feed stays open and connected to the database until explicitly
+closed and changes are sent to the client as they happen, i.e. in near
+real-time.</p>
+<p>As with the <cite>longpoll</cite> feed type you can set both the timeout and heartbeat
+intervals to ensure that the connection is kept open for new changes and
+updates.</p>
+<p>Keep in mind that <code class="docutils literal notranslate"><span class="pre">heartbeat</span></code> means “Send a linefeed every <code class="docutils literal notranslate"><span class="pre">x</span></code> ms
+if no change arrives, and hold the connection indefinitely” while <code class="docutils literal notranslate"><span class="pre">timeout</span></code>
+means “Hold this connection open for <code class="docutils literal notranslate"><span class="pre">x</span></code> ms, and if no change arrives in that
+time, close the socket.”  <code class="docutils literal notranslate"><span class="pre">heartbeat</span></code> overrides <code class="docutils literal notranslate"><span class="pre">timeout</span></code>.</p>
+<p>The continuous feed’s response is a little different than the other feed types
+to simplify the job of the client - each line of the response is either empty
+or a JSON object representing a single change, as found in the normal feed’s
+results.</p>
+<p>If <cite>limit</cite> has been specified the feed will end with a <cite>{ last_seq }</cite> object.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/somedatabase/_changes?feed=continuous</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;seq&quot;</span><span class="o">:</span><span class="s2">&quot;1-g1AAAAF9eJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MSGXAqSVIAkkn2IFUZzIkMuUAee5pRqnGiuXkKA2dpXkpqWmZeagpu_Q4g_fGEbEkAqaqH2sIItsXAyMjM2NgUUwdOU_JYgCRDA5ACGjQfn30QlQsgKvcTVnkAovI-YZUPICpBvs0CAN1eY_c&quot;</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;fresh&quot;</span><span class="p">,</span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="p">[{</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;5-g1AAAAHxeJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBOZcoEC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HkV_kkGyZWqSEXH6E0D666H6GcH6DYyMzIyNTUnwRR4LkGRoAFJAg-YjwiMtOdXCwJyU8ICYtABi0n6EnwzSzIxS00yI8hPEjAMQM-5nJTIQUPkAovI_UGUWAA0SgOI&quot;</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;updated&quot;</span><span class="p">,</span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="p">[{</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;2-7051cbe5c8faecd085a3fa619e6e6337&quot;</span><span class="p">}]}</span>
+<span class="p">{</span><span class="s2">&quot;seq&quot;</span><span class="o">:</span><span class="s2">&quot;3-g1AAAAHReJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBOZcoEC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HkV_kkGyZWqSEXH6E0D660H6ExlwqspjAZIMDUAKqHA-yCZGiEuTUy0MzEnxL8SkBRCT9iPcbJBmZpSaZkKUmyFmHICYcZ-wux9AVIJ8mAUABgp6XQ&quot;</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;deleted&quot;</span><span class="p">,</span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="p">[{</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;2-eec205a9d413992850a6e32678485900&quot;</span><span class="p">}],</span><span class="s2">&quot;deleted&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">}</span>
+<span class="p">...</span><span class="w"> </span><span class="nx">tum</span><span class="w"> </span><span class="nx">tee</span><span class="w"> </span><span class="nx">tum</span><span class="w"> </span><span class="p">...</span>
+<span class="p">{</span><span class="s2">&quot;seq&quot;</span><span class="o">:</span><span class="s2">&quot;6-g1AAAAIreJyVkEsKwjAURWMrqCOXoCuQ9MU0OrI70XyppcaRY92J7kR3ojupaVNopRQsgRd4yTlwb44QmqahQnN7VjpKImAr7E6Uu4eAI7EoiiJLQx6c3GIiuVJcx93vvQqxdFPsaguqLAY04YwpNLtYpc3RatXPJyW__-EFllst4D_-UPLXmh9VPAaICaEDUtixm-jmLie6N30YqTeYDenDmx7e9GwyYRODNuu_MnnHyzverV6AMkPkAMfHO1rdUAKUkqhLZV-_0o5j&quot;</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;updated&quot;</span><span class="p">,</span><span class="s2">&quot;changes&quot;</span><span class="o">:</span><span class="p">[{</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;3-825cb35de44c433bfb2df415563a19de&quot;</span><span class="p">}]}</span>
+</pre></div>
+</div>
+<p>Obviously, <cite>… tum tee tum …</cite> does not appear in the actual response, but
+represents a long pause before the change with seq 6 occurred.</p>
+</section>
+<section id="event-source">
+<span id="changes-eventsource"></span><h3><span class="section-number">1.3.12.1.4. </span>Event Source<a class="headerlink" href="#event-source" title="Permalink to this heading">¶</a></h3>
+<p>The <cite>eventsource</cite> feed provides push notifications that can be consumed in
+the form of DOM events in the browser. Refer to the <a class="reference external" href="http://www.w3.org/TR/eventsource/">W3C eventsource
+specification</a> for further details. CouchDB also honours the <code class="docutils literal notranslate"><span class="pre">Last-Event-ID</span></code>
+parameter.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/somedatabase/_changes?feed=eventsource</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// define the event handling function</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">EventSource</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventSource</span><span class="p">(</span><span class="s2">&quot;/somedatabase/_changes?feed=eventsource&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">source</span><span class="p">.</span><span class="nx">onerror</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;EventSource failed.&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">sourceListener</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="c1">// start listening for events</span>
+<span class="w">    </span><span class="nx">source</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">sourceListener</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// stop listening for events</span>
+<span class="w">    </span><span class="nx">source</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">sourceListener</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you set a heartbeat interval (using the <code class="docutils literal notranslate"><span class="pre">heartbeat</span></code> query argument),
+CouchDB will send a <code class="docutils literal notranslate"><span class="pre">hearbeat</span></code> event that you can subscribe to with:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">source</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;heartbeat&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This can be monitored by the client application to restart the EventSource
+connection if needed (i.e. if the TCP connection gets stuck in a half-open
+state).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>EventSource connections are subject to cross-origin resource sharing
+restrictions. You might need to configure <a class="reference internal" href="../../config/http.html#cors"><span class="std std-ref">CORS support</span></a> to get the EventSource to work in your application.</p>
+</div>
+</section>
+</section>
+<section id="filtering">
+<span id="changes-filter"></span><h2><span class="section-number">1.3.12.2. </span>Filtering<a class="headerlink" href="#filtering" title="Permalink to this heading">¶</a></h2>
+<p>You can filter the contents of the changes feed in a number of ways. The
+most basic way is to specify one or more document IDs to the query. This
+causes the returned structure value to only contain changes for the
+specified IDs. Note that the value of this query argument should be a
+JSON formatted array.</p>
+<p>You can also filter the <code class="docutils literal notranslate"><span class="pre">_changes</span></code> feed by defining a filter function
+within a design document. The specification for the filter is the same
+as for replication filters. You specify the name of the filter function
+to the <code class="docutils literal notranslate"><span class="pre">filter</span></code> parameter, specifying the design document name and
+<a class="reference internal" href="../../ddocs/ddocs.html#filterfun"><span class="std std-ref">filter name</span></a>. For example:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_changes?filter=design_doc/filtername</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p>Additionally, a couple of built-in filters are available and described
+below.</p>
+<section id="doc-ids">
+<span id="changes-filter-doc-ids"></span><h3><span class="section-number">1.3.12.2.1. </span>_doc_ids<a class="headerlink" href="#doc-ids" title="Permalink to this heading">¶</a></h3>
+<p>This filter accepts only changes for documents which ID in specified in
+<code class="docutils literal notranslate"><span class="pre">doc_ids</span></code> query parameter or payload’s object array. See
+<a class="reference internal" href="#post--db-_changes" title="POST /{db}/_changes"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/{db}/_changes</span></code></a> for an example.</p>
+</section>
+<section id="selector">
+<span id="changes-filter-selector"></span><h3><span class="section-number">1.3.12.2.2. </span>_selector<a class="headerlink" href="#selector" title="Permalink to this heading">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<p>This filter accepts only changes for documents which match a specified
+selector, defined using the same <a class="reference internal" href="find.html#find-selectors"><span class="std std-ref">selector
+syntax</span></a> used for <a class="reference internal" href="find.html#api-db-find"><span class="std std-ref">_find</span></a>.</p>
+<p>This is significantly more efficient than using a JavaScript filter
+function and is the recommended option if filtering on document attributes only.</p>
+<p>Note that, unlike JavaScript filters, selectors do not have access to the
+request object.</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/recipes/_changes?filter=_selector</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;selector&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;$regex&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;^_design/&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 06 Sep 2016 20:03:23 GMT</span>
+<span class="na">Etag</span><span class="o">:</span> <span class="l">&quot;1H8RGBCK3ABY6ACDM7ZSC30QK&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP/18)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;last_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;11-g1AAAAIreJyVkEEKwjAQRUOrqCuPoCeQZGIaXdmbaNIk1FLjyrXeRG-iN9Gb1LQRaimFlsAEJnkP_s8RQtM0VGhuz0qTmABfYXdI7h4CgeSiKIosDUVwcotJIpQSOmp_71TIpZty97OgymJAU8G5QrOLVdocrVbdfFzy-wYvcbLVEvrxh5K_NlJggIhSNiCFHbmJbu5yonttMoneYD6kD296eNOzzoRNBNqse2Xyjpd3vP96AcYNTQY4Pt5RdTOuHIwCY5S0qewLwY6OaA&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pending&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10-304cae84fd862832ea9814f02920d4b2&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ingredients&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;8-g1AAAAHxeJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBOZcoEC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HkV_kkGyZWqSEXH6E0D666H6GcH6DYyMzIyNTUnwRR4LkGRoAFJAg-ZnJTIQULkAonI_ws0GaWZGqWkmRLkZYsYBiBn3Cdv2AKIS7ENWsG2mxkampsaGmLqyAOYpgEo&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123-6f7c1b7c97a9e4f0d22bdf130e8fd817&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;deleted&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/cookbook&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9-g1AAAAHxeJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBOZcoEC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HkV_kkGyZWqSEXH6E0D661F8YWBkZGZsbEqCL_JYgCRDA5ACGjQ_K5GBgMoFEJX7EW42SDMzSk0zIcrNEDMOQMy4T9i2BxCVYB-ygm0zNTYyNTU2xNSVBQDnK4BL&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;6-5b8a52c22580e922e792047cff3618f3&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;deleted&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/meta&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;11-g1AAAAIReJyVkE0OgjAQRiegUVceQU9g-mOpruQm2tI2SLCuXOtN9CZ6E70JFmpCCCFCmkyTdt6bfJMDwDQNFcztWWkcY8JXyB2cu49AgFwURZGloQhO7mGSCKWEjtrtnQq5dFXufhaoLIZoKjhXMLtYpc3RatXNxyW_b_ASJVstST_-UPLXRgpESEQpG5DCjlyFm7uc6F6bTKI3iA_Zhzc9vOlZZ0ImItqse2Xyjpd3vDMBfzo_vrPawLiaxihhjOI2lX0BirqHbg&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="missing-selector">
+<span id="changes-filter-selector-missing"></span><h4><span class="section-number">1.3.12.2.2.1. </span>Missing selector<a class="headerlink" href="#missing-selector" title="Permalink to this heading">¶</a></h4>
+<p>If the selector object is missing from the request body,
+the error message is similar to the following example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bad request&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Selector must be specified in POST payload&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="not-a-valid-json-object">
+<span id="changes-filter-selector-invalidjson"></span><h4><span class="section-number">1.3.12.2.2.2. </span>Not a valid JSON object<a class="headerlink" href="#not-a-valid-json-object" title="Permalink to this heading">¶</a></h4>
+<p>If the selector object is not a well-formed JSON object,
+the error message is similar to the following example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bad request&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Selector error: expected a JSON object&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="not-a-valid-selector">
+<span id="changes-filter-selector-invalidselector"></span><h4><span class="section-number">1.3.12.2.2.3. </span>Not a valid selector<a class="headerlink" href="#not-a-valid-selector" title="Permalink to this heading">¶</a></h4>
+<p>If the selector object does not contain a valid selection expression,
+the error message is similar to the following example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bad request&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Selector error: expected a JSON object&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="design">
+<span id="changes-filter-design"></span><h3><span class="section-number">1.3.12.2.3. </span>_design<a class="headerlink" href="#design" title="Permalink to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">_design</span></code> filter accepts only changes for any design document within the
+requested database.</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/recipes/_changes?filter=_design</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 06 Sep 2016 12:55:12 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;ARIHFWL3I7PIS0SPVTFU6TLR2&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;last_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;11-g1AAAAIreJyVkEEKwjAQRUOrqCuPoCeQZGIaXdmbaNIk1FLjyrXeRG-iN9Gb1LQRaimFlsAEJnkP_s8RQtM0VGhuz0qTmABfYXdI7h4CgeSiKIosDUVwcotJIpQSOmp_71TIpZty97OgymJAU8G5QrOLVdocrVbdfFzy-wYvcbLVEvrxh5K_NlJggIhSNiCFHbmJbu5yonttMoneYD6kD296eNOzzoRNBNqse2Xyjpd3vP96AcYNTQY4Pt5RdTOuHIwCY5S0qewLwY6OaA&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pending&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10-304cae84fd862832ea9814f02920d4b2&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ingredients&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;8-g1AAAAHxeJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBOZcoEC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HkV_kkGyZWqSEXH6E0D666H6GcH6DYyMzIyNTUnwRR4LkGRoAFJAg-ZnJTIQULkAonI_ws0GaWZGqWkmRLkZYsYBiBn3Cdv2AKIS7ENWsG2mxkampsaGmLqyAOYpgEo&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123-6f7c1b7c97a9e4f0d22bdf130e8fd817&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;deleted&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/cookbook&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9-g1AAAAHxeJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBOZcoEC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HkV_kkGyZWqSEXH6E0D661F8YWBkZGZsbEqCL_JYgCRDA5ACGjQ_K5GBgMoFEJX7EW42SDMzSk0zIcrNEDMOQMy4T9i2BxCVYB-ygm0zNTYyNTU2xNSVBQDnK4BL&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;6-5b8a52c22580e922e792047cff3618f3&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;deleted&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/meta&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;11-g1AAAAIReJyVkE0OgjAQRiegUVceQU9g-mOpruQm2tI2SLCuXOtN9CZ6E70JFmpCCCFCmkyTdt6bfJMDwDQNFcztWWkcY8JXyB2cu49AgFwURZGloQhO7mGSCKWEjtrtnQq5dFXufhaoLIZoKjhXMLtYpc3RatXNxyW_b_ASJVstST_-UPLXRgpESEQpG5DCjlyFm7uc6F6bTKI3iA_Zhzc9vOlZZ0ImItqse2Xyjpd3vDMBfzo_vrPawLiaxihhjOI2lX0BirqHbg&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="view">
+<span id="changes-filter-view"></span><h3><span class="section-number">1.3.12.2.4. </span>_view<a class="headerlink" href="#view" title="Permalink to this heading">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.</span></p>
+</div>
+<p>The special filter <code class="docutils literal notranslate"><span class="pre">_view</span></code> allows to use existing
+<a class="reference internal" href="../../ddocs/ddocs.html#mapfun"><span class="std std-ref">map function</span></a> as the <a class="reference internal" href="../../ddocs/ddocs.html#filterfun"><span class="std std-ref">filter</span></a>. If the map
+function emits anything for the processed document it counts as accepted and
+the changes event emits to the feed. For most use-practice cases <cite>filter</cite>
+functions are very similar to <cite>map</cite> ones, so this feature helps to reduce
+amount of duplicated code.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While <a class="reference internal" href="../../ddocs/ddocs.html#mapfun"><span class="std std-ref">map functions</span></a> doesn’t process the design documents,
+using <code class="docutils literal notranslate"><span class="pre">_view</span></code> filter forces them to do this. You need to be sure, that
+they are ready to handle documents with <em>alien</em> structure without panic.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">_view</span></code> filter doesn’t queries the view index files, so you cannot
+use common <a class="reference internal" href="../ddoc/views.html#api-ddoc-view"><span class="std std-ref">view query parameters</span></a> to additionally
+filter the changes feed by index key. Also, CouchDB doesn’t returns
+the result instantly as it does for views - it really uses the specified
+map function as filter.</p>
+<p>Moreover, you cannot make such filters dynamic e.g. process the request
+query parameters or handle the <a class="reference internal" href="../../json-structure.html#userctx-object"><span class="std std-ref">User Context Object</span></a> - the map function is
+only operates with the document.</p>
+</div>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/recipes/_changes?filter=_view&amp;view=ingredients/by_recipe</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 06 Sep 2016 12:57:56 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;ARIHFWL3I7PIS0SPVTFU6TLR2&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;last_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;11-g1AAAAIreJyVkEEKwjAQRUOrqCuPoCeQZGIaXdmbaNIk1FLjyrXeRG-iN9Gb1LQRaimFlsAEJnkP_s8RQtM0VGhuz0qTmABfYXdI7h4CgeSiKIosDUVwcotJIpQSOmp_71TIpZty97OgymJAU8G5QrOLVdocrVbdfFzy-wYvcbLVEvrxh5K_NlJggIhSNiCFHbmJbu5yonttMoneYD6kD296eNOzzoRNBNqse2Xyjpd3vP96AcYNTQY4Pt5RdTOuHIwCY5S0qewLwY6OaA&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;changes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;13-bcb9d6388b60fd1e960d9ec4e8e3f29e&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SpaghettiWithMeatballs&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;11-g1AAAAIReJyVkE0OgjAQRiegUVceQU9g-mOpruQm2tI2SLCuXOtN9CZ6E70JFmpCCCFCmkyTdt6bfJMDwDQNFcztWWkcY8JXyB2cu49AgFwURZGloQhO7mGSCKWEjtrtnQq5dFXufhaoLIZoKjhXMLtYpc3RatXNxyW_b_ASJVstST_-UPLXRgpESEQpG5DCjlyFm7uc6F6bTKI3iA_Zhzc9vOlZZ0ImItqse2Xyjpd3vDMBfzo_vrPawLiaxihhjOI2lX0BirqHbg&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="shard.html" class="btn btn-neutral float-left" title="1.3.9. /{db}/_shards" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compact.html" class="btn btn-neutral float-right" title="1.3.13. /{db}/_compact" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

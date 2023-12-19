@@ -1,0 +1,559 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.4.2. /{db}/{docid}/{attname} &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/document/attachments.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.5. Design Documents" href="../ddoc/index.html" />
+    <link rel="prev" title="1.4.1. /{db}/{docid}" href="common.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/index.html">1.2. Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database/index.html">1.3. Databases</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">1.4. Documents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common.html">1.4.1. <code class="docutils literal notranslate"><span class="pre">/{db}/{docid}</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1.4.2. <code class="docutils literal notranslate"><span class="pre">/{db}/{docid}/{attname}</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#http-range-requests">1.4.2.1. HTTP Range Requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ddoc/index.html">1.5. Design Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../local.html">1.7. Local (non-replicating) Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">1. </span>API Reference</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1.4. </span>Documents</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.4.2. </span><code class="docutils literal notranslate"><span class="pre">/{db}/{docid}/{attname}</span></code></li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/document/attachments.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="db-docid-attname">
+<span id="api-doc-attachment"></span><h1><span class="section-number">1.4.2. </span><code class="docutils literal notranslate"><span class="pre">/{db}/{docid}/{attname}</span></code><a class="headerlink" href="#db-docid-attname" title="Permalink to this heading">¶</a></h1>
+<dl class="http head">
+<dt class="sig sig-object http" id="head--db-docid-attname">
+<span class="sig-name descname"><span class="pre">HEAD</span> </span><span class="sig-name descname"><span class="pre">/{db}/{docid}/{attname}</span></span><a class="headerlink" href="#head--db-docid-attname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the HTTP headers containing a minimal amount of information about
+the specified attachment. The method supports the same query arguments as
+the <a class="reference internal" href="#get--db-docid-attname" title="GET /{db}/{docid}/{attname}"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{db}/{docid}/{attname}</span></code></a> method, but only the header information
+(including attachment size, encoding and the MD5 hash as an
+<a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a>), is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+<li><p><strong>docid</strong> – Document ID</p></li>
+<li><p><strong>attname</strong> – Attachment name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.1">If-Match</a></span> – Document’s revision. Alternative to <code class="docutils literal notranslate"><span class="pre">rev</span></code> query
+parameter</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.2">If-None-Match</a></span> – Attachment’s base64 encoded MD5 binary digest.
+<em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rev</strong> (<em>string</em>) – Document’s revision. <em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7233#section-2.3">Accept-Ranges</a></span> – <a class="reference internal" href="#api-doc-attachment-range"><span class="std std-ref">Range request aware</span></a>. Used for attachments with
+<em class="mimetype">application/octet-stream</em> content type</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.2.2">Content-Encoding</a></span> – Used compression codec. Available if
+attachment’s <code class="docutils literal notranslate"><span class="pre">content_type</span></code> is in <a class="reference internal" href="../../config/misc.html#attachments/compressible_types" title="compressible_types"><code class="xref config config-option docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">compressible</span>
+<span class="pre">types</span></code></a></p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.2">Content-Length</a></span> – Attachment size. If compression codec was used,
+this value is about compressed size, not actual</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a></span> – Double quoted base64 encoded MD5 binary digest</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Attachment exists</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Read privilege required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database, document or attachment was not found</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">HEAD</span> <span class="nn">/recipes/SpaghettiWithMeatballs/recipe.txt</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Accept-Ranges</span><span class="o">:</span> <span class="l">none</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Encoding</span><span class="o">:</span> <span class="l">gzip</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">100</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">text/plain</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Thu, 15 Aug 2013 12:42:42 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;vVa/YgiE1+Gh0WfoFJAcSg==&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-docid-attname">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/{docid}/{attname}</span></span><a class="headerlink" href="#get--db-docid-attname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the file attachment associated with the document. The raw data of
+the associated attachment is returned (just as if you were accessing a
+static file. The returned <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> will be the same as the
+content type set when the document attachment was submitted into the
+database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+<li><p><strong>docid</strong> – Document ID</p></li>
+<li><p><strong>attname</strong> – Attachment name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.1">If-Match</a></span> – Document’s revision. Alternative to <code class="docutils literal notranslate"><span class="pre">rev</span></code> query
+parameter</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.2">If-None-Match</a></span> – Attachment’s base64 encoded MD5 binary digest.
+<em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rev</strong> (<em>string</em>) – Document’s revision. <em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7233#section-2.3">Accept-Ranges</a></span> – <a class="reference internal" href="#api-doc-attachment-range"><span class="std std-ref">Range request aware</span></a>. Used for attachments with
+<em class="mimetype">application/octet-stream</em></p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.2.2">Content-Encoding</a></span> – Used compression codec. Available if
+attachment’s <code class="docutils literal notranslate"><span class="pre">content_type</span></code> is in <a class="reference internal" href="../../config/misc.html#attachments/compressible_types" title="compressible_types"><code class="xref config config-option docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">compressible</span>
+<span class="pre">types</span></code></a></p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.2">Content-Length</a></span> – Attachment size. If compression codec is used,
+this value is about compressed size, not actual</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a></span> – Double quoted base64 encoded MD5 binary digest</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Stored content</p>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Attachment exists</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Read privilege required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database, document or attachment was not found</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--db-docid-attname">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/{db}/{docid}/{attname}</span></span><a class="headerlink" href="#put--db-docid-attname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads the supplied content as an attachment to the specified document.
+The attachment name provided must be a URL encoded string. You must supply
+the Content-Type header, and for an existing document you must also supply
+either the <code class="docutils literal notranslate"><span class="pre">rev</span></code> query argument or the <a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.1">If-Match</a> HTTP header. If
+the revision is omitted, a new, otherwise empty document will be created
+with the provided attachment, or a conflict will occur.</p>
+<p>If case when uploading an attachment using an existing attachment name,
+CouchDB will update the corresponding stored content of the database. Since
+you must supply the revision information to add an attachment to the
+document, this serves as validation to update the existing attachment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Uploading an attachment updates the corresponding document revision.
+Revisions are tracked for the parent document, not individual
+attachments.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+<li><p><strong>docid</strong> – Document ID</p></li>
+<li><p><strong>attname</strong> – Attachment name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – Attachment MIME type. Default: <em class="mimetype">application/octet-stream</em> <em>Optional</em></p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.1">If-Match</a></span> – Document revision. Alternative to <code class="docutils literal notranslate"><span class="pre">rev</span></code> query parameter</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rev</strong> (<em>string</em>) – Document revision. <em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<em>string</em>) – Document ID</p></li>
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+<li><p><strong>rev</strong> (<em>string</em>) – Revision MVCC token</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a></span> – Attachment created and stored on disk</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3">202 Accepted</a></span> – Request was accepted, but changes are not yet stored on disk</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid request body or parameters</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Write privileges required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database, document or attachment was not found</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10">409 Conflict</a></span> – Document’s revision wasn’t specified or it’s not the latest</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">PUT</span> <span class="nn">/recipes/SpaghettiWithMeatballs/recipe.txt</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">86</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">text/plain</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+<span class="na">If-Match</span><span class="o">:</span> <span class="l">1-917fa2381192822767f010b95b45325b</span>
+
+1. Cook spaghetti
+2. Cook meatballs
+3. Mix them
+4. Add tomato sauce
+5. ...
+6. PROFIT!
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">85</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Thu, 15 Aug 2013 12:38:04 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;2-ce91aed0129be8f9b0f650a2edcfd0a4&quot;</span>
+<span class="na">Location</span><span class="o">:</span> <span class="l">http://localhost:5984/recipes/SpaghettiWithMeatballs/recipe.txt</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SpaghettiWithMeatballs&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-ce91aed0129be8f9b0f650a2edcfd0a4&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--db-docid-attname">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/{db}/{docid}/{attname}</span></span><a class="headerlink" href="#delete--db-docid-attname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the attachment with filename <code class="docutils literal notranslate"><span class="pre">{attname}</span></code> of the specified <code class="docutils literal notranslate"><span class="pre">doc</span></code>.
+You must supply the <code class="docutils literal notranslate"><span class="pre">rev</span></code> query parameter or <a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.1">If-Match</a> with the
+current revision to delete the attachment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Deleting an attachment updates the corresponding document revision.
+Revisions are tracked for the parent document, not individual attachments.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+<li><p><strong>docid</strong> – Document ID</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.1">If-Match</a></span> – Document revision. Alternative to <code class="docutils literal notranslate"><span class="pre">rev</span></code> query parameter</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rev</strong> (<em>string</em>) – Document revision. <em>Required</em></p></li>
+<li><p><strong>batch</strong> (<em>string</em>) – Store changes in <a class="reference internal" href="../database/common.html#api-doc-batch-writes"><span class="std std-ref">batch mode</span></a> Possible values: <code class="docutils literal notranslate"><span class="pre">ok</span></code>. <em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a></span> – Double quoted document’s new revision</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>string</em>) – Document ID</p></li>
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+<li><p><strong>rev</strong> (<em>string</em>) – Revision MVCC token</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Attachment successfully removed</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3">202 Accepted</a></span> – Request was accepted, but changes are not yet stored on disk</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid request body or parameters</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Write privileges required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database, document or attachment was not found</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10">409 Conflict</a></span> – Document’s revision wasn’t specified or it’s not the latest</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/recipes/SpaghettiWithMeatballs?rev=6-440b2dd39c20413045748b42c6aba6e2</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p>Alternatively, instead of <code class="docutils literal notranslate"><span class="pre">rev</span></code> query parameter you may use
+<a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-3.1">If-Match</a> header:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/recipes/SpaghettiWithMeatballs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">If-Match</span><span class="o">:</span> <span class="l">6-440b2dd39c20413045748b42c6aba6e2</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">85</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Wed, 14 Aug 2013 12:23:13 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;7-05185cf5fcdf4b6da360af939431d466&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SpaghettiWithMeatballs&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7-05185cf5fcdf4b6da360af939431d466&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="http-range-requests">
+<span id="api-doc-attachment-range"></span><h2><span class="section-number">1.4.2.1. </span>HTTP Range Requests<a class="headerlink" href="#http-range-requests" title="Permalink to this heading">¶</a></h2>
+<p>HTTP allows you to specify byte ranges for requests. This allows the
+implementation of resumable downloads and skippable audio and video streams
+alike. This is available for all attachments inside CouchDB.</p>
+<p>This is just a real quick run through how this looks under the hood. Usually,
+you will have larger binary files to serve from CouchDB, like MP3s and videos,
+but to make things a little more obvious, I use a text file here (Note that I
+use the <em class="mimetype">application/octet-stream</em> :header`Content-Type` instead of
+<em class="mimetype">text/plain</em>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>shell&gt;<span class="w"> </span>cat<span class="w"> </span>file.txt
+My<span class="w"> </span>hovercraft<span class="w"> </span>is<span class="w"> </span>full<span class="w"> </span>of<span class="w"> </span>eels!
+</pre></div>
+</div>
+<p>Now let’s store this text file as an attachment in CouchDB. First, we create a
+database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>shell&gt;<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://adm:pass@127.0.0.1:5984/test
+<span class="o">{</span><span class="s2">&quot;ok&quot;</span>:true<span class="o">}</span>
+</pre></div>
+</div>
+<p>Then we create a new document and the file attachment in one go:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>shell&gt;<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://adm:pass@127.0.0.1:5984/test/doc/file.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/octet-stream&quot;</span><span class="w"> </span>-d@file.txt
+<span class="o">{</span><span class="s2">&quot;ok&quot;</span>:true,<span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;doc&quot;</span>,<span class="s2">&quot;rev&quot;</span>:<span class="s2">&quot;1-287a28fa680ae0c7fb4729bf0c6e0cf2&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>Now we can request the whole file easily:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>shell&gt;<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>GET<span class="w"> </span>http://adm:pass@127.0.0.1:5984/test/doc/file.txt
+My<span class="w"> </span>hovercraft<span class="w"> </span>is<span class="w"> </span>full<span class="w"> </span>of<span class="w"> </span>eels!
+</pre></div>
+</div>
+<p>But say we only want the first 13 bytes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>shell&gt;<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>GET<span class="w"> </span>http://adm:pass@127.0.0.1:5984/test/doc/file.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>-H<span class="w"> </span><span class="s2">&quot;Range: bytes=0-12&quot;</span>
+My<span class="w"> </span>hovercraft
+</pre></div>
+</div>
+<p>HTTP supports many ways to specify single and even multiple byte
+ranges. Read all about it in <span class="target" id="index-0"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2616.html#section-14.27"><strong>RFC 2616#section-14.27</strong></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Databases that have been created with CouchDB 1.0.2 or earlier will support
+range requests in 3.3, but they are using a less-optimal algorithm.
+If you plan to make heavy use of this feature, make sure to compact your
+database with CouchDB 3.3 to take advantage of a better algorithm to
+find byte ranges.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="common.html" class="btn btn-neutral float-left" title="1.4.1. /{db}/{docid}" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ddoc/index.html" class="btn btn-neutral float-right" title="1.5. Design Documents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

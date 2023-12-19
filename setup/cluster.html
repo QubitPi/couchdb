@@ -1,0 +1,510 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.2. Cluster Set Up &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/setup/cluster.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Configuration" href="../config/index.html" />
+    <link rel="prev" title="2.1. Single Node Setup" href="single-node.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. Setup</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="single-node.html">2.1. Single Node Setup</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.2. Cluster Set Up</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ports-and-firewalls">2.2.1. Ports and Firewalls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-and-test-the-communication-with-erlang">2.2.2. Configure and Test the Communication with Erlang</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#make-couchdb-use-correct-ip-fqdn-and-the-open-ports">2.2.2.1. Make CouchDB use correct IP|FQDN and the open ports</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#confirming-connectivity-between-nodes">2.2.2.2. Confirming connectivity between nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-couchdb-nodes-to-be-joined-into-a-cluster">2.2.3. Preparing CouchDB nodes to be joined into a cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-cluster-setup-wizard">2.2.4. The Cluster Setup Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-cluster-setup-api">2.2.5. The Cluster Setup API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">2. </span>Setup</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2.2. </span>Cluster Set Up</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/setup/cluster.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cluster-set-up">
+<span id="setup-cluster"></span><h1><span class="section-number">2.2. </span>Cluster Set Up<a class="headerlink" href="#cluster-set-up" title="Permalink to this heading">¶</a></h1>
+<p>This section describes everything you need to know to prepare, install, and
+set up your first CouchDB 2.x/3.x cluster.</p>
+<section id="ports-and-firewalls">
+<h2><span class="section-number">2.2.1. </span>Ports and Firewalls<a class="headerlink" href="#ports-and-firewalls" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB uses the following ports:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Port Number</p></th>
+<th class="head"><p>Protocol</p></th>
+<th class="head"><p>Recommended binding</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>5984</p></td>
+<td><p>tcp</p></td>
+<td><p>As desired, by
+default <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p></td>
+<td><p>Standard clustered
+port for all HTTP
+API requests</p></td>
+</tr>
+<tr class="row-odd"><td><p>4369</p></td>
+<td><p>tcp</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code> for single
+node installs. Private
+interface if clustered</p></td>
+<td><p>Erlang port mapper
+daemon (epmd)</p></td>
+</tr>
+<tr class="row-even"><td><p>Random
+above 1024
+(see below)</p></td>
+<td><p>tcp</p></td>
+<td><p>Private interface</p></td>
+<td><p>Communication with
+other CouchDB nodes
+in the cluster</p></td>
+</tr>
+</tbody>
+</table>
+<p>CouchDB in clustered mode uses the port <code class="docutils literal notranslate"><span class="pre">5984</span></code>, just as in a standalone
+configuration. Port <code class="docutils literal notranslate"><span class="pre">5986</span></code>, previously used in CouchDB 2.x, has been removed
+in CouchDB 3.x. All endpoints previously accessible at that port are now
+available under the <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/...</span></code> hierarchy via the primary <code class="docutils literal notranslate"><span class="pre">5984</span></code>
+port.</p>
+<p>CouchDB uses Erlang-native clustering functionality to achieve a clustered
+installation.  Erlang uses TCP port <code class="docutils literal notranslate"><span class="pre">4369</span></code> (EPMD) to find other nodes, so all
+servers must be able to speak to each other on this port. In an Erlang cluster,
+all nodes are connected to all other nodes, in a mesh network configuration.</p>
+<p>Every Erlang application running on that machine (such as CouchDB) then uses
+automatically assigned ports for communication with other nodes. Yes, this
+means random ports. This will obviously not work with a firewall, but it is
+possible to force an Erlang application to use a specific port range.</p>
+<p>This documentation will use the range TCP <code class="docutils literal notranslate"><span class="pre">9100-9200</span></code>, but this range is
+unnecessarily broad. If you only have a single Erlang application running on a
+machine, the range can be limited to a single port: <code class="docutils literal notranslate"><span class="pre">9100-9100</span></code>, since the
+ports erlang assigns are for <em>inbound connections</em> only. Three CouchDB nodes
+running on a single machine, as in a development cluster scenario, would need
+three ports in this range.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you expose the distribution port to the Internet or any other untrusted
+network, then the only thing protecting you is the Erlang
+<a class="reference external" href="http://erlang.org/doc/reference_manual/distributed.html">cookie</a>.</p>
+</div>
+</section>
+<section id="configure-and-test-the-communication-with-erlang">
+<h2><span class="section-number">2.2.2. </span>Configure and Test the Communication with Erlang<a class="headerlink" href="#configure-and-test-the-communication-with-erlang" title="Permalink to this heading">¶</a></h2>
+<section id="make-couchdb-use-correct-ip-fqdn-and-the-open-ports">
+<h3><span class="section-number">2.2.2.1. </span>Make CouchDB use correct IP|FQDN and the open ports<a class="headerlink" href="#make-couchdb-use-correct-ip-fqdn-and-the-open-ports" title="Permalink to this heading">¶</a></h3>
+<p>In file <code class="docutils literal notranslate"><span class="pre">etc/vm.args</span></code> change the line <code class="docutils literal notranslate"><span class="pre">-name</span> <span class="pre">couchdb&#64;127.0.0.1</span></code> to
+<code class="docutils literal notranslate"><span class="pre">-name</span> <span class="pre">couchdb&#64;&lt;reachable-ip-address|fully-qualified-domain-name&gt;</span></code> which defines
+the name of the node. Each node must have an identifier that allows remote
+systems to talk to it. The node name is of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;name&gt;&#64;&lt;reachable-ip-address|fully-qualified-domain-name&gt;</span></code>.</p>
+<p>The name portion can be couchdb on all nodes, unless you are running more than
+1 CouchDB node on the same server with the same IP address or domain name. In
+that case, we recommend names of <code class="docutils literal notranslate"><span class="pre">couchdb1</span></code>, <code class="docutils literal notranslate"><span class="pre">couchdb2</span></code>, etc.</p>
+<p>The second portion of the node name must be an identifier by which other nodes
+can access this node – either the node’s fully qualified domain name (FQDN) or
+the node’s IP address. The FQDN is preferred so that you can renumber the node’s
+IP address without disruption to the cluster. (This is common in cloud-hosted
+environments.)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Changing the name later is somewhat cumbersome (i.e. moving shards), which
+is why you will want to set it once and not have to change it.</p>
+</div>
+<p>Open <code class="docutils literal notranslate"><span class="pre">etc/vm.args</span></code>, on all nodes, and add <code class="docutils literal notranslate"><span class="pre">-kernel</span> <span class="pre">inet_dist_listen_min</span> <span class="pre">9100</span></code>
+and <code class="docutils literal notranslate"><span class="pre">-kernel</span> <span class="pre">inet_dist_listen_max</span> <span class="pre">9200</span></code> like below:</p>
+<div class="highlight-erlang notranslate"><div class="highlight"><pre><span></span><span class="p">-</span><span class="ni">name</span><span class="w"> </span><span class="p">...</span>
+<span class="p">-</span><span class="ni">setcookie</span><span class="w"> </span><span class="p">...</span>
+<span class="p">...</span>
+<span class="p">-</span><span class="ni">kernel</span><span class="w"> </span><span class="n">inet_dist_listen_min</span><span class="w"> </span><span class="mi">9100</span>
+<span class="p">-</span><span class="ni">kernel</span><span class="w"> </span><span class="n">inet_dist_listen_max</span><span class="w"> </span><span class="mi">9200</span>
+</pre></div>
+</div>
+<p>Again, a small range is fine, down to a single port (set both to <code class="docutils literal notranslate"><span class="pre">9100</span></code>) if you
+only ever run a single CouchDB node on each machine.</p>
+</section>
+<section id="confirming-connectivity-between-nodes">
+<h3><span class="section-number">2.2.2.2. </span>Confirming connectivity between nodes<a class="headerlink" href="#confirming-connectivity-between-nodes" title="Permalink to this heading">¶</a></h3>
+<p>For this test, you need 2 servers with working hostnames. Let us call them
+server1.test.com and server2.test.com. They reside at <code class="docutils literal notranslate"><span class="pre">192.168.0.1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">192.168.0.2</span></code>, respectively.</p>
+<p>On server1.test.com:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>erl<span class="w"> </span>-name<span class="w"> </span>bus@192.168.0.1<span class="w"> </span>-setcookie<span class="w"> </span><span class="s1">&#39;brumbrum&#39;</span><span class="w"> </span>-kernel<span class="w"> </span>inet_dist_listen_min<span class="w"> </span><span class="m">9100</span><span class="w"> </span>-kernel<span class="w"> </span>inet_dist_listen_max<span class="w"> </span><span class="m">9200</span>
+</pre></div>
+</div>
+<p>Then on server2.test.com:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>erl<span class="w"> </span>-name<span class="w"> </span>car@192.168.0.2<span class="w"> </span>-setcookie<span class="w"> </span><span class="s1">&#39;brumbrum&#39;</span><span class="w"> </span>-kernel<span class="w"> </span>inet_dist_listen_min<span class="w"> </span><span class="m">9100</span><span class="w"> </span>-kernel<span class="w"> </span>inet_dist_listen_max<span class="w"> </span><span class="m">9200</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>An explanation to the commands:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">erl</span></code> the Erlang shell.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-name</span> <span class="pre">bus&#64;192.168.0.1</span></code> the name of the Erlang node and its IP address or FQDN.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-setcookie</span> <span class="pre">'brumbrum'</span></code> the “password” used when nodes connect to each
+other.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-kernel</span> <span class="pre">inet_dist_listen_min</span> <span class="pre">9100</span></code> the lowest port in the range.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-kernel</span> <span class="pre">inet_dist_listen_max</span> <span class="pre">9200</span></code> the highest port in the range.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This gives us 2 Erlang shells. shell1 on server1, shell2 on server2.
+Time to connect them. Enter the following, being sure to end the line with a
+period (<code class="docutils literal notranslate"><span class="pre">.</span></code>):</p>
+<p>In shell1:</p>
+<div class="highlight-erlang notranslate"><div class="highlight"><pre><span></span><span class="nn">net_kernel</span><span class="p">:</span><span class="nf">connect_node</span><span class="p">(</span><span class="n">&#39;car@192.168.0.2&#39;</span><span class="p">).</span>
+</pre></div>
+</div>
+<p>This will connect to the node called <code class="docutils literal notranslate"><span class="pre">car</span></code> on the server called
+<code class="docutils literal notranslate"><span class="pre">192.168.0.2</span></code>.</p>
+<p>If that returns true, then you have an Erlang cluster, and the firewalls are
+open. This means that 2 CouchDB nodes on these two servers will be able to
+communicate with each other successfully. If you get false or nothing at all,
+then you have a problem with the firewall, DNS, or your settings. Try again.</p>
+<p>If you’re concerned about firewall issues, or having trouble connecting all
+nodes of your cluster later on, repeat the above test between all pairs of
+servers to confirm connectivity and system configuration is correct.</p>
+</section>
+</section>
+<section id="preparing-couchdb-nodes-to-be-joined-into-a-cluster">
+<span id="cluster-setup-prepare"></span><h2><span class="section-number">2.2.3. </span>Preparing CouchDB nodes to be joined into a cluster<a class="headerlink" href="#preparing-couchdb-nodes-to-be-joined-into-a-cluster" title="Permalink to this heading">¶</a></h2>
+<p>Before you can add nodes to form a cluster, you must have them listening on an
+IP address accessible from the other nodes in the cluster. You should also ensure
+that a few critical settings are identical across all nodes before joining them.</p>
+<p>The settings we recommend you set now, before joining the nodes into a cluster,
+are:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">etc/vm.args</span></code> settings as described in the
+<a class="reference internal" href="#setup-cluster"><span class="std std-ref">previous two sections</span></a></p></li>
+<li><p>At least one <a class="reference internal" href="../config/auth.html#config-admins"><span class="std std-ref">server administrator</span></a>
+user (and password)</p></li>
+<li><p>Bind the node’s clustered interface (port <code class="docutils literal notranslate"><span class="pre">5984</span></code>) to a reachable IP address</p></li>
+<li><p>A consistent <a class="reference internal" href="../config/couchdb.html#couchdb/uuid" title="uuid"><code class="xref config config-option docutils literal notranslate"><span class="pre">UUID</span></code></a>. The UUID is used in identifying
+the cluster when replicating. If this value is not consistent across all nodes
+in the cluster, replications may be forced to rewind the changes feed to zero,
+leading to excessive memory, CPU and network use.</p></li>
+<li><p>A consistent <a class="reference internal" href="../config/auth.html#chttpd_auth/secret" title="secret"><code class="xref config config-option docutils literal notranslate"><span class="pre">httpd</span> <span class="pre">secret</span></code></a>. The secret
+is used in calculating and evaluating cookie and proxy authentication, and should
+be set consistently to avoid unnecessary repeated session cookie requests.</p></li>
+</ol>
+<p>As of CouchDB 3.0, steps 4 and 5 above are automatically performed for you when
+using the setup API endpoints described below.</p>
+<p>If you use a configuration management tool, such as Chef, Ansible, Puppet, etc.,
+then you can place these settings in a <code class="docutils literal notranslate"><span class="pre">.ini</span></code> file and distribute them to all
+nodes ahead of time. Be sure to pre-encrypt the password (cutting and pasting
+from a test instance is easiest) if you use this route to avoid CouchDB rewriting
+the file.</p>
+<p>If you do not use configuration management, or are just experimenting with
+CouchDB for the first time, use these commands <em>once per server</em> to perform
+steps 2-4 above. Be sure to change the <code class="docutils literal notranslate"><span class="pre">password</span></code> to something secure, and
+again, use the same password on all nodes. You may have to run these commands
+locally on each node; if so, replace <code class="docutils literal notranslate"><span class="pre">&lt;server-IP|FQDN&gt;</span></code> below with <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, get two UUIDs to use later on. Be sure to use the SAME UUIDs on all nodes.</span>
+curl<span class="w"> </span>http://&lt;server-IP<span class="p">|</span>FQDN&gt;:5984/_uuids?count<span class="o">=</span><span class="m">2</span>
+
+<span class="c1"># CouchDB will respond with something like:</span>
+<span class="c1">#   {&quot;uuids&quot;:[&quot;60c9e8234dfba3e2fdab04bf92001142&quot;,&quot;60c9e8234dfba3e2fdab04bf92001cc2&quot;]}</span>
+<span class="c1"># Copy the provided UUIDs into your clipboard or a text editor for later use.</span>
+<span class="c1"># Use the first UUID as the cluster UUID.</span>
+<span class="c1"># Use the second UUID as the cluster shared http secret.</span>
+
+<span class="c1"># Create the admin user and password:</span>
+curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://&lt;server-IP<span class="p">|</span>FQDN&gt;:5984/_node/_local/_config/admins/admin<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;&quot;password&quot;&#39;</span>
+
+<span class="c1"># Now, bind the clustered interface to all IP addresses available on this machine</span>
+curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://&lt;server-IP<span class="p">|</span>FQDN&gt;:5984/_node/_local/_config/chttpd/bind_address<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;&quot;0.0.0.0&quot;&#39;</span>
+
+<span class="c1"># If not using the setup wizard / API endpoint, the following 2 steps are required:</span>
+<span class="c1"># Set the UUID of the node to the first UUID you previously obtained:</span>
+curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://&lt;server-IP<span class="p">|</span>FQDN&gt;:5984/_node/_local/_config/couchdb/uuid<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;&quot;FIRST-UUID-GOES-HERE&quot;&#39;</span>
+
+<span class="c1"># Finally, set the shared http secret for cookie creation to the second UUID:</span>
+curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://&lt;server-IP<span class="p">|</span>FQDN&gt;:5984/_node/_local/_config/chttpd_auth/secret<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;&quot;SECOND-UUID-GOES-HERE&quot;&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="the-cluster-setup-wizard">
+<span id="cluster-setup-wizard"></span><h2><span class="section-number">2.2.4. </span>The Cluster Setup Wizard<a class="headerlink" href="#the-cluster-setup-wizard" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB 2.x/3.x comes with a convenient Cluster Setup Wizard as part of the Fauxton
+web administration interface. For first-time cluster setup, and for
+experimentation, this is your best option.</p>
+<p>It is <strong>strongly recommended</strong> that the minimum number of nodes in a cluster is
+3. For more explanation, see the <a class="reference internal" href="../cluster/theory.html#cluster-theory"><span class="std std-ref">Cluster Theory</span></a> section
+of this documentation.</p>
+<p>After installation and initial start-up of all nodes in your cluster, ensuring
+all nodes are reachable, and the pre-configuration steps listed above, visit
+Fauxton at <code class="docutils literal notranslate"><span class="pre">http://&lt;server1&gt;:5984/_utils#setup</span></code>. You will be asked to set up
+CouchDB as a single-node instance or set up a cluster.</p>
+<p>When you click “Setup Cluster” you are asked for admin credentials again, and
+then to add nodes by IP address. To get more nodes, go through the same install
+procedure for each node, using the same machine to perform the setup process.
+Be sure to specify the total number of nodes you expect to add to the cluster
+before adding nodes.</p>
+<p>Now enter each node’s IP address or FQDN in the setup wizard, ensuring you also
+enter the previously set server admin username and password.</p>
+<p>Once you have added all nodes, click “Setup” and Fauxton will finish the
+cluster configuration for you.</p>
+<p>To check that all nodes have been joined correctly, visit
+<code class="docutils literal notranslate"><span class="pre">http://&lt;server-IP|FQDN&gt;:5984/_membership</span></code> on each node. The returned list
+should show all of the nodes in your cluster:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="s2">&quot;all_nodes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;couchdb@server1.test.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;couchdb@server2.test.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;couchdb@server3.test.com&quot;</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="s2">&quot;cluster_nodes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;couchdb@server1.test.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;couchdb@server2.test.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;couchdb@server3.test.com&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cluster_nodes</span></code> section is the list of <em>expected</em> nodes; the <code class="docutils literal notranslate"><span class="pre">all_nodes</span></code>
+section is the list of <em>actually connected</em> nodes. Be sure the two lists match.</p>
+<p>Now your cluster is ready and available! You can send requests to any one of
+the nodes, and all three will respond as if you are working with a single
+CouchDB cluster.</p>
+<p>For a proper production setup, you’d now set up an HTTP reverse proxy in front
+of the cluster, for load balancing and SSL termination. We recommend
+<a class="reference external" href="http://haproxy.org/">HAProxy</a>, but others can be used. Sample configurations are available in the
+<a class="reference internal" href="../best-practices/index.html#best-practices"><span class="std std-ref">Best Practices</span></a> section.</p>
+</section>
+<section id="the-cluster-setup-api">
+<span id="cluster-setup-api"></span><h2><span class="section-number">2.2.5. </span>The Cluster Setup API<a class="headerlink" href="#the-cluster-setup-api" title="Permalink to this heading">¶</a></h2>
+<p>If you would prefer to manually configure your CouchDB cluster, CouchDB exposes
+the <code class="docutils literal notranslate"><span class="pre">_cluster_setup</span></code> endpoint for that purpose. After installation and
+initial setup/config, we can set up the cluster. On each node we need to run
+the following command to set up the node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span>http://admin:password@127.0.0.1:5984/_cluster_setup<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;action&quot;: &quot;enable_cluster&quot;, &quot;bind_address&quot;:&quot;0.0.0.0&quot;, &quot;username&quot;: &quot;admin&quot;, &quot;password&quot;:&quot;password&quot;, &quot;node_count&quot;:&quot;3&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>After that we can join all the nodes together. Choose one node as the “setup
+coordination node” to run all these commands on.  This “setup coordination
+node” only manages the setup and requires all other nodes to be able to see it
+and vice versa. <em>It has no special purpose beyond the setup process; CouchDB
+does not have the concept of a “master” node in a cluster.</em></p>
+<p>Setup will not work with unavailable nodes. All nodes must be online and properly
+preconfigured before the cluster setup process can begin.</p>
+<p>To join a node to the cluster, run these commands for each node you want to add:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span>http://admin:password@&lt;setup-coordination-node&gt;:5984/_cluster_setup<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;action&quot;: &quot;enable_cluster&quot;, &quot;bind_address&quot;:&quot;0.0.0.0&quot;, &quot;username&quot;: &quot;admin&quot;, &quot;password&quot;:&quot;password&quot;, &quot;port&quot;: 5984, &quot;node_count&quot;: &quot;3&quot;, &quot;remote_node&quot;: &quot;&lt;remote-node-ip&gt;&quot;, &quot;remote_current_user&quot;: &quot;&lt;remote-node-username&gt;&quot;, &quot;remote_current_password&quot;: &quot;&lt;remote-node-password&gt;&quot; }&#39;</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span>http://admin:password@&lt;setup-coordination-node&gt;:5984/_cluster_setup<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;action&quot;: &quot;add_node&quot;, &quot;host&quot;:&quot;&lt;remote-node-ip&gt;&quot;, &quot;port&quot;: &lt;remote-node-port&gt;, &quot;username&quot;: &quot;admin&quot;, &quot;password&quot;:&quot;password&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>This will join the two nodes together. Keep running the above commands for each
+node you want to add to the cluster. Once this is done run the following
+command to complete the cluster setup and add the system databases:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span>http://admin:password@&lt;setup-coordination-node&gt;:5984/_cluster_setup<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;action&quot;: &quot;finish_cluster&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>Verify install:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://admin:password@&lt;setup-coordination-node&gt;:5984/_cluster_setup
+</pre></div>
+</div>
+<p>Response:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;state&quot;</span>:<span class="s2">&quot;cluster_finished&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>Verify all cluster nodes are connected:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://admin:password@&lt;setup-coordination-node&gt;:5984/_membership
+</pre></div>
+</div>
+<p>Response:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;all_nodes&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="s2">&quot;couchdb@couch1.test.com&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;couchdb@couch2.test.com&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;couchdb@couch3.test.com&quot;</span>,
+<span class="w">    </span><span class="o">]</span>,
+<span class="w">    </span><span class="s2">&quot;cluster_nodes&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="s2">&quot;couchdb@couch1.test.com&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;couchdb@couch2.test.com&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;couchdb@couch3.test.com&quot;</span>,
+<span class="w">    </span><span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>If the cluster is enabled and <code class="docutils literal notranslate"><span class="pre">all_nodes</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster_nodes</span></code> lists don’t match, use curl to add nodes with
+PUT <code class="docutils literal notranslate"><span class="pre">/_node/_local/_nodes/couchdb&#64;&lt;reachable-ip-address|fully-qualified-domain-name&gt;</span></code>
+and remove nodes with
+DELETE <code class="docutils literal notranslate"><span class="pre">/_node/_local/_nodes/couchdb&#64;&lt;reachable-ip-address|fully-qualified-domain-name&gt;</span></code></p>
+<p>You CouchDB cluster is now set up.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="single-node.html" class="btn btn-neutral float-left" title="2.1. Single Node Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../config/index.html" class="btn btn-neutral float-right" title="3. Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

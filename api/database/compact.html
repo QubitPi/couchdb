@@ -1,0 +1,536 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.3.13. /{db}/_compact &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/database/compact.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.3.17. /{db}/_security" href="security.html" />
+    <link rel="prev" title="1.3.12. /{db}/_changes" href="changes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/index.html">1.2. Server</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">1.3. Databases</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common.html">1.3.1. <code class="docutils literal notranslate"><span class="pre">/{db}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html">1.3.2. <code class="docutils literal notranslate"><span class="pre">/{db}/_all_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-design-docs">1.3.3. <code class="docutils literal notranslate"><span class="pre">/{db}/_design_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-bulk-get">1.3.4. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_get</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-bulk-docs">1.3.5. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html">1.3.6. <code class="docutils literal notranslate"><span class="pre">/{db}/_find</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-index">1.3.7. <code class="docutils literal notranslate"><span class="pre">/{db}/_index</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-explain">1.3.8. <code class="docutils literal notranslate"><span class="pre">/{db}/_explain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html">1.3.9. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-shards-docid">1.3.10. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards/{docid}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-sync-shards">1.3.11. <code class="docutils literal notranslate"><span class="pre">/{db}/_sync_shards</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="changes.html">1.3.12. <code class="docutils literal notranslate"><span class="pre">/{db}/_changes</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1.3.13. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-compact-ddoc">1.3.14. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact/{ddoc}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-ensure-full-commit">1.3.15. <code class="docutils literal notranslate"><span class="pre">/{db}/_ensure_full_commit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-view-cleanup">1.3.16. <code class="docutils literal notranslate"><span class="pre">/{db}/_view_cleanup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="security.html">1.3.17. <code class="docutils literal notranslate"><span class="pre">/{db}/_security</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html">1.3.18. <code class="docutils literal notranslate"><span class="pre">/{db}/_purge</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-purged-infos">1.3.19. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-purged-infos-limit">1.3.20. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos_limit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-missing-revs">1.3.21. <code class="docutils literal notranslate"><span class="pre">/{db}/_missing_revs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-revs-diff">1.3.22. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_diff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-revs-limit">1.3.23. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_limit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../document/index.html">1.4. Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ddoc/index.html">1.5. Design Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../local.html">1.7. Local (non-replicating) Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">1. </span>API Reference</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1.3. </span>Databases</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.3.13. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_compact</span></code></li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/database/compact.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="db-compact">
+<span id="api-db-compact"></span><h1><span class="section-number">1.3.13. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_compact</span></code><a class="headerlink" href="#db-compact" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_compact">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_compact</span></span><a class="headerlink" href="#post--db-_compact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request compaction of the specified database. Compaction compresses the
+disk database file by performing the following operations:</p>
+<ul class="simple">
+<li><p>Writes a new, optimised, version of the database file, removing any
+unused sections from the new version during write. Because a new file is
+temporarily created for this purpose, you may require up to twice the
+current storage space of the specified database in order for the
+compaction routine to complete.</p></li>
+<li><p>Removes the bodies of any non-leaf revisions of documents from the
+database.</p></li>
+<li><p>Removes old revision history beyond the limit specified by the
+<code class="docutils literal notranslate"><span class="pre">_revs_limit</span></code> database parameter.</p></li>
+</ul>
+<p>Compaction can only be requested on an individual database; you cannot
+compact all the databases for a CouchDB instance. The compaction process
+runs as a background process.</p>
+<p>You can determine if the compaction process is operating on a database
+by obtaining the database meta information, the <code class="docutils literal notranslate"><span class="pre">compact_running</span></code>
+value of the returned database structure will be set to true. See
+<a class="reference internal" href="common.html#get--db" title="GET /{db}"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{db}</span></code></a>.</p>
+<p>You can also obtain a list of running processes to determine whether
+compaction is currently running. See <a class="reference internal" href="../server/common.html#api-server-active-tasks"><span class="std std-ref">/_active_tasks</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3">202 Accepted</a></span> – Compaction request has been accepted</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">415 Unsupported Media Type</a></span> – Bad <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> value</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_compact</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">202</span> <span class="ne">Accepted</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">12</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 09:27:43 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-compact-ddoc">
+<span id="api-db-compact-ddoc"></span><h1><span class="section-number">1.3.14. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_compact/{ddoc}</span></code><a class="headerlink" href="#db-compact-ddoc" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_compact-ddoc">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_compact/{ddoc}</span></span><a class="headerlink" href="#post--db-_compact-ddoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compacts the view indexes associated with the specified design document.
+It may be that compacting a large view can return more storage than
+compacting the actual db. Thus, you can use this in place of the full
+database compaction if you know a specific set of view indexes have been
+affected by a recent database change. See <a class="reference internal" href="../../maintenance/compaction.html#compact-views"><span class="std std-ref">Manual View Compaction</span></a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+<li><p><strong>ddoc</strong> – Design document name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3">202 Accepted</a></span> – Compaction request has been accepted</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Design document not found</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">415 Unsupported Media Type</a></span> – Bad <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> value</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_compact/ddoc</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">202</span> <span class="ne">Accepted</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">12</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 09:36:44 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>View indexes are stored in a separate <code class="docutils literal notranslate"><span class="pre">.couch</span></code> file based on a hash
+of the design document’s relevant functions, in a sub directory of
+where the main <code class="docutils literal notranslate"><span class="pre">.couch</span></code> database files are located.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-ensure-full-commit">
+<span id="api-db-ensure-full-commit"></span><h1><span class="section-number">1.3.15. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_ensure_full_commit</span></code><a class="headerlink" href="#db-ensure-full-commit" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_ensure_full_commit">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_ensure_full_commit</span></span><a class="headerlink" href="#post--db-_ensure_full_commit" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0.0: </span>Deprecated; endpoint is a no-op.</p>
+</div>
+<p>Before 3.0 this was used to commit recent changes to the database in case
+the <code class="docutils literal notranslate"><span class="pre">delayed_commits=true</span></code> option was set. That option is always
+<code class="docutils literal notranslate"><span class="pre">false</span></code> now, so commits are never delayed. However, this endpoint is kept
+for compatibility with older replicators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>instance_start_time</strong> (<em>string</em>) – Always <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code>. (Returned for legacy
+reasons.)</p></li>
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a></span> – Commit completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">415 Unsupported Media Type</a></span> – Bad <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> value</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_ensure_full_commit</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">53</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 10:22:19 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;instance_start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-view-cleanup">
+<span id="api-db-view-cleanup"></span><h1><span class="section-number">1.3.16. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_view_cleanup</span></code><a class="headerlink" href="#db-view-cleanup" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_view_cleanup">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_view_cleanup</span></span><a class="headerlink" href="#post--db-_view_cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes view index files that are no longer required by CouchDB as a result
+of changed views within design documents. As the view filename is based on
+a hash of the view functions, over time old views will remain, consuming
+storage. This call cleans up the cached view output on disk for
+a given view.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3">202 Accepted</a></span> – Compaction request has been accepted</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">415 Unsupported Media Type</a></span> – Bad <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> value</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_view_cleanup</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">202</span> <span class="ne">Accepted</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">12</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 09:27:43 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="changes.html" class="btn btn-neutral float-left" title="1.3.12. /{db}/_changes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="security.html" class="btn btn-neutral float-right" title="1.3.17. /{db}/_security" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1299 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.1. Query Server Protocol &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/query-server/protocol.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.2. JavaScript" href="javascript.html" />
+    <link rel="prev" title="3. Query Server" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Query Server</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.1. Query Server Protocol</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reset">3.1.1. <code class="docutils literal notranslate"><span class="pre">reset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-lib">3.1.2. <code class="docutils literal notranslate"><span class="pre">add_lib</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-fun">3.1.3. <code class="docutils literal notranslate"><span class="pre">add_fun</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#map-doc">3.1.4. <code class="docutils literal notranslate"><span class="pre">map_doc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reduce">3.1.5. <code class="docutils literal notranslate"><span class="pre">reduce</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rereduce">3.1.6. <code class="docutils literal notranslate"><span class="pre">rereduce</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ddoc">3.1.7. <code class="docutils literal notranslate"><span class="pre">ddoc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#shows">3.1.7.1. <code class="docutils literal notranslate"><span class="pre">shows</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lists">3.1.7.2. <code class="docutils literal notranslate"><span class="pre">lists</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updates">3.1.7.3. <code class="docutils literal notranslate"><span class="pre">updates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filters">3.1.7.4. <code class="docutils literal notranslate"><span class="pre">filters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#views">3.1.7.5. <code class="docutils literal notranslate"><span class="pre">views</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#validate-doc-update">3.1.7.6. <code class="docutils literal notranslate"><span class="pre">validate_doc_update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rewrites">3.1.7.7. <code class="docutils literal notranslate"><span class="pre">rewrites</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#returning-errors">3.1.8. Returning errors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#error">3.1.8.1. <code class="docutils literal notranslate"><span class="pre">error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#forbidden">3.1.8.2. <code class="docutils literal notranslate"><span class="pre">forbidden</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unauthorized">3.1.8.3. <code class="docutils literal notranslate"><span class="pre">unauthorized</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#logging">3.1.9. Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="javascript.html">3.2. JavaScript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="erlang.html">3.3. Erlang</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Query Server</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.1. </span>Query Server Protocol</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/query-server/protocol.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="query-server-protocol">
+<span id="id1"></span><h1><span class="section-number">3.1. </span>Query Server Protocol<a class="headerlink" href="#query-server-protocol" title="Permalink to this heading">¶</a></h1>
+<p>A <cite>Query Server</cite> is an external process that communicates with CouchDB via a
+simple, custom JSON protocol over stdin/stdout. It is used to processes all
+design functions calls: <cite>views</cite>, <cite>shows</cite>, <cite>lists</cite>, <cite>filters</cite>, <cite>updates</cite> and
+<cite>validate_doc_update</cite>.</p>
+<p>CouchDB communicates with the Query Server process through stdin/stdout with
+JSON messages that are terminated by a newline character. Messages that are
+sent to the Query Server are always <cite>array</cite>-typed and follow the pattern
+<code class="docutils literal notranslate"><span class="pre">[&lt;command&gt;,</span> <span class="pre">&lt;*arguments&gt;]\n</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the documentation examples, we omit the trailing <code class="docutils literal notranslate"><span class="pre">\n</span></code> for greater
+readability. Also, examples contain formatted JSON values while real data
+is transferred in compact mode without formatting spaces.</p>
+</div>
+<section id="reset">
+<span id="qs-reset"></span><h2><span class="section-number">3.1.1. </span><code class="docutils literal notranslate"><span class="pre">reset</span></code><a class="headerlink" href="#reset" title="Permalink to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">reset</span></code></p>
+</dd>
+<dt class="field-even">Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../config/query-servers.html#config-query-server-config"><span class="std std-ref">Query server state</span></a> (optional)</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+</dl>
+<p>This resets the state of the Query Server and makes it forget all previous
+input. If applicable, this is the point to run garbage collection.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;reset&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">true</span>
+</pre></div>
+</div>
+<p>To set up new Query Server state, the second argument is used with object data.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;reset&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;reduce_limit&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span> <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">true</span>
+</pre></div>
+</div>
+</section>
+<section id="add-lib">
+<span id="qs-add-lib"></span><h2><span class="section-number">3.1.2. </span><code class="docutils literal notranslate"><span class="pre">add_lib</span></code><a class="headerlink" href="#add-lib" title="Permalink to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">add_lib</span></code></p>
+</dd>
+<dt class="field-even">Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><p>CommonJS library object by <code class="docutils literal notranslate"><span class="pre">views/lib</span></code> path</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+</dl>
+<p>Adds <a class="reference internal" href="javascript.html#commonjs"><span class="std std-ref">CommonJS</span></a> library to Query Server state for further usage
+in <cite>map</cite> functions.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;add_lib&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;utils&quot;</span><span class="p">:</span> <span class="s2">&quot;exports.MAGIC = 42;&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">true</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This library shouldn’t have any side effects nor track its own state
+or you’ll have a lot of happy debugging time if something goes wrong.
+Remember that a complete index rebuild is a heavy operation and this is
+the only way to fix mistakes with shared state.</p>
+</div>
+</section>
+<section id="add-fun">
+<span id="qs-add-fun"></span><h2><span class="section-number">3.1.3. </span><code class="docutils literal notranslate"><span class="pre">add_fun</span></code><a class="headerlink" href="#add-fun" title="Permalink to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">add_fun</span></code></p>
+</dd>
+<dt class="field-even">Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><p>Map function source code.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+</dl>
+<p>When creating or updating a view, this is how the Query Server is sent the
+view function for evaluation. The Query Server should parse, compile, and
+evaluate the function it receives to make it callable later. If this fails, the
+Query Server returns an error. CouchDB may store multiple functions before
+sending any documents.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;add_fun&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;function(doc) { if(doc.score &gt; 50) emit(null, {&#39;player_name&#39;: doc.name}); }&quot;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">true</span>
+</pre></div>
+</div>
+</section>
+<section id="map-doc">
+<span id="qs-map-doc"></span><h2><span class="section-number">3.1.4. </span><code class="docutils literal notranslate"><span class="pre">map_doc</span></code><a class="headerlink" href="#map-doc" title="Permalink to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">map_doc</span></code></p>
+</dd>
+<dt class="field-even">Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><p>Document object</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of key-value pairs per applied <a class="reference internal" href="#qs-add-fun"><span class="std std-ref">function</span></a></p>
+</dd>
+</dl>
+<p>When the view function is stored in the Query Server, CouchDB starts sending
+all the documents in the database, one at a time. The Query Server calls the
+previously stored functions one after another with a document and stores its
+result. When all functions have been called, the result is returned as a JSON
+string.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;map_doc&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;8877AFF9789988EE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;3-235256484&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;John Smith&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="mi">60</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>If the function above is the only function stored, the Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="n">null</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;John Smith&quot;</span><span class="p">}]</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>That is, an array with the result for every function for the given document.</p>
+<p>If a document is to be excluded from the view, the array should be empty.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;map_doc&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;9590AEB4585637FE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;1-674684684&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jane Parker&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="mi">43</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[]]</span>
+</pre></div>
+</div>
+</section>
+<section id="reduce">
+<span id="qs-reduce"></span><h2><span class="section-number">3.1.5. </span><code class="docutils literal notranslate"><span class="pre">reduce</span></code><a class="headerlink" href="#reduce" title="Permalink to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">reduce</span></code></p>
+</dd>
+<dt class="field-even">Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>Reduce function source</p></li>
+<li><p>Array of <a class="reference internal" href="../ddocs/ddocs.html#mapfun"><span class="std std-ref">map function</span></a> results where each item represented
+in format <code class="docutils literal notranslate"><span class="pre">[[key,</span> <span class="pre">id-of-doc],</span> <span class="pre">value]</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array with pair values: <code class="docutils literal notranslate"><span class="pre">true</span></code> and another array with reduced result</p>
+</dd>
+</dl>
+<p>If the view has a reduce function defined, CouchDB will enter into the reduce
+phase. The Query Server will receive a list of reduce functions and some map
+results on which it can apply them.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;reduce&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;function(k, v) { return sum(v); }&quot;</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+        <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;699b524273605d5d3e9d4fd0ff2cb272&quot;</span><span class="p">],</span> <span class="mi">10</span><span class="p">],</span>
+        <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;c081d0f69c13d2ce2050d684c7ba2843&quot;</span><span class="p">],</span> <span class="mi">20</span><span class="p">],</span>
+        <span class="p">[[</span><span class="n">null</span><span class="p">,</span> <span class="s2">&quot;foobar&quot;</span><span class="p">],</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">33</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that even though the view server receives the map results in the form
+<code class="docutils literal notranslate"><span class="pre">[[key,</span> <span class="pre">id-of-doc],</span> <span class="pre">value]</span></code>, the function may receive them in a different
+form. For example, the JavaScript Query Server applies functions on the list of
+keys and the list of values.</p>
+</section>
+<section id="rereduce">
+<span id="qs-rereduce"></span><h2><span class="section-number">3.1.6. </span><code class="docutils literal notranslate"><span class="pre">rereduce</span></code><a class="headerlink" href="#rereduce" title="Permalink to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">rereduce</span></code></p>
+</dd>
+<dt class="field-even">Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>Reduce function source</p></li>
+<li><p>List of values</p></li>
+</ul>
+</dd>
+</dl>
+<p>When building a view, CouchDB will apply the reduce step directly to the output
+of the map step and the rereduce step to the output of a previous reduce step.</p>
+<p>CouchDB will send a list of reduce functions and a list of values, with no keys
+or document ids to the rereduce step.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;rereduce&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;function(k, v, r) { return sum(v); }&quot;</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+        <span class="mi">33</span><span class="p">,</span>
+        <span class="mi">55</span><span class="p">,</span>
+        <span class="mi">66</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">154</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="ddoc">
+<span id="qs-ddoc"></span><h2><span class="section-number">3.1.7. </span><code class="docutils literal notranslate"><span class="pre">ddoc</span></code><a class="headerlink" href="#ddoc" title="Permalink to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of objects.</p>
+<ul class="simple">
+<li><p>First phase (ddoc initialization):</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;new&quot;</span></code></p></li>
+<li><p>Design document <code class="docutils literal notranslate"><span class="pre">_id</span></code></p></li>
+<li><p>Design document object</p></li>
+</ul>
+</li>
+<li><p>Second phase (design function execution):</p>
+<ul>
+<li><p>Design document <code class="docutils literal notranslate"><span class="pre">_id</span></code></p></li>
+<li><p>Function path as an array of object keys</p></li>
+<li><p>Array of function arguments</p></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>First phase (ddoc initialization): <code class="docutils literal notranslate"><span class="pre">true</span></code></p></li>
+<li><p>Second phase (design function execution): custom object depending on
+executed function</p></li>
+</ul>
+</dd>
+</dl>
+<p>This command acts in two phases: <cite>ddoc</cite> registration and <cite>design function</cite>
+execution.</p>
+<p>In the first phase CouchDB sends a full design document content to the Query
+Server to let it cache it by <code class="docutils literal notranslate"><span class="pre">_id</span></code> value for further function execution.</p>
+<p>To do this, CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ddoc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;new&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;_design/temp&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;_design/temp&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;8-d7379de23a751dc2a19e5638a7bbc5cc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="s2">&quot;javascript&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;shows&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="s2">&quot;function(doc,req){ return {json: req}; }&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;function(doc,req){ return {body: &#39;Hello, &#39; + (doc || </span><span class="si">{}</span><span class="s2">)._id + &#39;!&#39;}; }&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">true</span>
+</pre></div>
+</div>
+<p>After this, the design document will be ready to serve subcommands in the
+second phase.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">ddoc</span></code> subcommand is the root design document key, so they are not
+actually subcommands, but first elements of the JSON path that may be handled
+and processed.</p>
+<p>The pattern for subcommand execution is common:</p>
+<p><code class="docutils literal notranslate"><span class="pre">[&quot;ddoc&quot;,</span> <span class="pre">&lt;design_doc_id&gt;,</span> <span class="pre">[&lt;subcommand&gt;,</span> <span class="pre">&lt;funcname&gt;],</span> <span class="pre">[&lt;argument1&gt;,</span> <span class="pre">&lt;argument2&gt;,</span> <span class="pre">...]]</span></code></p>
+</div>
+<section id="shows">
+<span id="qs-ddoc-shows"></span><h3><span class="section-number">3.1.7.1. </span><code class="docutils literal notranslate"><span class="pre">shows</span></code><a class="headerlink" href="#shows" title="Permalink to this heading">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Show functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">SubCommand<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">shows</span></code></p>
+</dd>
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Document object or <code class="docutils literal notranslate"><span class="pre">null</span></code> if document <cite>id</cite> isn’t specified in request</p></li>
+<li><p><a class="reference internal" href="../json-structure.html#request-object"><span class="std std-ref">Request object</span></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array with two elements:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;resp&quot;</span></code></p></li>
+<li><p><a class="reference internal" href="../json-structure.html#response-object"><span class="std std-ref">Response object</span></a></p></li>
+</ul>
+</dd>
+</dl>
+<p>Executes <a class="reference internal" href="../ddocs/ddocs.html#showfun"><span class="std std-ref">show function</span></a>.</p>
+<p>Couchdb sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ddoc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;_design/temp&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;shows&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;doc&quot;</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+        <span class="n">null</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;db_name&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="s2">&quot;doc_del_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;update_seq&quot;</span><span class="p">:</span> <span class="mi">105</span><span class="p">,</span>
+                <span class="s2">&quot;purge_seq&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;compact_running&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+                <span class="s2">&quot;sizes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="mi">1535048</span><span class="p">,</span>
+                  <span class="s2">&quot;disk&quot;</span><span class="p">:</span> <span class="mi">15818856</span><span class="p">,</span>
+                  <span class="s2">&quot;external&quot;</span><span class="p">:</span> <span class="mi">15515850</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;instance_start_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1359952188595857&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;disk_format_version&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                <span class="s2">&quot;committed_update_seq&quot;</span><span class="p">:</span> <span class="mi">105</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;169cb4cc82427cc7322cb4463d0021bb&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;requested_path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;api&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;temp&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_show&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;request&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;api&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;temp&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_show&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;request&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;raw_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/_design/temp/_show/request&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;*/*&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost:5984&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;curl/7.26.0&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;undefined&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;peer&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;cookie&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;userCtx&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="s2">&quot;api&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+                <span class="s2">&quot;roles&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;_admin&quot;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;secObj&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;resp&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, undefined!&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="lists">
+<span id="qs-ddoc-lists"></span><h3><span class="section-number">3.1.7.2. </span><code class="docutils literal notranslate"><span class="pre">lists</span></code><a class="headerlink" href="#lists" title="Permalink to this heading">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>List functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">SubCommand<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">lists</span></code></p>
+</dd>
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../json-structure.html#view-head-info-object"><span class="std std-ref">View Head Information</span></a>:</p></li>
+<li><p><a class="reference internal" href="../json-structure.html#request-object"><span class="std std-ref">Request object</span></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array. See below for details.</p>
+</dd>
+</dl>
+<p>Executes <a class="reference internal" href="../ddocs/ddocs.html#listfun"><span class="std std-ref">list function</span></a>.</p>
+<p>The communication protocol for <cite>list</cite> functions is a bit complex so let’s use
+an example to illustrate.</p>
+<p>Assume we have view a function that emits <cite>id-rev</cite> pairs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">emit</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">_rev</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And we’d like to emulate <code class="docutils literal notranslate"><span class="pre">_all_docs</span></code> JSON response with list function. Our
+<em>first</em> version of the list functions looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">req</span><span class="p">){</span>
+    <span class="n">start</span><span class="p">({</span><span class="s1">&#39;headers&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}});</span>
+    <span class="n">var</span> <span class="n">resp</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+    <span class="n">var</span> <span class="n">rows</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">getRow</span><span class="p">()){</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">row</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">rows</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">toJSON</span><span class="p">(</span><span class="n">resp</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The whole communication session during list function execution could be divided
+on three parts:</p>
+<ol class="arabic">
+<li><p>Initialization</p>
+<p>The first returned object from the list function is an array with the
+following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">chunks</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">headers</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;chunks&gt;</span></code> is an array of text chunks that will be sent to the client
+and <code class="docutils literal notranslate"><span class="pre">&lt;headers&gt;</span></code> is an object with response HTTP headers.</p>
+<p>This message is sent from the Query Server to CouchDB on the
+<a class="reference internal" href="javascript.html#start" title="start"><code class="xref js js-func docutils literal notranslate"><span class="pre">start()</span></code></a> call which initializes the HTTP response to the client:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;start&quot;</span><span class="p">,</span>
+    <span class="p">[],</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>After this, the list function may start to process view rows.</p>
+</li>
+<li><p>View Processing</p>
+<p>Since view results can be extremely large, it is not wise to pass all its
+rows in a single command. Instead, CouchDB can send view rows one by one
+to the Query Server allowing view processing and output generation to be
+processed as a stream.</p>
+<p>CouchDB sends a special array that carries view row data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;list_row&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;0cb42c267fe32d4b56b3500bc503e030&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;0cb42c267fe32d4b56b3500bc503e030&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1-967a00dff5e02add41819138abb3284d&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>If the Query Server has something to return on this, it returns an array
+with a <code class="docutils literal notranslate"><span class="pre">&quot;chunks&quot;</span></code> item in the head and an array of data in the tail. For
+this example it has nothing to return, so the response will be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="s2">&quot;chunks&quot;</span><span class="p">,</span>
+  <span class="p">[]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>When there are no more view rows to process, CouchDB sends a <cite>list_end</cite>
+message to signify there is no more data to send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;list_end&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>Finalization</p>
+<p>The last stage of the communication process is the returning <em>list tail</em>:
+the last data chunk. After this, processing of the list function will be
+complete and the client will receive a complete response.</p>
+<p>For our example the last message is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;end&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;{</span><span class="se">\&quot;</span><span class="s2">total_rows</span><span class="se">\&quot;</span><span class="s2">:2,</span><span class="se">\&quot;</span><span class="s2">offset</span><span class="se">\&quot;</span><span class="s2">:0,</span><span class="se">\&quot;</span><span class="s2">rows</span><span class="se">\&quot;</span><span class="s2">:[{</span><span class="se">\&quot;</span><span class="s2">id</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">0cb42c267fe32d4b56b3500bc503e030</span><span class="se">\&quot;</span><span class="s2">,</span><span class="se">\&quot;</span><span class="s2">key</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">0cb42c267fe32d4b56b3500bc503e030</span><span class="se">\&quot;</span><span class="s2">,</span><span class="se">\&quot;</span><span class="s2">value</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">1-967a00dff5e02add41819138abb3284d</span><span class="se">\&quot;</span><span class="s2">},{</span><span class="se">\&quot;</span><span class="s2">id</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">431926a69504bde41851eb3c18a27b1f</span><span class="se">\&quot;</span><span class="s2">,</span><span class="se">\&quot;</span><span class="s2">key</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">431926a69504bde41851eb3c18a27b1f</span><span class="se">\&quot;</span><span class="s2">,</span><span class="se">\&quot;</span><span class="s2">value</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">1-967a00dff5e02add41819138abb3284d</span><span class="se">\&quot;</span><span class="s2">}]}&quot;</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>In this example, we have returned our result in a single message from the Query
+Server. This is okay for small numbers of rows, but for large data sets,
+perhaps with millions of documents or millions of view rows, this would not be
+acceptable.</p>
+<p>Let’s fix our list function and see the changes in communication:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">req</span><span class="p">){</span>
+    <span class="n">start</span><span class="p">({</span><span class="s1">&#39;headers&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}});</span>
+    <span class="n">send</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">);</span>
+    <span class="n">send</span><span class="p">(</span><span class="s1">&#39;&quot;total_rows&quot;:&#39;</span> <span class="o">+</span> <span class="n">toJSON</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="n">total_rows</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="p">);</span>
+    <span class="n">send</span><span class="p">(</span><span class="s1">&#39;&quot;offset&quot;:&#39;</span> <span class="o">+</span> <span class="n">toJSON</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="p">);</span>
+    <span class="n">send</span><span class="p">(</span><span class="s1">&#39;&quot;rows&quot;:[&#39;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">getRow</span><span class="p">()){</span>
+        <span class="n">send</span><span class="p">(</span><span class="n">toJSON</span><span class="p">(</span><span class="n">row</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">getRow</span><span class="p">()){</span>
+        <span class="n">send</span><span class="p">(</span><span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="n">toJSON</span><span class="p">(</span><span class="n">row</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="n">send</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="s1">&#39;}&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>“Wait, what?” - you’d like to ask. Yes, we’d build JSON response manually by
+string chunks, but let’s take a look on logs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.19191.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">OS</span> <span class="n">Process</span> <span class="c1">#Port&lt;0.4444&gt; Output :: [&quot;start&quot;,[&quot;{&quot;,&quot;\&quot;total_rows\&quot;:2,&quot;,&quot;\&quot;offset\&quot;:0,&quot;,&quot;\&quot;rows\&quot;:[&quot;],{&quot;headers&quot;:{&quot;Content-Type&quot;:&quot;application/json&quot;}}]</span>
+<span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">info</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.18963.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="mf">127.0.0.1</span> <span class="o">-</span> <span class="o">-</span> <span class="n">GET</span> <span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">_design</span><span class="o">/</span><span class="n">post</span><span class="o">/</span><span class="n">_list</span><span class="o">/</span><span class="n">index</span><span class="o">/</span><span class="n">all_docs</span> <span class="mi">200</span>
+<span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.19191.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">OS</span> <span class="n">Process</span> <span class="c1">#Port&lt;0.4444&gt; Input  :: [&quot;list_row&quot;,{&quot;id&quot;:&quot;0cb42c267fe32d4b56b3500bc503e030&quot;,&quot;key&quot;:&quot;0cb42c267fe32d4b56b3500bc503e030&quot;,&quot;value&quot;:&quot;1-967a00dff5e02add41819138abb3284d&quot;}]</span>
+<span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.19191.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">OS</span> <span class="n">Process</span> <span class="c1">#Port&lt;0.4444&gt; Output :: [&quot;chunks&quot;,[&quot;{\&quot;id\&quot;:\&quot;0cb42c267fe32d4b56b3500bc503e030\&quot;,\&quot;key\&quot;:\&quot;0cb42c267fe32d4b56b3500bc503e030\&quot;,\&quot;value\&quot;:\&quot;1-967a00dff5e02add41819138abb3284d\&quot;}&quot;]]</span>
+<span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.19191.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">OS</span> <span class="n">Process</span> <span class="c1">#Port&lt;0.4444&gt; Input  :: [&quot;list_row&quot;,{&quot;id&quot;:&quot;431926a69504bde41851eb3c18a27b1f&quot;,&quot;key&quot;:&quot;431926a69504bde41851eb3c18a27b1f&quot;,&quot;value&quot;:&quot;1-967a00dff5e02add41819138abb3284d&quot;}]</span>
+<span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.19191.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">OS</span> <span class="n">Process</span> <span class="c1">#Port&lt;0.4444&gt; Output :: [&quot;chunks&quot;,[&quot;,{\&quot;id\&quot;:\&quot;431926a69504bde41851eb3c18a27b1f\&quot;,\&quot;key\&quot;:\&quot;431926a69504bde41851eb3c18a27b1f\&quot;,\&quot;value\&quot;:\&quot;1-967a00dff5e02add41819138abb3284d\&quot;}&quot;]]</span>
+<span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.19191.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">OS</span> <span class="n">Process</span> <span class="c1">#Port&lt;0.4444&gt; Input  :: [&quot;list_end&quot;]</span>
+<span class="p">[</span><span class="n">Wed</span><span class="p">,</span> <span class="mi">24</span> <span class="n">Jul</span> <span class="mi">2013</span> <span class="mi">05</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.19191.1</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">OS</span> <span class="n">Process</span> <span class="c1">#Port&lt;0.4444&gt; Output :: [&quot;end&quot;,[&quot;]&quot;,&quot;}&quot;]]</span>
+</pre></div>
+</div>
+<p>Note, that now the Query Server sends response by lightweight chunks and if
+our communication process was extremely slow, the client will see how response
+data appears on their screen. Chunk by chunk, without waiting for the complete
+result, like they have for our previous list function.</p>
+</section>
+<section id="updates">
+<span id="qs-ddoc-updates"></span><h3><span class="section-number">3.1.7.3. </span><code class="docutils literal notranslate"><span class="pre">updates</span></code><a class="headerlink" href="#updates" title="Permalink to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">SubCommand<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">updates</span></code></p>
+</dd>
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Document object or <code class="docutils literal notranslate"><span class="pre">null</span></code> if document <cite>id</cite> wasn’t specified in request</p></li>
+<li><p><a class="reference internal" href="../json-structure.html#request-object"><span class="std std-ref">Request object</span></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array with there elements:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;up&quot;</span></code></p></li>
+<li><p>Document object or <code class="docutils literal notranslate"><span class="pre">null</span></code> if nothing should be stored</p></li>
+<li><p><a class="reference internal" href="../json-structure.html#response-object"><span class="std std-ref">Response object</span></a></p></li>
+</ul>
+</dd>
+</dl>
+<p>Executes <a class="reference internal" href="../ddocs/ddocs.html#updatefun"><span class="std std-ref">update function</span></a>.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ddoc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;_design/id&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;updates&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nothing&quot;</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+        <span class="n">null</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;db_name&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s2">&quot;doc_del_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;update_seq&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+                <span class="s2">&quot;purge_seq&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;compact_running&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+                <span class="s2">&quot;sizes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="mi">7979745</span><span class="p">,</span>
+                  <span class="s2">&quot;disk&quot;</span><span class="p">:</span> <span class="mi">8056936</span><span class="p">,</span>
+                  <span class="s2">&quot;external&quot;</span><span class="p">:</span> <span class="mi">8024930</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;instance_start_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1374612186131612&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;disk_format_version&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                <span class="s2">&quot;committed_update_seq&quot;</span><span class="p">:</span> <span class="mi">16</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;7b695cb34a03df0316c15ab529002e69&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;requested_path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;1139&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_update&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;nothing&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;1139&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_update&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;nothing&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;raw_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/test/_design/1139/_update/nothing&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;*/*&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;identity, gzip, deflate, compress&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Content-Length&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost:5984&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;peer&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;cookie&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;userCtx&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+                <span class="s2">&quot;roles&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;_admin&quot;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;secObj&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;up&quot;</span><span class="p">,</span>
+    <span class="n">null</span><span class="p">,</span>
+    <span class="p">{</span><span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;document id wasn&#39;t provided&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>or in case of successful update:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;up&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;7b695cb34a03df0316c15ab529002e69&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;world!&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;document was updated&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="filters">
+<span id="qs-ddoc-filters"></span><h3><span class="section-number">3.1.7.4. </span><code class="docutils literal notranslate"><span class="pre">filters</span></code><a class="headerlink" href="#filters" title="Permalink to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">SubCommand<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">filters</span></code></p>
+</dd>
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Array of document objects</p></li>
+<li><p><a class="reference internal" href="../json-structure.html#request-object"><span class="std std-ref">Request object</span></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of two elements:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></li>
+<li><p>Array of booleans in the same order of input documents.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Executes <a class="reference internal" href="../ddocs/ddocs.html#filterfun"><span class="std std-ref">filter function</span></a>.</p>
+<p>CouchDB sends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ddoc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;_design/test&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;filters&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;random&quot;</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;431926a69504bde41851eb3c18a27b1f&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;1-967a00dff5e02add41819138abb3284d&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_revisions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s2">&quot;ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;967a00dff5e02add41819138abb3284d&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0cb42c267fe32d4b56b3500bc503e030&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;1-967a00dff5e02add41819138abb3284d&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_revisions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s2">&quot;ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;967a00dff5e02add41819138abb3284d&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;db_name&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s2">&quot;doc_del_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;update_seq&quot;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span>
+                <span class="s2">&quot;purge_seq&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;compact_running&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+                <span class="s2">&quot;sizes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="mi">7979745</span><span class="p">,</span>
+                  <span class="s2">&quot;disk&quot;</span><span class="p">:</span> <span class="mi">8056936</span><span class="p">,</span>
+                  <span class="s2">&quot;external&quot;</span><span class="p">:</span> <span class="mi">8024930</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;instance_start_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1374612186131612&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;disk_format_version&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                <span class="s2">&quot;committed_update_seq&quot;</span><span class="p">:</span> <span class="mi">19</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;7b695cb34a03df0316c15ab529023a81&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;requested_path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_changes?filter=test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;random&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_changes&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;raw_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/test/_changes?filter=test/random&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;test/random&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;identity, gzip, deflate, compress&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Content-Length&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json; charset=utf-8&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost:5984&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;peer&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;cookie&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;userCtx&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+                <span class="s2">&quot;roles&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;_admin&quot;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;secObj&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">true</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="n">true</span><span class="p">,</span>
+        <span class="n">false</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="views">
+<span id="qs-ddoc-views"></span><h3><span class="section-number">3.1.7.5. </span><code class="docutils literal notranslate"><span class="pre">views</span></code><a class="headerlink" href="#views" title="Permalink to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">SubCommand<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">views</span></code></p>
+</dd>
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of document objects</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of two elements:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></li>
+<li><p>Array of booleans in the same order of input documents.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.</span></p>
+</div>
+<p>Executes <a class="reference internal" href="../ddocs/ddocs.html#viewfilter"><span class="std std-ref">view function</span></a> in place of the filter.</p>
+<p>Acts in the same way as <a class="reference internal" href="#qs-ddoc-filters"><span class="std std-ref">filters</span></a> command.</p>
+</section>
+<section id="validate-doc-update">
+<span id="qs-ddoc-validate-doc-update"></span><h3><span class="section-number">3.1.7.6. </span><code class="docutils literal notranslate"><span class="pre">validate_doc_update</span></code><a class="headerlink" href="#validate-doc-update" title="Permalink to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">SubCommand<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">validate_doc_update</span></code></p>
+</dd>
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Document object that will be stored</p></li>
+<li><p>Document object that will be replaced</p></li>
+<li><p><a class="reference internal" href="../json-structure.html#userctx-object"><span class="std std-ref">User Context Object</span></a></p></li>
+<li><p><a class="reference internal" href="../json-structure.html#security-object"><span class="std std-ref">Security Object</span></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+</dl>
+<p>Executes <a class="reference internal" href="../ddocs/ddocs.html#vdufun"><span class="std std-ref">validation function</span></a>.</p>
+<p>CouchDB send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ddoc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;_design/id&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;validate_doc_update&quot;</span><span class="p">],</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;docid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;2-e0165f450f6c89dc6b071c075dde3c4d&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="mi">10</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;docid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;1-9f798c6ad72a406afdbf470b9eea8375&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="mi">4</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Mike&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;roles&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;player&quot;</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;admins&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;members&quot;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the only valid response for this command is <code class="docutils literal notranslate"><span class="pre">true</span></code>, to prevent the
+document from being saved, the Query Server needs to raise an error:
+<code class="docutils literal notranslate"><span class="pre">forbidden</span></code> or <code class="docutils literal notranslate"><span class="pre">unauthorized</span></code>; these errors will be turned into correct
+<code class="docutils literal notranslate"><span class="pre">HTTP</span> <span class="pre">403</span></code> and <code class="docutils literal notranslate"><span class="pre">HTTP</span> <span class="pre">401</span></code> responses respectively.</p>
+</div>
+</section>
+<section id="rewrites">
+<span id="qs-ddoc-rewrites"></span><h3><span class="section-number">3.1.7.7. </span><code class="docutils literal notranslate"><span class="pre">rewrites</span></code><a class="headerlink" href="#rewrites" title="Permalink to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Command<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ddoc</span></code></p>
+</dd>
+<dt class="field-even">SubCommand<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">rewrites</span></code></p>
+</dd>
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../json-structure.html#request2-object"><span class="std std-ref">Request2 object</span></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+</dl>
+<p>Executes <a class="reference internal" href="../api/ddoc/rewrites.html#api-ddoc-rewrite"><span class="std std-ref">rewrite function</span></a>.</p>
+<p>CouchDB send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ddoc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;_design/id&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;rewrites&quot;</span><span class="p">],</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;requested_path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;1139&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_update&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;nothing&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;1139&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_update&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;nothing&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;raw_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/test/_design/1139/_update/nothing&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;*/*&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;identity, gzip, deflate, compress&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Content-Length&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost:5984&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;peer&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cookie&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;userCtx&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+                <span class="s2">&quot;roles&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;_admin&quot;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;secObj&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The Query Server answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ok&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;some/path&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;key1&quot;</span><span class="p">:</span> <span class="s2">&quot;value1&quot;</span><span class="p">,</span> <span class="s2">&quot;key2&quot;</span><span class="p">:</span> <span class="s2">&quot;value2&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;METHOD&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Header1&quot;</span><span class="p">:</span> <span class="s2">&quot;value1&quot;</span><span class="p">,</span> <span class="s2">&quot;Header2&quot;</span><span class="p">:</span> <span class="s2">&quot;value2&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>or in case of direct response:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ok&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;Welcome!&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">200</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>or for immediate redirect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="s2">&quot;ok&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Location&quot;</span><span class="p">:</span> <span class="s2">&quot;http://example.com/path/&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">302</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="returning-errors">
+<span id="qs-errors"></span><h2><span class="section-number">3.1.8. </span>Returning errors<a class="headerlink" href="#returning-errors" title="Permalink to this heading">¶</a></h2>
+<p>When something goes wrong, the Query Server can inform CouchDB by sending a
+special message in response to the received command.</p>
+<p>Error messages prevent further command execution and return an error description
+to CouchDB. Errors are logically divided into two groups:</p>
+<ul class="simple">
+<li><p><cite>Common errors</cite>. These errors only break the current Query Server command and
+return the error info to the CouchDB instance <em>without</em> terminating the Query
+Server process.</p></li>
+<li><p><cite>Fatal errors</cite>. Fatal errors signal a condition that cannot be recovered.
+For instance, if your a design function is unable to import a third party
+module, it’s better to count such error as fatal and terminate whole process.</p></li>
+</ul>
+<section id="error">
+<span id="qs-error"></span><h3><span class="section-number">3.1.8.1. </span><code class="docutils literal notranslate"><span class="pre">error</span></code><a class="headerlink" href="#error" title="Permalink to this heading">¶</a></h3>
+<p>To raise an error, the Query Server should respond with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="s2">&quot;error_name&quot;</span><span class="p">,</span> <span class="s2">&quot;reason why&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;error_name&quot;</span></code> helps to classify problems by their type e.g. if it’s
+<code class="docutils literal notranslate"><span class="pre">&quot;value_error&quot;</span></code> to indicate improper data, <code class="docutils literal notranslate"><span class="pre">&quot;not_found&quot;</span></code> to indicate a
+missing resource and <code class="docutils literal notranslate"><span class="pre">&quot;type_error&quot;</span></code> to indicate an improper data type.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;reason</span> <span class="pre">why&quot;</span></code> explains in human-readable terms what went wrong, and
+possibly how to resolve it.</p>
+<p>For example, calling <a class="reference internal" href="../ddocs/ddocs.html#updatefun"><span class="std std-ref">Update Functions</span></a> against a non-existent document could
+produce the error message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="s2">&quot;not_found&quot;</span><span class="p">,</span> <span class="s2">&quot;Update function requires existent document&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="forbidden">
+<span id="qs-error-forbidden"></span><h3><span class="section-number">3.1.8.2. </span><code class="docutils literal notranslate"><span class="pre">forbidden</span></code><a class="headerlink" href="#forbidden" title="Permalink to this heading">¶</a></h3>
+<p>The <cite>forbidden</cite> error is widely used by <a class="reference internal" href="../ddocs/ddocs.html#vdufun"><span class="std std-ref">Validate Document Update Functions</span></a> to stop further function
+processing and prevent storage of the new document revision. Since this is not
+actually an error, but an assertion against user actions, CouchDB doesn’t log
+it at <cite>“error”</cite> level, but returns <cite>HTTP 403 Forbidden</cite> response with error
+information object.</p>
+<p>To raise this error, the Query Server should respond with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;forbidden&quot;</span><span class="p">:</span> <span class="s2">&quot;reason why&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="unauthorized">
+<span id="qs-error-unauthorized"></span><h3><span class="section-number">3.1.8.3. </span><code class="docutils literal notranslate"><span class="pre">unauthorized</span></code><a class="headerlink" href="#unauthorized" title="Permalink to this heading">¶</a></h3>
+<p>The <cite>unauthorized</cite> error mostly acts like <cite>forbidden</cite> one, but with
+the meaning of <em>please authorize first</em>. This small difference helps end users
+to understand what they can do to solve the problem. Similar to <cite>forbidden</cite>,
+CouchDB doesn’t log it at <cite>“error”</cite> level, but returns a <cite>HTTP 401 Unauthorized</cite>
+response with an error information object.</p>
+<p>To raise this error, the Query Server should respond with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;unauthorized&quot;</span><span class="p">:</span> <span class="s2">&quot;reason why&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="logging">
+<span id="qs-log"></span><h2><span class="section-number">3.1.9. </span>Logging<a class="headerlink" href="#logging" title="Permalink to this heading">¶</a></h2>
+<p>At any time, the Query Server may send some information that will be saved in
+CouchDB’s log file. This is done by sending a special <cite>log</cite> object with a single
+argument, on a separate line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;some message&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>CouchDB does not respond, but writes the received message to the log file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Sun</span><span class="p">,</span> <span class="mi">13</span> <span class="n">Feb</span> <span class="mi">2009</span> <span class="mi">23</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">30</span> <span class="n">GMT</span><span class="p">]</span> <span class="p">[</span><span class="n">info</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="mf">0.72.0</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">Query</span> <span class="n">Server</span> <span class="n">Log</span> <span class="n">Message</span><span class="p">:</span> <span class="n">some</span> <span class="n">message</span>
+</pre></div>
+</div>
+<p>These messages are only logged at <a class="reference internal" href="../config/logging.html#log/level" title="level"><code class="xref config config-option docutils literal notranslate"><span class="pre">info</span> <span class="pre">level</span></code></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="3. Query Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="javascript.html" class="btn btn-neutral float-right" title="3.2. JavaScript" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

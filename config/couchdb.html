@@ -1,0 +1,487 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2. Base Configuration &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/config/couchdb.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.3. Configuring Clustering" href="cluster.html" />
+    <link rel="prev" title="3.1. Introduction To Configuring" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Introduction To Configuring</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.2. Base Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#base-couchdb-options">3.2.1. Base CouchDB Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">3.3. Configuring Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couch-peruser.html">3.4. Database Per User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk-monitor.html">3.5. Disk Monitor Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html">3.6. CouchDB HTTP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html">3.7. Authentication and Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">3.8. Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexbuilds.html">3.9. Background Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ioq.html">3.10. IO Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">3.11. Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replicator.html">3.12. Replicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query-servers.html">3.13. Query Servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">3.14. Miscellaneous Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">3.15. Resharding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Configuration</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.2. </span>Base Configuration</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/config/couchdb.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="base-configuration">
+<h1><span class="section-number">3.2. </span>Base Configuration<a class="headerlink" href="#base-configuration" title="Permalink to this heading">¶</a></h1>
+<section id="base-couchdb-options">
+<span id="config-couchdb"></span><h2><span class="section-number">3.2.1. </span>Base CouchDB Options<a class="headerlink" href="#base-couchdb-options" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="couchdb">
+<span class="sig-name descname"><span class="pre">[couchdb]</span></span><a class="headerlink" href="#couchdb" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="couchdb/attachment_stream_buffer_size">
+<span class="sig-name descname"><span class="pre">attachment_stream_buffer_size</span></span><a class="headerlink" href="#couchdb/attachment_stream_buffer_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Higher values may result in better read performance due to fewer read
+operations and/or more OS page cache hits. However, they can also
+increase overall response time for writes when there are many
+attachment write requests in parallel.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">attachment_stream_buffer_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4096</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/database_dir">
+<span class="sig-name descname"><span class="pre">database_dir</span></span><a class="headerlink" href="#couchdb/database_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies location of CouchDB database files (<code class="docutils literal notranslate"><span class="pre">*.couch</span></code> named). This
+location should be writable and readable for the user the CouchDB
+service runs as (<code class="docutils literal notranslate"><span class="pre">couchdb</span></code> by default).</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">database_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/lib/couchdb</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/default_security">
+<span class="sig-name descname"><span class="pre">default_security</span></span><a class="headerlink" href="#couchdb/default_security" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0: </span><code class="docutils literal notranslate"><span class="pre">admin_only</span></code> is now the default.</p>
+</div>
+<p>Default security object for databases if not explicitly set. When set
+to <code class="docutils literal notranslate"><span class="pre">everyone</span></code>, anyone can performs reads and writes. When set to
+<code class="docutils literal notranslate"><span class="pre">admin_only</span></code>, only admins can read and write. When set to
+<code class="docutils literal notranslate"><span class="pre">admin_local</span></code>, sharded databases can be read and written by anyone
+but the shards can only be read and written by admins.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">default_security</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">admin_only</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/enable_database_recovery">
+<span class="sig-name descname"><span class="pre">enable_database_recovery</span></span><a class="headerlink" href="#couchdb/enable_database_recovery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable this to only “soft-delete” databases when
+<a class="reference internal" href="../api/database/common.html#api-db"><span class="std std-ref">DELETE /{db}</span></a> DELETE  requests are made. This will
+rename all shards of the database with a suffix of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;dbname&gt;.YMD.HMS.deleted.couchdb</span></code>. You can then manually delete these
+files later, as desired.</p>
+<p>Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">enable_database_recovery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/file_compression">
+<span class="sig-name descname"><span class="pre">file_compression</span></span><a class="headerlink" href="#couchdb/file_compression" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.2: </span>Added <a class="reference external" href="http://code.google.com/p/snappy/">Google Snappy</a> compression algorithm.</p>
+</div>
+<p>Method used to compress everything that is appended to database and
+view index files, except for attachments (see the
+<a class="reference internal" href="misc.html#attachments" title="[attachments]"><code class="xref config config-section docutils literal notranslate"><span class="pre">attachments</span></code></a> section). Available methods are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code>: no compression</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">snappy</span></code>: use Google Snappy, a very fast compressor/decompressor</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deflate_N</span></code>: use zlib’s deflate; <code class="docutils literal notranslate"><span class="pre">N</span></code> is the compression level
+which ranges from <code class="docutils literal notranslate"><span class="pre">1</span></code> (fastest, lowest compression ratio) to <code class="docutils literal notranslate"><span class="pre">9</span></code>
+(slowest, highest compression ratio)</p></li>
+</ul>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">file_compression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">snappy</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/maintenance_mode">
+<span class="sig-name descname"><span class="pre">maintenance_mode</span></span><a class="headerlink" href="#couchdb/maintenance_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A CouchDB node may be put into two distinct maintenance modes by setting
+this configuration parameter.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: The node will not respond to clustered requests from other
+nodes and the /_up endpoint will return a 404 response.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nolb</span></code>: The /_up endpoint will return a 404 response.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: The node responds normally, /_up returns a 200 response.</p></li>
+</ul>
+<p>It is expected that the administrator has configured a load balancer
+in front of the CouchDB nodes in the cluster. This load balancer should
+use the /_up endpoint to determine whether or not to send HTTP requests
+to any particular node. For HAProxy, the following config is
+appropriate:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>http-check disable-on-404
+option httpchk GET /_up
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/max_dbs_open">
+<span class="sig-name descname"><span class="pre">max_dbs_open</span></span><a class="headerlink" href="#couchdb/max_dbs_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option places an upper bound on the number of databases that can
+be open at once. CouchDB reference counts database accesses internally
+and will close idle databases as needed. Sometimes it is necessary to
+keep more than the default open at once, such as in deployments where
+many databases will be replicating continuously.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">max_dbs_open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/max_document_size">
+<span class="sig-name descname"><span class="pre">max_document_size</span></span><a class="headerlink" href="#couchdb/max_document_size" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0.0.</span></p>
+</div>
+<p>Limit maximum document body size. Size is calculated based on the
+serialized Erlang representation of the JSON document body, because
+that reflects more accurately the amount of storage consumed on disk.
+In particular, this limit does not include attachments.</p>
+<p>HTTP requests which create or update documents will fail with error
+code 413 if one or more documents is larger than this configuration
+value.</p>
+<p>In case of <code class="docutils literal notranslate"><span class="pre">_update</span></code> handlers, document size is checked after the
+transformation and right before being inserted into the database.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">max_document_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">8000000</span><span class="w"> </span><span class="c1">; bytes</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Before version 2.1.0 this setting was implemented by simply checking
+http request body sizes. For individual document updates via <cite>PUT</cite>
+that approximation was close enough, however that is not the case
+for <code class="docutils literal notranslate"><span class="pre">_bulk_docs</span></code> endpoint. After 2.1.0 a separate configuration
+parameter was defined: <a class="reference internal" href="http.html#chttpd/max_http_request_size" title="max_http_request_size"><code class="xref config config-option docutils literal notranslate"><span class="pre">chttpd/max_http_request_size</span></code></a>,
+which can be used to limit maximum http request sizes. After upgrade,
+it is advisable to review those settings and adjust them accordingly.</p>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/os_process_timeout">
+<span class="sig-name descname"><span class="pre">os_process_timeout</span></span><a class="headerlink" href="#couchdb/os_process_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>If an external process, such as a query server or external process,
+runs for this amount of milliseconds without returning any results, it
+will be terminated. Keeping this value smaller ensures you get
+expedient errors, but you may want to tweak it for your specific
+needs.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">os_process_timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">5000</span><span class="w"> </span><span class="c1">; 5 sec</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/single_node">
+<span class="sig-name descname"><span class="pre">single_node</span></span><a class="headerlink" href="#couchdb/single_node" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.0.</span></p>
+</div>
+<p>When this configuration setting is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, automatically
+create the system databases on startup. Must be set <code class="docutils literal notranslate"><span class="pre">false</span></code> for a
+clustered CouchDB installation.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/uri_file">
+<span class="sig-name descname"><span class="pre">uri_file</span></span><a class="headerlink" href="#couchdb/uri_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>This file contains the full <a class="reference external" href="http://en.wikipedia.org/wiki/URI">URI</a> that can be used to access this
+instance of CouchDB. It is used to help discover the port CouchDB is
+running on (if it was set to <code class="docutils literal notranslate"><span class="pre">0</span></code> (e.g. automatically assigned any
+free one). This file should be writable and readable for the user that
+runs the CouchDB service (<code class="docutils literal notranslate"><span class="pre">couchdb</span></code> by default).</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">uri_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/run/couchdb/couchdb.uri</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/users_db_security_editable">
+<span class="sig-name descname"><span class="pre">users_db_security_editable</span></span><a class="headerlink" href="#couchdb/users_db_security_editable" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.0.</span></p>
+</div>
+<p>When this configuration setting is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, reject any attempts
+to modify the <code class="docutils literal notranslate"><span class="pre">_users</span></code> database security object. Modification of this
+object is deprecated in 3.x and will be completely disallowed in CouchDB
+4.x.</p>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/users_db_suffix">
+<span class="sig-name descname"><span class="pre">users_db_suffix</span></span><a class="headerlink" href="#couchdb/users_db_suffix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the suffix (last component of a name) of the system database
+for storing CouchDB users.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">users_db_suffix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">_users</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you change the database name, do not forget to remove or clean
+up the old database, since it will no longer be protected by
+CouchDB.</p>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/util_driver_dir">
+<span class="sig-name descname"><span class="pre">util_driver_dir</span></span><a class="headerlink" href="#couchdb/util_driver_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies location of binary drivers (<cite>icu</cite>, <cite>ejson</cite>, etc.). This
+location and its contents should be readable for the user that runs the
+CouchDB service.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">util_driver_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/usr/lib/couchdb/erlang/lib/couch-1.5.0/priv/lib</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/uuid">
+<span class="sig-name descname"><span class="pre">uuid</span></span><a class="headerlink" href="#couchdb/uuid" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.</span></p>
+</div>
+<p>Unique identifier for this CouchDB server instance.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">uuid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0a959b9b8227188afc2ac26ccdf345a6</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/view_index_dir">
+<span class="sig-name descname"><span class="pre">view_index_dir</span></span><a class="headerlink" href="#couchdb/view_index_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies location of CouchDB view index files. This location should be
+writable and readable for the user that runs the CouchDB service
+(<code class="docutils literal notranslate"><span class="pre">couchdb</span></code> by default).</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">view_index_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/lib/couchdb</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="couchdb/write_xxhash_checksums">
+<span class="sig-name descname"><span class="pre">write_xxhash_checksums</span></span><a class="headerlink" href="#couchdb/write_xxhash_checksums" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.4.</span></p>
+</div>
+<p>The default value in version 3.4 is <code class="docutils literal notranslate"><span class="pre">false</span></code>. The legacy checksum
+algorithm will be used for writing couch_file blocks. During reads,
+both xxHash and the legacy checksum algorithm will be used to verify
+data integrity. In a future version of CouchDB the default value will
+become <code class="docutils literal notranslate"><span class="pre">true</span></code>. However, it would still be possible to safely
+downgrade to version 3.4, which would be able to verify both xxHash and
+legacy checksums. If CouchDB version downgrade is not a concern,
+enabling xxHash checksums can result in a measuralbe document read
+performance, especially for larger document sizes:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">write_xxhash_checksums</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="3.1. Introduction To Configuring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cluster.html" class="btn btn-neutral float-right" title="3.3. Configuring Clustering" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

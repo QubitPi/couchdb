@@ -1,0 +1,1428 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.3.2. /{db}/_all_docs &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/database/bulk-api.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.3.6. /{db}/_find" href="find.html" />
+    <link rel="prev" title="1.3.1. /{db}" href="common.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/index.html">1.2. Server</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">1.3. Databases</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common.html">1.3.1. <code class="docutils literal notranslate"><span class="pre">/{db}</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1.3.2. <code class="docutils literal notranslate"><span class="pre">/{db}/_all_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-design-docs">1.3.3. <code class="docutils literal notranslate"><span class="pre">/{db}/_design_docs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sending-multiple-queries-to-a-database">1.3.3.1. Sending multiple queries to a database</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#db-bulk-get">1.3.4. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_get</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-bulk-docs">1.3.5. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_docs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inserting-documents-in-bulk">1.3.5.1. Inserting Documents in Bulk</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updating-documents-in-bulk">1.3.5.2. Updating Documents in Bulk</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bulk-documents-transaction-semantics">1.3.5.3. Bulk Documents Transaction Semantics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bulk-document-validation-and-conflict-errors">1.3.5.4. Bulk Document Validation and Conflict Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="find.html">1.3.6. <code class="docutils literal notranslate"><span class="pre">/{db}/_find</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-index">1.3.7. <code class="docutils literal notranslate"><span class="pre">/{db}/_index</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-explain">1.3.8. <code class="docutils literal notranslate"><span class="pre">/{db}/_explain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html">1.3.9. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-shards-docid">1.3.10. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards/{docid}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-sync-shards">1.3.11. <code class="docutils literal notranslate"><span class="pre">/{db}/_sync_shards</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="changes.html">1.3.12. <code class="docutils literal notranslate"><span class="pre">/{db}/_changes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html">1.3.13. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-compact-ddoc">1.3.14. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact/{ddoc}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-ensure-full-commit">1.3.15. <code class="docutils literal notranslate"><span class="pre">/{db}/_ensure_full_commit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-view-cleanup">1.3.16. <code class="docutils literal notranslate"><span class="pre">/{db}/_view_cleanup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="security.html">1.3.17. <code class="docutils literal notranslate"><span class="pre">/{db}/_security</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html">1.3.18. <code class="docutils literal notranslate"><span class="pre">/{db}/_purge</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-purged-infos">1.3.19. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-purged-infos-limit">1.3.20. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos_limit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-missing-revs">1.3.21. <code class="docutils literal notranslate"><span class="pre">/{db}/_missing_revs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-revs-diff">1.3.22. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_diff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#db-revs-limit">1.3.23. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_limit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../document/index.html">1.4. Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ddoc/index.html">1.5. Design Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../local.html">1.7. Local (non-replicating) Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">1. </span>API Reference</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1.3. </span>Databases</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.3.2. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_all_docs</span></code></li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/database/bulk-api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="db-all-docs">
+<span id="api-db-all-docs"></span><h1><span class="section-number">1.3.2. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_all_docs</span></code><a class="headerlink" href="#db-all-docs" title="Permalink to this heading">¶</a></h1>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_all_docs">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_all_docs</span></span><a class="headerlink" href="#get--db-_all_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the built-in <cite>_all_docs</cite> <a class="reference internal" href="../../ddocs/views/index.html#views"><span class="std std-ref">view</span></a>, returning all of the
+documents in the database.  With the exception of the URL parameters
+(described below), this endpoint works identically to any other view. Refer
+to the <a class="reference internal" href="../ddoc/views.html#api-ddoc-view"><span class="std std-ref">view endpoint</span></a> documentation for a complete
+description of the available query parameters and the format of the returned
+data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Requested database not found</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_all_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 10 Aug 2013 16:22:56 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;1W2DJUZFZSZD9K78UFA3GZWB4&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;16e458537602f5ef2a710089dffd9453&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;16e458537602f5ef2a710089dffd9453&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-967a00dff5e02add41819138abb3284d&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a4c51cdfa2069f3e905c431114001aff&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a4c51cdfa2069f3e905c431114001aff&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-967a00dff5e02add41819138abb3284d&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a4c51cdfa2069f3e905c4311140034aa&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a4c51cdfa2069f3e905c4311140034aa&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5-6182c9c954200ab5e3c6bd5e76a1549f&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a4c51cdfa2069f3e905c431114003597&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a4c51cdfa2069f3e905c431114003597&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-7051cbe5c8faecd085a3fa619e6e6337&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;f4ca7773ddea715afebc4b4b15d4f0b3&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;f4ca7773ddea715afebc4b4b15d4f0b3&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-7051cbe5c8faecd085a3fa619e6e6337&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_all_docs">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_all_docs</span></span><a class="headerlink" href="#post--db-_all_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.3">POST</a> <cite>_all_docs</cite> functionality supports identical parameters and behavior
+as specified in the <a class="reference internal" href="#get--db-_all_docs" title="GET /{db}/_all_docs"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{db}/_all_docs</span></code></a> API but allows for the query string
+parameters to be supplied as keys in a JSON object in the body of the <cite>POST</cite> request.</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_all_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">70</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;keys&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;Zingylemontart&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Yogurtraita&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;total_rows&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">2666</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;rows&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;rev&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1-a3544d296de19e6f5b932ea77d886942&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Zingylemontart&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;key&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Zingylemontart&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;rev&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1-91635098bfe7d40197a1b98d7ee085fc&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Yogurtraita&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;key&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Yogurtraita&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;offset&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-design-docs">
+<span id="api-db-design-docs"></span><h1><span class="section-number">1.3.3. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_design_docs</span></code><a class="headerlink" href="#db-design-docs" title="Permalink to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_design_docs">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_design_docs</span></span><a class="headerlink" href="#get--db-_design_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a JSON structure of all of the design documents in a given
+database. The information is returned as a JSON structure containing meta
+information about the return structure, including a list of all design
+documents and basic contents, consisting the ID, revision and key. The key
+is the design document’s <code class="docutils literal notranslate"><span class="pre">_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conflicts</strong> (<em>boolean</em>) – Includes <cite>conflicts</cite> information in response.
+Ignored if <cite>include_docs</cite> isn’t <code class="docutils literal notranslate"><span class="pre">true</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>descending</strong> (<em>boolean</em>) – Return the design documents in descending by
+key order. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>endkey</strong> (<em>string</em>) – Stop returning records when the specified key is
+reached. <em>Optional</em>.</p></li>
+<li><p><strong>end_key</strong> (<em>string</em>) – Alias for <cite>endkey</cite> param.</p></li>
+<li><p><strong>endkey_docid</strong> (<em>string</em>) – Stop returning records when the specified
+design document ID is reached. <em>Optional</em>.</p></li>
+<li><p><strong>end_key_doc_id</strong> (<em>string</em>) – Alias for <cite>endkey_docid</cite> param.</p></li>
+<li><p><strong>include_docs</strong> (<em>boolean</em>) – Include the full content of the design
+documents in the return. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>inclusive_end</strong> (<em>boolean</em>) – Specifies whether the specified end key
+should be included in the result. Default is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – Return only design documents that match the specified
+key. <em>Optional</em>.</p></li>
+<li><p><strong>keys</strong> (<em>string</em>) – Return only design documents that match the specified
+keys. <em>Optional</em>.</p></li>
+<li><p><strong>limit</strong> (<em>number</em>) – Limit the number of the returned design documents to
+the specified number. <em>Optional</em>.</p></li>
+<li><p><strong>skip</strong> (<em>number</em>) – Skip this number of records before starting to return
+the results. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>startkey</strong> (<em>string</em>) – Return records starting with the specified key.
+<em>Optional</em>.</p></li>
+<li><p><strong>start_key</strong> (<em>string</em>) – Alias for <cite>startkey</cite> param.</p></li>
+<li><p><strong>startkey_docid</strong> (<em>string</em>) – Return records starting with the specified
+design document ID. <em>Optional</em>.</p></li>
+<li><p><strong>start_key_doc_id</strong> (<em>string</em>) – Alias for <cite>startkey_docid</cite> param.</p></li>
+<li><p><strong>update_seq</strong> (<em>boolean</em>) – Response includes an <code class="docutils literal notranslate"><span class="pre">update_seq</span></code> value
+indicating which sequence id of the underlying database the view
+reflects. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a></span> – Response signature</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> (<em>number</em>) – Offset where the design document list started</p></li>
+<li><p><strong>rows</strong> (<em>array</em>) – Array of view row objects. By default the information
+returned contains only the design document ID and revision.</p></li>
+<li><p><strong>total_rows</strong> (<em>number</em>) – Number of design documents in the database. Note
+that this is not the number of rows returned in the actual query.</p></li>
+<li><p><strong>update_seq</strong> (<em>number</em>) – Current update sequence for the database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Requested database not found</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_design_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 23 Dec 2017 16:22:56 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;1W2DJUZFZSZD9K78UFA3GZWB4&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc01&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc01&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-7407569d54af5bc94c266e70cbf8a180&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc02&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc02&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-d942f0ce01647aa0f46518b213b5628e&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc03&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc03&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-721fead6e6c8d811a225d5a62d08dfd0&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc04&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc04&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-32c76b46ca61351c75a84fbcbceece2f&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc05&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc05&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-af856babf9cf746b48ae999645f9541e&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_design_docs">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_design_docs</span></span><a class="headerlink" href="#post--db-_design_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.3">POST</a> <cite>_design_docs</cite> functionality supports identical parameters and behavior
+as specified in the <a class="reference internal" href="#get--db-_design_docs" title="GET /{db}/_design_docs"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{db}/_design_docs</span></code></a> API but allows for the query string
+parameters to be supplied as keys in a JSON object in the body of the <cite>POST</cite> request.</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_design_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">70</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;keys&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;_design/ddoc02&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;_design/ddoc05&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The returned JSON is the all documents structure, but with only the
+selected keys in the output:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;total_rows&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;rows&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;rev&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1-d942f0ce01647aa0f46518b213b5628e&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc02&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;key&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc02&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;rev&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1-af856babf9cf746b48ae999645f9541e&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc05&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;key&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_design/ddoc05&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;offset&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="sending-multiple-queries-to-a-database">
+<h2><span class="section-number">1.3.3.1. </span>Sending multiple queries to a database<a class="headerlink" href="#sending-multiple-queries-to-a-database" title="Permalink to this heading">¶</a></h2>
+<section id="db-all-docs-queries">
+<span id="api-db-all-docs-queries"></span><h3><span class="section-number">1.3.3.1.1. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_all_docs/queries</span></code><a class="headerlink" href="#db-all-docs-queries" title="Permalink to this heading">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_all_docs-queries">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_all_docs/queries</span></span><a class="headerlink" href="#post--db-_all_docs-queries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes multiple specified built-in view queries of all documents in this
+database. This enables you to request multiple queries in a single
+request, in place of multiple <a class="reference internal" href="#post--db-_all_docs" title="POST /{db}/_all_docs"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/{db}/_all_docs</span></code></a> requests.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – An array of query objects with fields for the
+parameters of each individual view query to be executed. The field names
+and their meaning are the same as the query parameters of a
+regular <a class="reference internal" href="#api-db-all-docs"><span class="std std-ref">_all_docs request</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a></span> – Response signature</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.1">Transfer-Encoding</a></span> – <code class="docutils literal notranslate"><span class="pre">chunked</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results</strong> (<em>array</em>) – An array of result objects - one for each query. Each
+result object contains the same fields as the response to a regular
+<a class="reference internal" href="#api-db-all-docs"><span class="std std-ref">_all_docs request</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid request</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Read permission required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database is missing</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Query execution error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_all_docs/queries</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;queries&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;keys&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;meatballs&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;spaghetti&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;skip&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Wed, 20 Dec 2017 11:17:07 GMT</span>
+<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;1H8RGBCK3ABY6ACDM7ZSC30QK&quot;</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;meatballs&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;meatballs&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;spaghetti&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;spaghetti&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;offset&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;rows&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;id&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Adukiandorangecasserole-microwave&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Aduki and orange casserole - microwave&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;value&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                        </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;Aduki and orange casserole - microwave&quot;</span>
+<span class="w">                    </span><span class="p">]</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;id&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Aioli-garlicmayonnaise&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Aioli - garlic mayonnaise&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;value&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                        </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;Aioli - garlic mayonnaise&quot;</span>
+<span class="w">                    </span><span class="p">]</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;id&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alabamapeanutchicken&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alabama peanut chicken&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;value&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                        </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;Alabama peanut chicken&quot;</span>
+<span class="w">                    </span><span class="p">]</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;total_rows&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2667</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The multiple queries are also supported in
+<a class="reference internal" href="../local.html#api-db-local-docs-queries"><span class="std std-ref">/{db}/_local_docs/queries</span></a> and
+<a class="reference internal" href="#api-db-design-docs-queries"><span class="std std-ref">/{db}/_design_docs/queries</span></a>
+(similar to <a class="reference internal" href="#api-db-all-docs-queries"><span class="std std-ref">/{db}/_all_docs/queries</span></a>).</p>
+</div>
+</section>
+<section id="db-design-docs-queries">
+<span id="api-db-design-docs-queries"></span><h3><span class="section-number">1.3.3.1.2. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_design_docs/queries</span></code><a class="headerlink" href="#db-design-docs-queries" title="Permalink to this heading">¶</a></h3>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_design_docs-queries">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_design_docs/queries</span></span><a class="headerlink" href="#post--db-_design_docs-queries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Querying with specified <code class="docutils literal notranslate"><span class="pre">keys</span></code> will return design documents only.
+You can also combine <code class="docutils literal notranslate"><span class="pre">keys</span></code> with other query parameters,
+such as <code class="docutils literal notranslate"><span class="pre">limit</span></code> and <code class="docutils literal notranslate"><span class="pre">skip</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – An array of query objects with fields for the
+parameters of each individual view query to be executed.
+The field names and their meaning are the same as the query
+parameters of a regular
+<a class="reference internal" href="#api-db-design-docs"><span class="std std-ref">_design_docs request</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.1">Transfer-Encoding</a></span> – <code class="docutils literal notranslate"><span class="pre">chunked</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results</strong> (<em>array</em>) – An array of result objects - one for each query. Each
+result object contains the same fields as the response to a regular
+<a class="reference internal" href="#api-db-design-docs"><span class="std std-ref">_design_docs request</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid request</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Read permission required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified database is missing</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Query execution error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_design_docs/queries</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;queries&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;keys&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;_design/recipe&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;_design/not-exist&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;spaghetti&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Thu, 20 Jul 2023 20:06:44 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;total_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/recipe&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/recipe&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-ad0e29fe6b473658514742a7c2317766&quot;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_design/not-exist&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;not_found&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>/{db}/_design_docs/queries with keys will only return design documents,
+or <code class="docutils literal notranslate"><span class="pre">&quot;error&quot;:</span> <span class="pre">&quot;not_found&quot;</span></code> if the design document doesn’t exist. If
+<code class="docutils literal notranslate"><span class="pre">key</span></code> is not a design document id, it will not be included in the
+response.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="db-bulk-get">
+<span id="api-db-bulk-get"></span><h1><span class="section-number">1.3.4. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_get</span></code><a class="headerlink" href="#db-bulk-get" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_bulk_get">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_bulk_get</span></span><a class="headerlink" href="#post--db-_bulk_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method can be called to query several documents in bulk. It is well
+suited for fetching a specific revision of documents, as replicators do for
+example, or for getting revision history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">multipart/related</em></p></li>
+<li><p><em class="mimetype">multipart/mixed</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>revs</strong> (<em>boolean</em>) – Give the revisions history</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>docs</strong> (<em>array</em>) – List of document objects, with <code class="docutils literal notranslate"><span class="pre">id</span></code>, and optionally
+<code class="docutils literal notranslate"><span class="pre">rev</span></code> and <code class="docutils literal notranslate"><span class="pre">atts_since</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>results</strong> (<em>object</em>) – an array of results for each requested document/rev
+pair. <code class="docutils literal notranslate"><span class="pre">id</span></code> key lists the requested document ID, <code class="docutils literal notranslate"><span class="pre">docs</span></code> contains a
+single-item array of objects, each of which has either an <code class="docutils literal notranslate"><span class="pre">error</span></code> key and
+value describing the error, or <code class="docutils literal notranslate"><span class="pre">ok</span></code> key and associated value of the
+requested document, with the additional <code class="docutils literal notranslate"><span class="pre">_revisions</span></code> property that lists
+the parent revisions if <code class="docutils literal notranslate"><span class="pre">revs=true</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – The request provided invalid JSON data or invalid query parameter</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Read permission required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Invalid database name</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">415 Unsupported Media Type</a></span> – Bad <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> value</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_bulk_get</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span><span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;foo&quot;</span>
+<span class="w">            </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4-753875d51501a6b1883a9d62b4d33f91&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;foo&quot;</span>
+<span class="w">            </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-4a7e4ae49c4366eaed8edeaea8f784ad&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 19 Mar 2018 15:27:34 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4-753875d51501a6b1883a9d62b4d33f91&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;this is foo&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_revisions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">&quot;ids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;753875d51501a6b1883a9d62b4d33f91&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;efc54218773c6acd910e2e97fea2a608&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;2ee767305024673cfb3f5af037cd2729&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;4a7e4ae49c4366eaed8edeaea8f784ad&quot;</span>
+<span class="w">              </span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-4a7e4ae49c4366eaed8edeaea8f784ad&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;this is the first revision of foo&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_revisions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">&quot;ids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;4a7e4ae49c4366eaed8edeaea8f784ad&quot;</span>
+<span class="w">              </span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-9b71d36dfdd9b4815388eb91cc8fb61d&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;baz&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_revisions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">&quot;ids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;9b71d36dfdd9b4815388eb91cc8fb61d&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;309651b95df56d52658650fb64257b97&quot;</span>
+<span class="w">              </span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;undefined&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;not_found&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;missing&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Example response with a conflicted document:</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_bulk_get</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Type</span><span class="o">:</span><span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 19 Mar 2018 15:27:34 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-23202479633c2b380f79507a776743d5&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;a&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-967a00dff5e02add41819138abb3284d&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-bulk-docs">
+<span id="api-db-bulk-docs"></span><h1><span class="section-number">1.3.5. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_docs</span></code><a class="headerlink" href="#db-bulk-docs" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_bulk_docs">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_bulk_docs</span></span><a class="headerlink" href="#post--db-_bulk_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bulk document API allows you to create and update multiple documents
+at the same time within a single request. The basic operation is similar
+to creating or updating a single document, except that you batch the
+document structure and information.</p>
+<p>When creating new documents the document ID (<code class="docutils literal notranslate"><span class="pre">_id</span></code>) is optional.</p>
+<p>For updating existing documents, you must provide the document ID, revision
+information (<code class="docutils literal notranslate"><span class="pre">_rev</span></code>), and new document values.</p>
+<p>In case of batch deleting documents all fields as document ID, revision
+information and deletion status (<code class="docutils literal notranslate"><span class="pre">_deleted</span></code>) are required.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>docs</strong> (<em>array</em>) – List of documents objects</p></li>
+<li><p><strong>new_edits</strong> (<em>boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">false</span></code>, prevents the database from
+assigning them new revision IDs. Default is <code class="docutils literal notranslate"><span class="pre">true</span></code>. <em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Array of Objects<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>string</em>) – Document ID</p></li>
+<li><p><strong>rev</strong> (<em>string</em>) – New document revision token. Available
+if document has saved without errors. <em>Optional</em></p></li>
+<li><p><strong>error</strong> (<em>string</em>) – Error type. <em>Optional</em></p></li>
+<li><p><strong>reason</strong> (<em>string</em>) – Error reason. <em>Optional</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a></span> – Document(s) have been created or updated</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – The request provided invalid JSON data</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Requested database not found</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_bulk_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">109</span>
+<span class="na">Content-Type</span><span class="o">:</span><span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-0786321986194c92dd3b57dfbfc741ce&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_deleted&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">144</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 00:15:05 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="s2">&quot; 1-967a00dff5e02add41819138abb3284d&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3-f9c62b2169d0999103e9f41949090807&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="inserting-documents-in-bulk">
+<h2><span class="section-number">1.3.5.1. </span>Inserting Documents in Bulk<a class="headerlink" href="#inserting-documents-in-bulk" title="Permalink to this heading">¶</a></h2>
+<p>Each time a document is stored or updated in CouchDB, the internal B-tree
+is updated. Bulk insertion provides efficiency gains in both storage space,
+and time, by consolidating many of the updates to intermediate B-tree nodes.</p>
+<p>It is not intended as a way to perform <code class="docutils literal notranslate"><span class="pre">ACID</span></code>-like transactions in CouchDB,
+the only transaction boundary within CouchDB is a single update to a single
+database. The constraints are detailed in <a class="reference internal" href="#api-db-bulk-docs-semantics"><span class="std std-ref">Bulk Documents Transaction Semantics</span></a>.</p>
+<p>To insert documents in bulk into a database you need to supply a JSON
+structure with the array of documents that you want to add to the database.
+You can either include a document ID, or allow the document ID to be
+automatically generated.</p>
+<p>For example, the following update inserts three new documents, two with the
+supplied document IDs, and one which will have a document ID generated:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/source/_bulk_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">323</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;servings&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Delicious with freshly baked bread&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;servings&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Serve with a whole meal scone topping&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;servings&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hand-made dumplings make a great accompaniment&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BeefStew&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The return type from a bulk insertion will be <a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a>,
+with the content of the returned structure indicating specific success
+or otherwise messages on a per-document basis.</p>
+<p>The return structure from the example above contains a list of the
+documents created, here with the combination and their revision IDs:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">215</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 26 Oct 2013 00:10:39 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP)</span>
+
+<span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-6a466d5dfda05e613ba97bd737829d67&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-648f1b989d52b8e43f05aa877092cc7c&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00a271787f89c0ef2e10e88a0c0003f0&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-e4602845fc4c99674f50b1d5a804fdfa&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>For details of the semantic content and structure of the returned JSON see
+<a class="reference internal" href="#api-db-bulk-docs-semantics"><span class="std std-ref">Bulk Documents Transaction Semantics</span></a>. Conflicts and validation errors when
+updating documents in bulk must be handled separately; see
+<a class="reference internal" href="#api-db-bulk-docs-validation"><span class="std std-ref">Bulk Document Validation and Conflict Errors</span></a>.</p>
+</section>
+<section id="updating-documents-in-bulk">
+<h2><span class="section-number">1.3.5.2. </span>Updating Documents in Bulk<a class="headerlink" href="#updating-documents-in-bulk" title="Permalink to this heading">¶</a></h2>
+<p>The bulk document update procedure is similar to the insertion
+procedure, except that you must specify the document ID and current
+revision for every document in the bulk update JSON string.</p>
+<p>For example, you could send the following request:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/recipes/_bulk_docs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">464</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-6a466d5dfda05e613ba97bd737829d67&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;servings&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Delicious with freshly baked bread&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-648f1b989d52b8e43f05aa877092cc7c&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;servings&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Serve with a whole meal scone topping&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BeefStew&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;_rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-e4602845fc4c99674f50b1d5a804fdfa&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;servings&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hand-made dumplings make a great accompaniment&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BeefStew&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The return structure is the JSON of the updated documents, with the new
+revision and ID information:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">215</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 26 Oct 2013 00:10:39 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP)</span>
+
+<span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-2bff94179917f1dec7cd7f0209066fb8&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-6a7aae7ac481aa98a2042718d09843c4&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BeefStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rev&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2-9801936a42f06a16f16c30027980d96f&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>You can optionally delete documents during a bulk update by adding the
+<code class="docutils literal notranslate"><span class="pre">_deleted</span></code> field with a value of <code class="docutils literal notranslate"><span class="pre">true</span></code> to each document ID/revision
+combination within the submitted JSON structure.</p>
+<p>The return type from a bulk insertion will be <a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a>, with the
+content of the returned structure indicating specific success or otherwise
+messages on a per-document basis.</p>
+<p>The content and structure of the returned JSON will depend on the transaction
+semantics being used for the bulk update; see <a class="reference internal" href="#api-db-bulk-docs-semantics"><span class="std std-ref">Bulk Documents Transaction Semantics</span></a>
+for more information. Conflicts and validation errors when updating documents
+in bulk must be handled separately; see <a class="reference internal" href="#api-db-bulk-docs-validation"><span class="std std-ref">Bulk Document Validation and Conflict Errors</span></a>.</p>
+</section>
+<section id="bulk-documents-transaction-semantics">
+<span id="api-db-bulk-docs-semantics"></span><h2><span class="section-number">1.3.5.3. </span>Bulk Documents Transaction Semantics<a class="headerlink" href="#bulk-documents-transaction-semantics" title="Permalink to this heading">¶</a></h2>
+<p>Bulk document operations are <strong>non-atomic</strong>. This means that CouchDB does not
+guarantee that any individual document included in the bulk update (or insert)
+will be saved when you send the request. The response will contain the list of
+documents successfully inserted or updated during the process. In the event of
+a crash, some of the documents may have been successfully saved, while others
+lost.</p>
+<p>The response structure will indicate whether the document was updated by
+supplying the new <code class="docutils literal notranslate"><span class="pre">_rev</span></code> parameter indicating a new document revision was
+created. If the update failed, you will get an <code class="docutils literal notranslate"><span class="pre">error</span></code> of type <code class="docutils literal notranslate"><span class="pre">conflict</span></code>.
+For example:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;FishStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;error&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;conflict&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;reason&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Document update conflict.&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;error&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;conflict&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;reason&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Document update conflict.&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;id&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;BeefStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;error&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;conflict&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;reason&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Document update conflict.&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In this case no new revision has been created and you will need to submit the
+document update, with the correct revision tag, to update the document.</p>
+<p>Replication of documents is independent of the type of insert or update.
+The documents and revisions created during a bulk insert or update are
+replicated in the same way as any other document.</p>
+</section>
+<section id="bulk-document-validation-and-conflict-errors">
+<span id="api-db-bulk-docs-validation"></span><h2><span class="section-number">1.3.5.4. </span>Bulk Document Validation and Conflict Errors<a class="headerlink" href="#bulk-document-validation-and-conflict-errors" title="Permalink to this heading">¶</a></h2>
+<p>The JSON returned by the <code class="docutils literal notranslate"><span class="pre">_bulk_docs</span></code> operation consists of an array
+of JSON structures, one for each document in the original submission.
+The returned JSON structure should be examined to ensure that all of the
+documents submitted in the original request were successfully added to
+the database.</p>
+<p>When a document (or document revision) is not correctly committed to the
+database because of an error, you should check the <code class="docutils literal notranslate"><span class="pre">error</span></code> field to
+determine error type and course of action. Errors will be one of the
+following type:</p>
+<ul>
+<li><p><strong>conflict</strong></p>
+<p>The document as submitted is in conflict. The new revision will not have been
+created and you will need to re-submit the document to the database.</p>
+<p>Conflict resolution of documents added using the bulk docs interface
+is identical to the resolution procedures used when resolving
+conflict errors during replication.</p>
+</li>
+<li><p><strong>forbidden</strong></p>
+<p>Entries with this error type indicate that the validation routine
+applied to the document during submission has returned an error.</p>
+<p>For example, if your <a class="reference internal" href="../../ddocs/ddocs.html#vdufun"><span class="std std-ref">validation routine</span></a> includes
+the following:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span><span class="p">({</span><span class="nx">forbidden</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;invalid recipe ingredient&#39;</span><span class="p">});</span>
+</pre></div>
+</div>
+<p>The error response returned will be:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">80</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 26 Oct 2013 00:05:17 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang OTP)</span>
+
+<span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LambStew&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;forbidden&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;invalid recipe ingredient&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="common.html" class="btn btn-neutral float-left" title="1.3.1. /{db}" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="find.html" class="btn btn-neutral float-right" title="1.3.6. /{db}/_find" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

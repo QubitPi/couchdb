@@ -1,0 +1,365 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.18. 0.10.x Branch &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/whatsnew/0.10.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.19. 0.9.x Branch" href="0.9.html" />
+    <link rel="prev" title="1.17. 0.11.x Branch" href="0.11.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Release Notes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="3.3.html">1.1. 3.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2.html">1.2. 3.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.1.html">1.3. 3.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.0.html">1.4. 3.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3.html">1.5. 2.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2.html">1.6. 2.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.1.html">1.7. 2.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.0.html">1.8. 2.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.7.html">1.9. 1.7.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.6.html">1.10. 1.6.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.5.html">1.11. 1.5.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4.html">1.12. 1.4.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3.html">1.13. 1.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2.html">1.14. 1.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.1.html">1.15. 1.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.0.html">1.16. 1.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.11.html">1.17. 0.11.x Branch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.18. 0.10.x Branch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-notes">1.18.1. Upgrade Notes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modular-configuration-directories">1.18.1.1. Modular Configuration Directories</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#show-and-list-api-change">1.18.1.2. Show and List API change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stricter-enforcing-of-reduciness-in-reduce-functions">1.18.1.3. Stricter enforcing of reduciness in reduce-functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#view-query-reduce-parameter-strictness">1.18.1.4. View query reduce parameter strictness</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-0-10-2">1.18.2. Version 0.10.2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#build-and-system-integration">1.18.2.1. Build and System Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#security">1.18.2.2. Security</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replicator">1.18.2.3. Replicator</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-0-10-1">1.18.3. Version 0.10.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">1.18.3.1. Build and System Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.18.3.2. Replicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#query-server">1.18.3.3. Query Server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stats">1.18.3.4. Stats</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-0-10-0">1.18.4. Version 0.10.0</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1.18.4.1. Build and System Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-interface">1.18.4.2. HTTP Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#storage-format">1.18.4.3. Storage Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#view-server">1.18.4.4. View Server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="0.9.html">1.19. 0.9.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.8.html">1.20. 0.8.x Branch</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Release Notes</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.18. </span>0.10.x Branch</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/whatsnew/0.10.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x-branch">
+<span id="release-0-10-x"></span><h1><span class="section-number">1.18. </span>0.10.x Branch<a class="headerlink" href="#x-branch" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#upgrade-notes" id="id4">Upgrade Notes</a></p></li>
+<li><p><a class="reference internal" href="#version-0-10-2" id="id5">Version 0.10.2</a></p></li>
+<li><p><a class="reference internal" href="#version-0-10-1" id="id6">Version 0.10.1</a></p></li>
+<li><p><a class="reference internal" href="#version-0-10-0" id="id7">Version 0.10.0</a></p></li>
+</ul>
+</nav>
+<section id="upgrade-notes">
+<span id="release-0-10-x-upgrade"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.18.1. </span>Upgrade Notes</a><a class="headerlink" href="#upgrade-notes" title="Permalink to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a class="reference internal" href="#release-0-10-2"><span class="std std-ref">Version 0.10.2</span></a> contains important security fixes. Previous <cite>0.10.x</cite>
+releases are not recommended for regular usage.</p>
+</div>
+<section id="modular-configuration-directories">
+<h3><span class="section-number">1.18.1.1. </span>Modular Configuration Directories<a class="headerlink" href="#modular-configuration-directories" title="Permalink to this heading">¶</a></h3>
+<p>CouchDB now loads configuration from the following places (<a class="reference external" href="http://linux.die.net/man/7/glob">glob(7)</a> syntax)
+in order:</p>
+<ul class="simple">
+<li><p>PREFIX/default.ini</p></li>
+<li><p>PREFIX/default.d/*</p></li>
+<li><p>PREFIX/local.ini</p></li>
+<li><p>PREFIX/local.d/*</p></li>
+</ul>
+<p>The configuration options for <cite>couchdb</cite> script have changed to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">a</span> <span class="n">FILE</span>     <span class="n">add</span> <span class="n">configuration</span> <span class="n">FILE</span> <span class="n">to</span> <span class="n">chain</span>
+<span class="o">-</span><span class="n">A</span> <span class="n">DIR</span>      <span class="n">add</span> <span class="n">configuration</span> <span class="n">DIR</span> <span class="n">to</span> <span class="n">chain</span>
+<span class="o">-</span><span class="n">n</span>          <span class="n">reset</span> <span class="n">configuration</span> <span class="n">file</span> <span class="n">chain</span> <span class="p">(</span><span class="n">including</span> <span class="n">system</span> <span class="n">default</span><span class="p">)</span>
+<span class="o">-</span><span class="n">c</span>          <span class="nb">print</span> <span class="n">configuration</span> <span class="n">file</span> <span class="n">chain</span> <span class="ow">and</span> <span class="n">exit</span>
+</pre></div>
+</div>
+</section>
+<section id="show-and-list-api-change">
+<h3><span class="section-number">1.18.1.2. </span>Show and List API change<a class="headerlink" href="#show-and-list-api-change" title="Permalink to this heading">¶</a></h3>
+<p>Show and List functions must have a new structure in 0.10.
+See <a class="reference external" href="http://wiki.apache.org/couchdb/Formatting_with_Show_and_List">Formatting_with_Show_and_List</a> for details.</p>
+</section>
+<section id="stricter-enforcing-of-reduciness-in-reduce-functions">
+<h3><span class="section-number">1.18.1.3. </span>Stricter enforcing of reduciness in reduce-functions<a class="headerlink" href="#stricter-enforcing-of-reduciness-in-reduce-functions" title="Permalink to this heading">¶</a></h3>
+<p>Reduce functions are now required to reduce the number of values for a key.</p>
+</section>
+<section id="view-query-reduce-parameter-strictness">
+<h3><span class="section-number">1.18.1.4. </span>View query reduce parameter strictness<a class="headerlink" href="#view-query-reduce-parameter-strictness" title="Permalink to this heading">¶</a></h3>
+<p>CouchDB now considers the parameter <code class="docutils literal notranslate"><span class="pre">reduce=false</span></code> to be an error for queries
+of map-only views, and responds with status code 400.</p>
+</section>
+</section>
+<section id="version-0-10-2">
+<span id="release-0-10-2"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.18.2. </span>Version 0.10.2</a><a class="headerlink" href="#version-0-10-2" title="Permalink to this heading">¶</a></h2>
+<section id="build-and-system-integration">
+<h3><span class="section-number">1.18.2.1. </span>Build and System Integration<a class="headerlink" href="#build-and-system-integration" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed distribution preparation for building on Mac OS X.</p></li>
+</ul>
+</section>
+<section id="security">
+<h3><span class="section-number">1.18.2.2. </span>Security<a class="headerlink" href="#security" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed <a class="reference internal" href="../cve/2010-0009.html#cve-2010-0009"><span class="std std-ref">CVE-2010-0009: Apache CouchDB Timing Attack Vulnerability</span></a></p></li>
+</ul>
+</section>
+<section id="replicator">
+<h3><span class="section-number">1.18.2.3. </span>Replicator<a class="headerlink" href="#replicator" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Avoid leaking file descriptors on automatic replication restarts.</p></li>
+</ul>
+</section>
+</section>
+<section id="version-0-10-1">
+<span id="release-0-10-1"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.18.3. </span>Version 0.10.1</a><a class="headerlink" href="#version-0-10-1" title="Permalink to this heading">¶</a></h2>
+<section id="id1">
+<h3><span class="section-number">1.18.3.1. </span>Build and System Integration<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Test suite now works with the distcheck target.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3><span class="section-number">1.18.3.2. </span>Replicator<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Stability enhancements regarding redirects, timeouts, OAuth.</p></li>
+</ul>
+</section>
+<section id="query-server">
+<h3><span class="section-number">1.18.3.3. </span>Query Server<a class="headerlink" href="#query-server" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Avoid process leaks</p></li>
+<li><p>Allow list and view to span languages</p></li>
+</ul>
+</section>
+<section id="stats">
+<h3><span class="section-number">1.18.3.4. </span>Stats<a class="headerlink" href="#stats" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Eliminate new process flood on system wake</p></li>
+</ul>
+</section>
+</section>
+<section id="version-0-10-0">
+<span id="release-0-10-0"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">1.18.4. </span>Version 0.10.0</a><a class="headerlink" href="#version-0-10-0" title="Permalink to this heading">¶</a></h2>
+<section id="id3">
+<h3><span class="section-number">1.18.4.1. </span>Build and System Integration<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Changed <cite>couchdb</cite> script configuration options.</p></li>
+<li><p>Added default.d and local.d configuration directories to load sequence.</p></li>
+</ul>
+</section>
+<section id="http-interface">
+<h3><span class="section-number">1.18.4.2. </span>HTTP Interface<a class="headerlink" href="#http-interface" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added optional cookie-based authentication handler.</p></li>
+<li><p>Added optional two-legged OAuth authentication handler.</p></li>
+</ul>
+</section>
+<section id="storage-format">
+<h3><span class="section-number">1.18.4.3. </span>Storage Format<a class="headerlink" href="#storage-format" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Add move headers with checksums to the end of database files for extra robust
+storage and faster storage.</p></li>
+</ul>
+</section>
+<section id="view-server">
+<h3><span class="section-number">1.18.4.4. </span>View Server<a class="headerlink" href="#view-server" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added native Erlang views for high-performance applications.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="0.11.html" class="btn btn-neutral float-left" title="1.17. 0.11.x Branch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="0.9.html" class="btn btn-neutral float-right" title="1.19. 0.9.x Branch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

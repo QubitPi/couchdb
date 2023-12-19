@@ -1,0 +1,875 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.7. The Core API &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/intro/api.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Replication" href="../replication/index.html" />
+    <link rel="prev" title="1.6. Getting Started" href="tour.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Introduction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">1.1. Technical Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="why.html">1.2. Why CouchDB?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="consistency.html">1.3. Eventual Consistency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="curl.html">1.4. cURL: Your Command Line Friend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">1.5. Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tour.html">1.6. Getting Started</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.7. The Core API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#server">1.7.1. Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#databases">1.7.2. Databases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documents">1.7.3. Documents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#revisions">1.7.3.1. Revisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#documents-in-detail">1.7.3.2. Documents in Detail</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attachments">1.7.3.3. Attachments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#replication">1.7.4. Replication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapping-up">1.7.5. Wrapping Up</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Introduction</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.7. </span>The Core API</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/intro/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-core-api">
+<span id="intro-api"></span><h1><span class="section-number">1.7. </span>The Core API<a class="headerlink" href="#the-core-api" title="Permalink to this heading">¶</a></h1>
+<p>This document explores the CouchDB in minute detail. It shows all the
+nitty-gritty and clever bits. We show you best practices and guide you around
+common pitfalls.</p>
+<p>We start out by revisiting the basic operations we ran in the previous document
+<a class="reference internal" href="tour.html#intro-tour"><span class="std std-ref">Getting Started</span></a>, looking behind the scenes. We also show what Fauxton needs to
+do behind its user interface to give us the nice features we saw earlier.</p>
+<p>This document is both an introduction to the core CouchDB API as well as a
+reference. If you can’t remember how to run a particular request or why some
+parameters are needed, you can always come back here and look things up (we
+are probably the heaviest users of this document).</p>
+<p>While explaining the API bits and pieces, we sometimes need to take a larger
+detour to explain the reasoning for a particular request. This is a good
+opportunity for us to tell you why CouchDB works the way it does.</p>
+<p>The API can be subdivided into the following sections. We’ll explore them
+individually:</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#server" id="id1">Server</a></p></li>
+<li><p><a class="reference internal" href="#databases" id="id2">Databases</a></p></li>
+<li><p><a class="reference internal" href="#documents" id="id3">Documents</a></p></li>
+<li><p><a class="reference internal" href="#replication" id="id4">Replication</a></p></li>
+<li><p><a class="reference internal" href="#wrapping-up" id="id5">Wrapping Up</a></p></li>
+</ul>
+</nav>
+<section id="server">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">1.7.1. </span>Server</a><a class="headerlink" href="#server" title="Permalink to this heading">¶</a></h2>
+<p>This one is basic and simple. It can serve as a sanity check to see if
+CouchDB is running at all. It can also act as a safety guard for libraries
+that require a certain version of CouchDB. We’re using the <a class="reference external" href="http://curl.haxx.se/">curl</a> utility
+again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>CouchDB replies, all excited to get going:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="s2">&quot;couchdb&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Welcome&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;version&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3.0.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;git_sha&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;83bdcf693&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;uuid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;56f16e7c93ff4a2dc20eb6acc7000b71&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;features&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;access-ready&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;partitioned&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;pluggable-storage-engines&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;reshard&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;scheduler&quot;</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="s2">&quot;vendor&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;The Apache Software Foundation&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You get back a JSON string, that, if parsed into a native object or data
+structure of your programming language, gives you access to the welcome
+string and version information.</p>
+<p>This is not terribly useful, but it illustrates nicely the way CouchDB
+behaves. You send an HTTP request and you receive a JSON string in the HTTP
+response as a result.</p>
+</section>
+<section id="databases">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">1.7.2. </span>Databases</a><a class="headerlink" href="#databases" title="Permalink to this heading">¶</a></h2>
+<p>Now let’s do something a little more useful: <em>create databases</em>.
+For the strict, CouchDB is a <em>database management system</em> (DMS). That means it
+can hold multiple databases. A database is a bucket that holds “related data”.
+We’ll explore later what that means exactly. In practice, the terminology is
+overlapping – often people refer to a DMS as “a database” and also a database
+within the DMS as “a database.” We might follow that slight oddity, so don’t
+get confused by it. In general, it should be clear from the context if we are
+talking about the whole of CouchDB or a single database within CouchDB.</p>
+<p>Now let’s make one! We want to store our favorite music albums,
+and we creatively give our database the name albums. Note that we’re now
+using the <code class="docutils literal notranslate"><span class="pre">-X</span></code> option again to tell curl to send a <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.4">PUT</a> request
+instead of the default <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.1">GET</a> request:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span>
+</pre></div>
+</div>
+<p>CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>That’s it. You created a database and CouchDB told you that all went well.
+What happens if you try to create a database that already exists? Let’s try
+to create that database again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span>
+</pre></div>
+</div>
+<p>CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="s2">&quot;file_exists&quot;</span><span class="p">,</span><span class="s2">&quot;reason&quot;</span><span class="o">:</span><span class="s2">&quot;The database could not be created, the file already exists.&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We get back an error. This is pretty convenient. We also learn a little bit
+about how CouchDB works. CouchDB stores each database in a single file.
+Very simple.</p>
+<p>Let’s create another database, this time with curl’s <code class="docutils literal notranslate"><span class="pre">-v</span></code> (for “verbose”)
+option. The verbose option tells curl to show us not only the essentials –
+the HTTP response body – but all the underlying request and response details:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">vX</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">-</span><span class="n">backup</span>
+</pre></div>
+</div>
+<p>curl elaborates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">About</span> <span class="n">to</span> <span class="n">connect</span><span class="p">()</span> <span class="n">to</span> <span class="mf">127.0.0.1</span> <span class="n">port</span> <span class="mi">5984</span> <span class="p">(</span><span class="c1">#0)</span>
+<span class="o">*</span>   <span class="n">Trying</span> <span class="mf">127.0.0.1</span><span class="o">...</span> <span class="n">connected</span>
+<span class="o">*</span> <span class="n">Connected</span> <span class="n">to</span> <span class="mf">127.0.0.1</span> <span class="p">(</span><span class="mf">127.0.0.1</span><span class="p">)</span> <span class="n">port</span> <span class="mi">5984</span> <span class="p">(</span><span class="c1">#0)</span>
+<span class="o">&gt;</span> <span class="n">PUT</span> <span class="o">/</span><span class="n">albums</span><span class="o">-</span><span class="n">backup</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span>
+<span class="o">&gt;</span> <span class="n">User</span><span class="o">-</span><span class="n">Agent</span><span class="p">:</span> <span class="n">curl</span><span class="o">/</span><span class="mf">7.16.3</span> <span class="p">(</span><span class="n">powerpc</span><span class="o">-</span><span class="n">apple</span><span class="o">-</span><span class="n">darwin9</span><span class="mf">.0</span><span class="p">)</span> <span class="n">libcurl</span><span class="o">/</span><span class="mf">7.16.3</span> <span class="n">OpenSSL</span><span class="o">/</span><span class="mf">0.9.7</span><span class="n">l</span> <span class="n">zlib</span><span class="o">/</span><span class="mf">1.2.3</span>
+<span class="o">&gt;</span> <span class="n">Host</span><span class="p">:</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span>
+<span class="o">&gt;</span> <span class="n">Accept</span><span class="p">:</span> <span class="o">*/*</span>
+<span class="o">&gt;</span>
+<span class="o">&lt;</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">201</span> <span class="n">Created</span>
+<span class="o">&lt;</span> <span class="n">Server</span><span class="p">:</span> <span class="n">CouchDB</span> <span class="p">(</span><span class="n">Erlang</span><span class="o">/</span><span class="n">OTP</span><span class="p">)</span>
+<span class="o">&lt;</span> <span class="n">Date</span><span class="p">:</span> <span class="n">Sun</span><span class="p">,</span> <span class="mi">05</span> <span class="n">Jul</span> <span class="mi">2009</span> <span class="mi">22</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">28</span> <span class="n">GMT</span>
+<span class="o">&lt;</span> <span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">text</span><span class="o">/</span><span class="n">plain</span><span class="p">;</span><span class="n">charset</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
+<span class="o">&lt;</span> <span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">12</span>
+<span class="o">&lt;</span> <span class="n">Cache</span><span class="o">-</span><span class="n">Control</span><span class="p">:</span> <span class="n">must</span><span class="o">-</span><span class="n">revalidate</span>
+<span class="o">&lt;</span>
+<span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">}</span>
+<span class="o">*</span> <span class="n">Connection</span> <span class="c1">#0 to host 127.0.0.1 left intact</span>
+<span class="o">*</span> <span class="n">Closing</span> <span class="n">connection</span> <span class="c1">#0</span>
+</pre></div>
+</div>
+<p>What a mouthful. Let’s step through this line by line to understand what’s
+going on and find out what’s important. Once you’ve seen this output a few
+times, you’ll be able to spot the important bits more easily.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">About</span> <span class="n">to</span> <span class="n">connect</span><span class="p">()</span> <span class="n">to</span> <span class="mf">127.0.0.1</span> <span class="n">port</span> <span class="mi">5984</span> <span class="p">(</span><span class="c1">#0)</span>
+</pre></div>
+</div>
+<p>This is curl telling us that it is going to establish a TCP connection to the
+CouchDB server we specified in our request URI. Not at all important,
+except when debugging networking issues.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span>   <span class="n">Trying</span> <span class="mf">127.0.0.1</span><span class="o">...</span> <span class="n">connected</span>
+<span class="o">*</span> <span class="n">Connected</span> <span class="n">to</span> <span class="mf">127.0.0.1</span> <span class="p">(</span><span class="mf">127.0.0.1</span><span class="p">)</span> <span class="n">port</span> <span class="mi">5984</span> <span class="p">(</span><span class="c1">#0)</span>
+</pre></div>
+</div>
+<p>curl tells us it successfully connected to CouchDB. Again,
+not important if you aren’t trying to find problems with your network.</p>
+<p>The following lines are prefixed with <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> characters.
+The <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> means the line was sent to CouchDB verbatim (without the actual
+<code class="docutils literal notranslate"><span class="pre">&gt;</span></code>). The <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> means the line was sent back to curl by CouchDB.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">PUT</span> <span class="o">/</span><span class="n">albums</span><span class="o">-</span><span class="n">backup</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span>
+</pre></div>
+</div>
+<p>This initiates an HTTP request. Its <em>method</em> is <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.4">PUT</a>, the <em>URI</em> is
+<code class="docutils literal notranslate"><span class="pre">/albums-backup</span></code>, and the HTTP version is <code class="docutils literal notranslate"><span class="pre">HTTP/1.1</span></code>. There is also
+<code class="docutils literal notranslate"><span class="pre">HTTP/1.0</span></code>, which is simpler in some cases, but for all practical reasons
+you should be using <code class="docutils literal notranslate"><span class="pre">HTTP/1.1</span></code>.</p>
+<p>Next, we see a number of <em>request headers</em>. These are used to provide
+additional details about the request to CouchDB.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">User</span><span class="o">-</span><span class="n">Agent</span><span class="p">:</span> <span class="n">curl</span><span class="o">/</span><span class="mf">7.16.3</span> <span class="p">(</span><span class="n">powerpc</span><span class="o">-</span><span class="n">apple</span><span class="o">-</span><span class="n">darwin9</span><span class="mf">.0</span><span class="p">)</span> <span class="n">libcurl</span><span class="o">/</span><span class="mf">7.16.3</span> <span class="n">OpenSSL</span><span class="o">/</span><span class="mf">0.9.7</span><span class="n">l</span> <span class="n">zlib</span><span class="o">/</span><span class="mf">1.2.3</span>
+</pre></div>
+</div>
+<p>The User-Agent header tells CouchDB which piece of client software is doing
+the HTTP request. We don’t learn anything new: it’s curl. This header is
+often useful in web development when there are known errors in client
+implementations that a server might want to prepare the response for.
+It also helps to determine which platform a user is on. This information
+can be used for technical and statistical reasons. For CouchDB, the
+<a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.5.3">User-Agent</a> header is irrelevant.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Host</span><span class="p">:</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-5.4">Host</a> header is required by <code class="docutils literal notranslate"><span class="pre">HTTP</span> <span class="pre">1.1</span></code>. It tells the server
+the hostname that came with the request.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Accept</span><span class="p">:</span> <span class="o">*/*</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> header tells CouchDB that curl accepts any media type.
+We’ll look into why this is useful a little later.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>An empty line denotes that the request headers are now finished and the rest
+of the request contains data we’re sending to the server. In this case,
+we’re not sending any data, so the rest of the curl output is dedicated to
+the HTTP response.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">201</span> <span class="n">Created</span>
+</pre></div>
+</div>
+<p>The first line of CouchDB’s HTTP response includes the HTTP version
+information (again, to acknowledge that the requested version could be
+processed), an HTTP <em>status code</em>, and a <em>status code message</em>.
+Different requests trigger different response codes. There’s a whole range of
+them telling the client (curl in our case) what effect the request had on the
+server. Or, if an error occurred, what kind of error. <span class="target" id="index-0"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2616.html"><strong>RFC 2616</strong></a> (the HTTP 1.1
+specification) defines clear behavior for response codes. CouchDB fully
+follows the RFC.</p>
+<p>The <a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> status code tells the client that the resource
+the request was made against was successfully created. No surprise here,
+but if you remember that we got an error message when we tried to create this
+database twice, you now know that this response could include a different
+response code. Acting upon responses based on response codes is a common
+practice. For example, all response codes of <a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> or larger
+tell you that some error occurred. If you want to shortcut your logic and
+immediately deal with the error, you could just check a &gt;= <code class="docutils literal notranslate"><span class="pre">400</span></code> response
+code.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span> <span class="n">Server</span><span class="p">:</span> <span class="n">CouchDB</span> <span class="p">(</span><span class="n">Erlang</span><span class="o">/</span><span class="n">OTP</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-7.4.2">Server</a> header is good for diagnostics. It tells us which
+CouchDB version and which underlying Erlang version we are talking to.
+In general, you can ignore this header, but it is good to know it’s there if
+you need it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span> <span class="n">Date</span><span class="p">:</span> <span class="n">Sun</span><span class="p">,</span> <span class="mi">05</span> <span class="n">Jul</span> <span class="mi">2009</span> <span class="mi">22</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">28</span> <span class="n">GMT</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-7.1.1.2">Date</a> header tells you the time of the server. Since client
+and server time are not necessarily synchronized, this header is purely
+informational. You shouldn’t build any critical application logic on top
+of this!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span> <span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">text</span><span class="o">/</span><span class="n">plain</span><span class="p">;</span><span class="n">charset</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> header tells you which MIME type
+the HTTP response body is and its encoding. We already know CouchDB returns
+JSON strings. The appropriate <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> header is
+<em class="mimetype">application/json</em>. Why do we see <em class="mimetype">text/plain</em>?
+This is where pragmatism wins over purity. Sending an
+<em class="mimetype">application/json</em> <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> header will make
+a browser offer you the returned JSON for download instead of
+just displaying it. Since it is extremely useful to be able to test CouchDB
+from a browser, CouchDB sends a <em class="mimetype">text/plain</em> content type, so all
+browsers will display the JSON as text.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are some extensions that make your browser JSON-aware,
+but they are not installed by default. For more information, look at
+the popular <a class="reference external" href="http://jsonview.com/">JSONView</a> extension, available for both Firefox and Chrome.</p>
+</div>
+<p>Do you remember the <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> request header and how it is set to
+<code class="docutils literal notranslate"><span class="pre">*/*</span></code> to express interest in any MIME type? If you send <code class="docutils literal notranslate"><span class="pre">Accept:</span>
+<span class="pre">application/json</span></code> in your request, CouchDB knows that you can deal with a pure
+JSON response with the proper <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> header and will
+use it instead of <em class="mimetype">text/plain</em>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span> <span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">12</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://tools.ietf.org/html/rfc7230#section-3.3.2">Content-Length</a> header simply tells us how many bytes
+the response body has.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span> <span class="n">Cache</span><span class="o">-</span><span class="n">Control</span><span class="p">:</span> <span class="n">must</span><span class="o">-</span><span class="n">revalidate</span>
+</pre></div>
+</div>
+<p>This <a class="reference external" href="https://tools.ietf.org/html/rfc7234#section-5.2">Cache-Control</a> header tells you, or any proxy server between
+CouchDB and you, not to cache this response.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span>
+</pre></div>
+</div>
+<p>This empty line tells us we’re done with the response headers and what
+follows now is the response body.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We’ve seen this before.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">Connection</span> <span class="c1">#0 to host 127.0.0.1 left intact</span>
+<span class="o">*</span> <span class="n">Closing</span> <span class="n">connection</span> <span class="c1">#0</span>
+</pre></div>
+</div>
+<p>The last two lines are curl telling us that it kept the TCP connection it
+opened in the beginning open for a moment, but then closed it after it
+received the entire response.</p>
+<p>Throughout the documents, we’ll show more requests with the <code class="docutils literal notranslate"><span class="pre">-v</span></code> option,
+but we’ll omit some of the headers we’ve seen here and include only those
+that are important for the particular request.</p>
+<p>Creating databases is all fine, but how do we get rid of one? Easy – just
+change the HTTP method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">curl</span> <span class="o">-</span><span class="n">vX</span> <span class="n">DELETE</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">-</span><span class="n">backup</span>
+</pre></div>
+</div>
+<p>This deletes a CouchDB database. The request will remove the file that the
+database contents are stored in. There is no <em>“Are you sure?”</em> safety net or
+any <em>“Empty the trash”</em> magic you’ve got to do to delete a database. Use this
+command with care. Your data will be deleted without a chance to bring it
+back easily if you don’t have a backup copy.</p>
+<p>This section went knee-deep into HTTP and set the stage for discussing the
+rest of the core CouchDB API. Next stop: documents.</p>
+</section>
+<section id="documents">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">1.7.3. </span>Documents</a><a class="headerlink" href="#documents" title="Permalink to this heading">¶</a></h2>
+<p>Documents are CouchDB’s central data structure. The idea behind a document
+is, unsurprisingly, that of a real-world document – a sheet of paper such as
+an invoice, a recipe, or a business card. We already learned that CouchDB uses
+the JSON format to store documents. Let’s see how this storing works at the
+lowest level.</p>
+<p>Each document in CouchDB has an <em>ID</em>. This ID is unique per database. You are
+free to choose any string to be the ID, but for best results we recommend a
+<a class="reference external" href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a> (or <a class="reference external" href="http://en.wikipedia.org/wiki/Globally_unique_identifier">GUID</a>), i.e., a Universally (or Globally) Unique IDentifier.
+UUIDs are random numbers that have such a low collision probability that
+everybody can make thousands of UUIDs a minute for millions of years without
+ever creating a duplicate. This is a great way to ensure two independent people
+cannot create two different documents with the same ID. Why should you care
+what somebody else is doing? For one, that somebody else could be you at a
+later time or on a different computer; secondly, CouchDB replication lets you
+share documents with others and using UUIDs ensures that it all works.
+But more on that later; let’s make some documents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mf">6e1295</span><span class="n">ed6c29495e54cc05947f18c8af</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;title&quot;:&quot;There is Nothing Left to Lose&quot;,&quot;artist&quot;:&quot;Foo Fighters&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;6e1295ed6c29495e54cc05947f18c8af&quot;</span><span class="p">,</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;1-2902191555&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The curl command appears complex, but let’s break it down.
+First, <code class="docutils literal notranslate"><span class="pre">-X</span> <span class="pre">PUT</span></code> tells curl to make a <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.4">PUT</a> request.
+It is followed by the URL that specifies your CouchDB IP address and port.
+The resource part of the URL <code class="docutils literal notranslate"><span class="pre">/albums/6e1295ed6c29495e54cc05947f18c8af</span></code>
+specifies the location of a document inside our albums database.
+The wild collection of numbers and characters is a UUID. This UUID is your
+document’s ID. Finally, the <code class="docutils literal notranslate"><span class="pre">-d</span></code> flag tells curl to use the following
+string as the body for the <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.4">PUT</a> request. The string is a simple JSON
+structure including <code class="docutils literal notranslate"><span class="pre">title</span></code> and <code class="docutils literal notranslate"><span class="pre">artist</span></code> attributes with their respective
+values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don’t have a UUID handy, you can ask CouchDB to give you one (in
+fact, that is what we did just now without showing you). Simply send a
+<a class="reference internal" href="../api/server/common.html#get--_uuids" title="GET /_uuids"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/_uuids</span></code></a> request:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_uuids</span>
+</pre></div>
+</div>
+<p>CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;uuids&quot;</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;6e1295ed6c29495e54cc05947f18c8af&quot;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Voilà, a UUID. If you need more than one, you can pass in the <code class="docutils literal notranslate"><span class="pre">?count=10</span></code>
+HTTP parameter to request 10 UUIDs, or really, any number you need.</p>
+</div>
+<p>To double-check that CouchDB isn’t lying about having saved your document (it
+usually doesn’t), try to retrieve it by sending a GET request:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mf">6e1295</span><span class="n">ed6c29495e54cc05947f18c8af</span>
+</pre></div>
+</div>
+<p>We hope you see a pattern here. Everything in CouchDB has an address, a URI,
+and you use the different HTTP methods to operate on these URIs.</p>
+<p>CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="s2">&quot;6e1295ed6c29495e54cc05947f18c8af&quot;</span><span class="p">,</span><span class="s2">&quot;_rev&quot;</span><span class="o">:</span><span class="s2">&quot;1-2902191555&quot;</span><span class="p">,</span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="s2">&quot;There is Nothing Left to Lose&quot;</span><span class="p">,</span><span class="s2">&quot;artist&quot;</span><span class="o">:</span><span class="s2">&quot;Foo Fighters&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>This looks a lot like the document you asked CouchDB to save, which is good.
+But you should notice that CouchDB added two fields to your JSON structure.
+The first is <code class="docutils literal notranslate"><span class="pre">_id</span></code>, which holds the UUID we asked CouchDB to save our document
+under. We always know the ID of a document if it is included, which is very
+convenient.</p>
+<p>The second field is <code class="docutils literal notranslate"><span class="pre">_rev</span></code>. It stands for <em>revision</em>.</p>
+<section id="revisions">
+<h3><span class="section-number">1.7.3.1. </span>Revisions<a class="headerlink" href="#revisions" title="Permalink to this heading">¶</a></h3>
+<p>If you want to change a document in CouchDB, you don’t tell it to go and find
+a field in a specific document and insert a new value. Instead, you load
+the full document out of CouchDB, make your changes in the JSON structure
+(or object, when you are doing actual programming), and save the entire new
+revision (or version) of that document back into CouchDB. Each revision is
+identified by a new <code class="docutils literal notranslate"><span class="pre">_rev</span></code> value.</p>
+<p>If you want to update or delete a document, CouchDB expects you to include
+the <code class="docutils literal notranslate"><span class="pre">_rev</span></code> field of the revision you wish to change. When CouchDB accepts
+the change, it will generate a new revision number. This mechanism ensures that,
+in case somebody else made a change without you knowing before you got to
+request the document update, CouchDB will not accept your update because you
+are likely to overwrite data you didn’t know existed. Or simplified: whoever
+saves a change to a document first, wins. Let’s see what happens if we don’t
+provide a <code class="docutils literal notranslate"><span class="pre">_rev</span></code> field (which is equivalent to providing a outdated value):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mf">6e1295</span><span class="n">ed6c29495e54cc05947f18c8af</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;title&quot;:&quot;There is Nothing Left to Lose&quot;,&quot;artist&quot;:&quot;Foo Fighters&quot;,&quot;year&quot;:&quot;1997&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="s2">&quot;conflict&quot;</span><span class="p">,</span><span class="s2">&quot;reason&quot;</span><span class="o">:</span><span class="s2">&quot;Document update conflict.&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>If you see this, add the latest revision number of your document to the JSON
+structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mf">6e1295</span><span class="n">ed6c29495e54cc05947f18c8af</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;_rev&quot;:&quot;1-2902191555&quot;,&quot;title&quot;:&quot;There is Nothing Left to Lose&quot;,&quot;artist&quot;:&quot;Foo Fighters&quot;,&quot;year&quot;:&quot;1997&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>Now you see why it was handy that CouchDB returned that <code class="docutils literal notranslate"><span class="pre">_rev</span></code> when we made
+the initial request. CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;6e1295ed6c29495e54cc05947f18c8af&quot;</span><span class="p">,</span><span class="s2">&quot;rev&quot;</span><span class="o">:</span><span class="s2">&quot;2-8aff9ee9d06671fa89c99d20a4b3ae&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>CouchDB accepted your write and also generated a new revision number.
+The revision number is the <em>MD5 hash</em> of the transport representation of a
+document with an <code class="docutils literal notranslate"><span class="pre">N-</span></code> prefix denoting the number of times a document got
+updated. This is useful for replication. See <a class="reference internal" href="../replication/conflicts.html#replication-conflicts"><span class="std std-ref">Replication and conflict model</span></a> for
+more information.</p>
+<p>There are multiple reasons why CouchDB uses this revision system,
+which is also called Multi-Version Concurrency Control (<a class="reference external" href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">MVCC</a>). They all work
+hand-in-hand, and this is a good opportunity to explain some of them.</p>
+<p>One of the aspects of the HTTP protocol that CouchDB uses is that it is
+stateless. What does that mean? When talking to CouchDB you need to make
+requests. Making a request includes opening a network connection to CouchDB,
+exchanging bytes, and closing the connection. This is done every time you
+make a request. Other protocols allow you to open a connection, exchange bytes,
+keep the connection open, exchange more bytes later – maybe depending on the
+bytes you exchanged at the beginning – and eventually close the connection.
+Holding a connection open for later use requires the server to do extra work.
+One common pattern is that for the lifetime of a connection, the client has
+a consistent and static view of the data on the server. Managing huge amounts
+of parallel connections is a significant amount of work. HTTP connections are
+usually short-lived, and making the same guarantees is a lot easier.
+As a result, CouchDB can handle many more concurrent connections.</p>
+<p>Another reason CouchDB uses MVCC is that this model is simpler conceptually
+and, as a consequence, easier to program. CouchDB uses less code to make this
+work, and less code is always good because the ratio of defects per lines of
+code is static.</p>
+<p>The revision system also has positive effects on replication and storage
+mechanisms, but we’ll explore these later in the documents.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The terms <em>version</em> and <em>revision</em> might sound familiar (if you are
+programming without version control, stop reading this guide right now and
+start learning one of the popular systems). Using new versions for document
+changes works a lot like version control, but there’s an important
+difference: <strong>CouchDB does not guarantee that older versions are kept
+around. Don’t use the ``_rev`` token in CouchDB as a revision control system
+for your documents.</strong></p>
+</div>
+</section>
+<section id="documents-in-detail">
+<h3><span class="section-number">1.7.3.2. </span>Documents in Detail<a class="headerlink" href="#documents-in-detail" title="Permalink to this heading">¶</a></h3>
+<p>Now let’s have a closer look at our document creation requests with the curl
+<code class="docutils literal notranslate"><span class="pre">-v</span></code> flag that was helpful when we explored the database API earlier.
+This is also a good opportunity to create more documents that we can use in
+later examples.</p>
+<p>We’ll add some more of our favorite music albums. Get a fresh UUID from the
+<code class="docutils literal notranslate"><span class="pre">/_uuids</span></code> resource. If you don’t remember how that works, you can look it up
+a few pages back.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">vX</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mi">70</span><span class="n">b50bfa0a4b3aed1f8aff9e92dc16a0</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;title&quot;:&quot;Blackened Sky&quot;,&quot;artist&quot;:&quot;Biffy Clyro&quot;,&quot;year&quot;:2002}&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By the way, if you happen to know more information about your favorite
+albums, don’t hesitate to add more properties. And don’t worry about not
+knowing all the information for all the albums. CouchDB’s schema-less
+documents can contain whatever you know. After all, you should relax and not
+worry about data.</p>
+</div>
+<p>Now with the <code class="docutils literal notranslate"><span class="pre">-v</span></code> option, CouchDB’s reply (with only the important bits shown)
+looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">PUT</span> <span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mi">70</span><span class="n">b50bfa0a4b3aed1f8aff9e92dc16a0</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span>
+<span class="o">&gt;</span>
+<span class="o">&lt;</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">201</span> <span class="n">Created</span>
+<span class="o">&lt;</span> <span class="n">Location</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mi">70</span><span class="n">b50bfa0a4b3aed1f8aff9e92dc16a0</span>
+<span class="o">&lt;</span> <span class="n">ETag</span><span class="p">:</span> <span class="s2">&quot;1-e89c99d29d06671fa0a4b3ae8aff9e&quot;</span>
+<span class="o">&lt;</span>
+<span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="p">:</span><span class="s2">&quot;70b50bfa0a4b3aed1f8aff9e92dc16a0&quot;</span><span class="p">,</span><span class="s2">&quot;rev&quot;</span><span class="p">:</span><span class="s2">&quot;1-e89c99d29d06671fa0a4b3ae8aff9e&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We’re getting back the <a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> HTTP status code in the response
+headers, as we saw earlier when we created a database. The <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-7.1.2">Location</a>
+header gives us a full URL to our newly created document. And there’s a new
+header. An <a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a> in HTTP-speak identifies a specific version of a
+resource. In this case, it identifies a specific version (the first one) of our
+new document. Sound familiar? Yes, conceptually, an <a class="reference external" href="https://tools.ietf.org/html/rfc7232#section-2.3">ETag</a> is the same
+as a CouchDB document revision number, and it shouldn’t come as a surprise that
+CouchDB uses revision numbers for ETags. ETags are useful for caching
+infrastructures.</p>
+</section>
+<section id="attachments">
+<h3><span class="section-number">1.7.3.3. </span>Attachments<a class="headerlink" href="#attachments" title="Permalink to this heading">¶</a></h3>
+<p>CouchDB documents can have attachments just like an email message can have
+attachments. An attachment is identified by a name and includes its MIME type
+(or <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a>) and the number of bytes the attachment
+contains. Attachments can be any data. It is easiest to think about attachments
+as files attached to a document. These files can be text, images, Word
+documents, music, or movie files. Let’s make one.</p>
+<p>Attachments get their own URL where you can upload data. Say we want to add
+the album artwork to the <code class="docutils literal notranslate"><span class="pre">6e1295ed6c29495e54cc05947f18c8af</span></code> document
+(<em>“There is Nothing Left to Lose”</em>), and let’s also say the artwork is in a file
+<cite>artwork.jpg</cite> in the current directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>curl -vX PUT http://admin:password@127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg?rev=2-2739352689 \
+     --data-binary @artwork.jpg -H &quot;Content-Type:image/jpg&quot;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--data-binary</span></code> <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> option tells curl to read a file’s contents into
+the HTTP request body. We’re using the <code class="docutils literal notranslate"><span class="pre">-H</span></code> option to tell CouchDB that
+we’re uploading a JPEG file. CouchDB will keep this information around and
+will send the appropriate header when requesting this attachment; in case of
+an image like this, a browser will render the image instead of offering you
+the data for download. This will come in handy later. Note that you need
+to provide the current revision number of the document you’re attaching
+the artwork to, just as if you would update the document. Because, after
+all, attaching some data is changing the document.</p>
+</div>
+<p>You should now see your artwork image if you point your browser to
+<a class="reference external" href="http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg">http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg</a></p>
+<p>If you request the document again, you’ll see a new member:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">/</span><span class="mf">6e1295</span><span class="n">ed6c29495e54cc05947f18c8af</span>
+</pre></div>
+</div>
+<p>CouchDB replies:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;6e1295ed6c29495e54cc05947f18c8af&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;_rev&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3-131533518&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;There is Nothing Left to Lose&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;artist&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Foo Fighters&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;year&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1997&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;_attachments&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;artwork.jpg&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;stub&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;content_type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;image/jpg&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;length&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">52450</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">_attachments</span></code> is a list of keys and values where the values are JSON objects
+containing the attachment metadata. <code class="docutils literal notranslate"><span class="pre">stub=true</span></code> tells us that this entry is
+just the metadata. If we use the <code class="docutils literal notranslate"><span class="pre">?attachments=true</span></code> HTTP option when
+requesting this document, we’d get a <a class="reference external" href="http://en.wikipedia.org/wiki/Base64">Base64</a> encoded string containing the
+attachment data.</p>
+<p>We’ll have a look at more document request options later as we explore more
+features of CouchDB, such as replication, which is the next topic.</p>
+</section>
+</section>
+<section id="replication">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.7.4. </span>Replication</a><a class="headerlink" href="#replication" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB replication is a mechanism to synchronize databases. Much like <a class="reference external" href="http://en.wikipedia.org/wiki/Rsync">rsync</a>
+synchronizes two directories locally or over a network, replication synchronizes
+two databases locally or remotely.</p>
+<p>In a simple <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.3">POST</a> request, you tell CouchDB the <em>source</em> and the
+<em>target</em> of a replication and CouchDB will figure out which documents and new
+document revisions are on <em>source</em> that are not yet on <em>target</em>, and will
+proceed  to move the missing documents and revisions over.</p>
+<p>We’ll take an in-depth look at replication in the document
+<a class="reference internal" href="../replication/intro.html#replication-intro"><span class="std std-ref">Introduction to Replication</span></a>; in this document, we’ll just show you how to use it.</p>
+<p>First, we’ll create a target database. Note that CouchDB won’t automatically
+create a target database for you, and will return a replication failure if
+the target doesn’t exist (likewise for the source, but that mistake isn’t as
+easy to make):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">albums</span><span class="o">-</span><span class="n">replica</span>
+</pre></div>
+</div>
+<p>Now we can use the database <cite>albums-replica</cite> as a replication target:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_replicate</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;source&quot;:&quot;http://admin:password@127.0.0.1:5984/albums&quot;,&quot;target&quot;:&quot;http://admin:password@127.0.0.1:5984/albums-replica&quot;}&#39;</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of CouchDB 2.0.0, fully qualified URLs are required for both the
+replication <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> parameters.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CouchDB supports the option <code class="docutils literal notranslate"><span class="pre">&quot;create_target&quot;:true</span></code> placed in the JSON
+POSTed to the <a class="reference internal" href="../api/server/common.html#api-server-replicate"><span class="std std-ref">_replicate</span></a> URL. It implicitly
+creates the target database if it doesn’t exist.</p>
+</div>
+<p>CouchDB replies (this time we formatted the output so you can read it more
+easily):</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;ok&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;session_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;30bb4ac013ca69369c0f32be78864d6e&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source_last_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYExlzgQLsBiaphqYpSZjKcRqRxwIkGRqA1H8Uk4wszJIskg0wdWUBAFHwJD4&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;replication_id_version&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;history&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;session_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;30bb4ac013ca69369c0f32be78864d6e&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;start_time&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Sun, 05 Mar 2023 20:30:26 GMT&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;end_time&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Sun, 05 Mar 2023 20:30:29 GMT&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;start_last_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;end_last_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYExlzgQLsBiaphqYpSZjKcRqRxwIkGRqA1H8Uk4wszJIskg0wdWUBAFHwJD4&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;recorded_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYExlzgQLsBiaphqYpSZjKcRqRxwIkGRqA1H8Uk4wszJIskg0wdWUBAFHwJD4&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;missing_checked&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;missing_found&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;docs_read&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;docs_written&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;doc_write_failures&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;bulk_get_docs&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;bulk_get_attempts&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>CouchDB maintains a <em>session history</em> of replications. The response for a
+replication request contains the history entry for this <em>replication session</em>.
+It is also worth noting that the request for replication will stay open until
+replication closes. If you have a lot of documents, it’ll take a while until
+they are all replicated and you won’t get back the replication response
+until all documents are replicated. It is important to note that
+replication replicates the database only as it was at the point in time
+when replication was started. So, any additions, modifications,
+or deletions subsequent to the start of replication will not be replicated.</p>
+<p>We’ll punt on the details again – the <code class="docutils literal notranslate"><span class="pre">&quot;ok&quot;:</span> <span class="pre">true</span></code> at the beginning tells
+us all went well. If you now have a look at the albums-replica database,
+you should see all the documents that you created in the albums database.
+Neat, eh?</p>
+<p>What you just did is called local replication in CouchDB terms. You created a
+local copy of a database. This is useful for backups or to keep snapshots of
+a specific state of your data around for later. You might want to do this
+if you are developing your applications but want to be able to roll back to
+a stable version of your code and data.</p>
+<p>There are more types of replication useful in other situations. The source
+and target members of our replication request are actually links (like in
+HTML) and so far we’ve seen links relative to the server we’re working on
+(hence local). You can also specify a remote database as the target:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_replicate</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;source&quot;:&quot;http://admin:password@127.0.0.1:5984/albums&quot;,&quot;target&quot;:&quot;http://user:password@example.org:5984/albums-replica&quot;}&#39;</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type:application/json&quot;</span>
+</pre></div>
+</div>
+<p>Using a <em>local source</em> and a <em>remote target</em> database is called <em>push
+replication</em>. We’re pushing changes to a remote server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since we don’t have a second CouchDB server around just yet, we’ll just use
+the absolute address of our single server, but you should be able to infer
+from this that you can put any remote server in there.</p>
+</div>
+<p>This is great for sharing local changes with remote servers or buddies next
+door.</p>
+<p>You can also use a <em>remote source</em> and a <em>local target</em> to do a <em>pull
+replication</em>. This is great for getting the latest changes from a server that
+is used by others:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_replicate</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;source&quot;:&quot;http://user:password@example.org:5984/albums-replica&quot;,&quot;target&quot;:&quot;http://admin:password@127.0.0.1:5984/albums&quot;}&#39;</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type:application/json&quot;</span>
+</pre></div>
+</div>
+<p>Finally, you can run remote replication, which is mostly useful for management
+operations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">admin</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">5984</span><span class="o">/</span><span class="n">_replicate</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;source&quot;:&quot;http://user:password@example.org:5984/albums&quot;,&quot;target&quot;:&quot;http://user:password@example.org:5984/albums-replica&quot;}&#39;</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>CouchDB and REST</strong></p>
+<p>CouchDB prides itself on having a <a class="reference external" href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> API, but these replication
+requests don’t look very RESTy to the trained eye. What’s up with that?
+While CouchDB’s core database, document, and attachment API are RESTful,
+not all of CouchDB’s API is. The replication API is one example. There are
+more, as we’ll see later in the documents.</p>
+<p>Why are there RESTful and non-RESTful APIs mixed up here? Have the
+developers been too lazy to go REST all the way? Remember, REST is an
+architectural style that lends itself to certain architectures (such as the
+CouchDB document API). But it is not a one-size-fits-all. Triggering an
+event like replication does not make a whole lot of sense in the REST world.
+It is more like a traditional remote procedure call. And there is nothing
+wrong with this.</p>
+<p>We very much believe in the “use the right tool for the job” philosophy,
+and REST does not fit every job. For support, we refer to Leonard Richardson
+and Sam Ruby who wrote <a class="reference external" href="http://oreilly.com/catalog/9780596529260">RESTful Web Services</a> (O’Reilly), as they share our
+view.</p>
+</div>
+</section>
+<section id="wrapping-up">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.7.5. </span>Wrapping Up</a><a class="headerlink" href="#wrapping-up" title="Permalink to this heading">¶</a></h2>
+<p>This is still not the full CouchDB API, but we discussed the essentials in
+great detail. We’re going to fill in the blanks as we go. For now, we believe
+you’re ready to start building CouchDB applications.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../api/index.html#api"><span class="std std-ref">Complete HTTP API Reference</span></a>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/server/index.html#api-server"><span class="std std-ref">Server API Reference</span></a></p></li>
+<li><p><a class="reference internal" href="../api/database/index.html#api-database"><span class="std std-ref">Database API Reference</span></a></p></li>
+<li><p><a class="reference internal" href="../api/document/index.html#api-document"><span class="std std-ref">Document API Reference</span></a></p></li>
+<li><p><a class="reference internal" href="../api/server/common.html#api-server-replicate"><span class="std std-ref">Replication API</span></a></p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tour.html" class="btn btn-neutral float-left" title="1.6. Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../replication/index.html" class="btn btn-neutral float-right" title="2. Replication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

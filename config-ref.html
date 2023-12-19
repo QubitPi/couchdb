@@ -1,0 +1,1612 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration Quick Reference &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/config-ref.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="search" title="Search" href="search.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="http-routingtable.html">API Quick Reference</a></li>
+<li><a href="#">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuration Quick Reference</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+   <h1>Configuration Quick Reference</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-admins"><strong>admins</strong></a> | 
+   <a href="#cap-attachments"><strong>attachments</strong></a> | 
+   <a href="#cap-chttpd"><strong>chttpd</strong></a> | 
+   <a href="#cap-chttpd_auth"><strong>chttpd_auth</strong></a> | 
+   <a href="#cap-cluster"><strong>cluster</strong></a> | 
+   <a href="#cap-cors"><strong>cors</strong></a> | 
+   <a href="#cap-couch_peruser"><strong>couch_peruser</strong></a> | 
+   <a href="#cap-couchdb"><strong>couchdb</strong></a> | 
+   <a href="#cap-csp"><strong>csp</strong></a> | 
+   <a href="#cap-database_compaction"><strong>database_compaction</strong></a> | 
+   <a href="#cap-disk_monitor"><strong>disk_monitor</strong></a> | 
+   <a href="#cap-dreyfus"><strong>dreyfus</strong></a> | 
+   <a href="#cap-httpd"><strong>httpd</strong></a> | 
+   <a href="#cap-ioq"><strong>ioq</strong></a> | 
+   <a href="#cap-ioq.bypass"><strong>ioq.bypass</strong></a> | 
+   <a href="#cap-jwt_auth"><strong>jwt_auth</strong></a> | 
+   <a href="#cap-ken"><strong>ken</strong></a> | 
+   <a href="#cap-ken.ignore"><strong>ken.ignore</strong></a> | 
+   <a href="#cap-log"><strong>log</strong></a> | 
+   <a href="#cap-mango"><strong>mango</strong></a> | 
+   <a href="#cap-native_query_servers"><strong>native_query_servers</strong></a> | 
+   <a href="#cap-nouveau"><strong>nouveau</strong></a> | 
+   <a href="#cap-prometheus"><strong>prometheus</strong></a> | 
+   <a href="#cap-purge"><strong>purge</strong></a> | 
+   <a href="#cap-query_server_config"><strong>query_server_config</strong></a> | 
+   <a href="#cap-replicator"><strong>replicator</strong></a> | 
+   <a href="#cap-replicator.shares"><strong>replicator.shares</strong></a> | 
+   <a href="#cap-resharding"><strong>resharding</strong></a> | 
+   <a href="#cap-rexi"><strong>rexi</strong></a> | 
+   <a href="#cap-smoosh"><strong>smoosh</strong></a> | 
+   <a href="#cap-smoosh.{channel-name}"><strong>smoosh.{channel-name}</strong></a> | 
+   <a href="#cap-ssl"><strong>ssl</strong></a> | 
+   <a href="#cap-stats"><strong>stats</strong></a> | 
+   <a href="#cap-uuids"><strong>uuids</strong></a> | 
+   <a href="#cap-vendor"><strong>vendor</strong></a> | 
+   <a href="#cap-vhosts"><strong>vhosts</strong></a> | 
+   <a href="#cap-view_compaction"><strong>view_compaction</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-admins"><td></td><td>
+       <strong>admins</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-1" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/auth.html#admins"><code class="xref">admins</code></a></td><td>
+       <em>Server Administrators</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-attachments"><td></td><td>
+       <strong>attachments</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-2" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/misc.html#attachments"><code class="xref">attachments</code></a></td><td>
+       <em>Configuration of Attachment Storage</em></td></tr>
+     <tr class="cg-2">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#attachments/compressible_types"><code class="xref">compressible_types</code></a></td><td>
+       <em>List of attachment types for compression</em></td></tr>
+     <tr class="cg-2">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#attachments/compression_level"><code class="xref">compression_level</code></a></td><td>
+       <em>Set zlib compression level</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-chttpd"><td></td><td>
+       <strong>chttpd</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-3" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/http.html#chttpd"><code class="xref">chttpd</code></a></td><td>
+       <em>Clustered HTTP Server Options</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/admin_only_all_dbs"><code class="xref">admin_only_all_dbs</code></a></td><td>
+       <em>Require admin for ``_all_dbs`` and ``_dbs_info``</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/allow_jsonp"><code class="xref">allow_jsonp</code></a></td><td>
+       <em>Enables JSONP support</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/authentication_handlers"><code class="xref">authentication_handlers</code></a></td><td>
+       <em>Authentication handlers</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/bind_address"><code class="xref">bind_address</code></a></td><td>
+       <em>HTTP port IP address binding</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/buffer_response"><code class="xref">buffer_response</code></a></td><td>
+       <em>Buffered response</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/bulk_get_use_batches"><code class="xref">bulk_get_use_batches</code></a></td><td>
+       <em>Use the optimized bulk_get implementation</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/changes_timeout"><code class="xref">changes_timeout</code></a></td><td>
+       <em>Changes feed timeout</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/config_whitelist"><code class="xref">config_whitelist</code></a></td><td>
+       <em>Config options whitelist</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/disconnect_check_jitter_msec"><code class="xref">disconnect_check_jitter_msec</code></a></td><td>
+       <em>Client disconnection check jitter</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/disconnect_check_msec"><code class="xref">disconnect_check_msec</code></a></td><td>
+       <em>Client disconnection check interval</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/enable_cors"><code class="xref">enable_cors</code></a></td><td>
+       <em>Activates CORS</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/enable_xframe_options"><code class="xref">enable_xframe_options</code></a></td><td>
+       <em>Controls X-Frame-Options header</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/max_http_request_size"><code class="xref">max_http_request_size</code></a></td><td>
+       <em>Maximum HTTP request body size</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/port"><code class="xref">port</code></a></td><td>
+       <em>Listen port</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/prefer_minimal"><code class="xref">prefer_minimal</code></a></td><td>
+       <em>Sends minimal set of headers</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd/require_valid_user"><code class="xref">require_valid_user</code></a></td><td>
+       <em>Force user authentication</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd/require_valid_user_except_for_up"><code class="xref">require_valid_user_except_for_up</code></a></td><td>
+       <em>Force user auth (mostly)</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/secure_rewrites"><code class="xref">secure_rewrites</code></a></td><td>
+       <em>Default request handler</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/server_header_versions"><code class="xref">server_header_versions</code></a></td><td>
+       <em>Whether to send version info Server header</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/x_forwarded_host"><code class="xref">x_forwarded_host</code></a></td><td>
+       <em>X-Forwarder-Host</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/x_forwarded_proto"><code class="xref">x_forwarded_proto</code></a></td><td>
+       <em>X-Forwarder-Proto</em></td></tr>
+     <tr class="cg-3">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#chttpd/x_forwarded_ssl"><code class="xref">x_forwarded_ssl</code></a></td><td>
+       <em>X-Forwarder-Ssl</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-chttpd_auth"><td></td><td>
+       <strong>chttpd_auth</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-4" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/auth.html#chttpd_auth"><code class="xref">chttpd_auth</code></a></td><td>
+       <em>Authentication Configuration</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/allow_persistent_cookies"><code class="xref">allow_persistent_cookies</code></a></td><td>
+       <em>Persistent cookies</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/auth_cache_size"><code class="xref">auth_cache_size</code></a></td><td>
+       <em>Authentication cache</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/authentication_redirect"><code class="xref">authentication_redirect</code></a></td><td>
+       <em>Default redirect for authentication requests</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/cookie_domain"><code class="xref">cookie_domain</code></a></td><td>
+       <em>Cookie Domain</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/hash_algorithms"><code class="xref">hash_algorithms</code></a></td><td>
+       <em>Supported hash algorithms for cookie and     proxy auth</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/iterations"><code class="xref">iterations</code></a></td><td>
+       <em>PBKDF2 iterations count</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/max_iterations"><code class="xref">max_iterations</code></a></td><td>
+       <em>Maximum PBKDF2 iterations count</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/min_iterations"><code class="xref">min_iterations</code></a></td><td>
+       <em>Minimum PBKDF2 iterations count</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/password_regexp"><code class="xref">password_regexp</code></a></td><td>
+       <em>Password regular expressions</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/proxy_use_secret"><code class="xref">proxy_use_secret</code></a></td><td>
+       <em>Force proxy auth to use secret token</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/public_fields"><code class="xref">public_fields</code></a></td><td>
+       <em>User documents public fields</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/same_site"><code class="xref">same_site</code></a></td><td>
+       <em>SameSite</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/secret"><code class="xref">secret</code></a></td><td>
+       <em>Authentication secret token</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/timeout"><code class="xref">timeout</code></a></td><td>
+       <em>Session timeout</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/users_db_public"><code class="xref">users_db_public</code></a></td><td>
+       <em>Publish user documents</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/x_auth_roles"><code class="xref">x_auth_roles</code></a></td><td>
+       <em>Proxy Auth roles header</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/x_auth_token"><code class="xref">x_auth_token</code></a></td><td>
+       <em>Proxy Auth token header</em></td></tr>
+     <tr class="cg-4">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#chttpd_auth/x_auth_username"><code class="xref">x_auth_username</code></a></td><td>
+       <em>Proxy Auth username header</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-cluster"><td></td><td>
+       <strong>cluster</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-5" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/cluster.html#cluster"><code class="xref">cluster</code></a></td><td>
+       <em>Cluster Options</em></td></tr>
+     <tr class="cg-5">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#cluster/n"><code class="xref">n</code></a></td><td>
+       <em>Number of replicas of each document</em></td></tr>
+     <tr class="cg-5">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#cluster/placement"><code class="xref">placement</code></a></td><td>
+       <em>Sets the cluster-wide replica placement policy</em></td></tr>
+     <tr class="cg-5">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#cluster/q"><code class="xref">q</code></a></td><td>
+       <em>Default number of shards for newly created database</em></td></tr>
+     <tr class="cg-5">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#cluster/reconnect_interval_sec"><code class="xref">reconnect_interval_sec</code></a></td><td>
+       <em>Cluster connectivity check period.</em></td></tr>
+     <tr class="cg-5">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#cluster/seedlist"><code class="xref">seedlist</code></a></td><td>
+       <em>Optional, comma-delimited list of nodes that should be contacted to join cluster</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-cors"><td></td><td>
+       <strong>cors</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-6" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/http.html#cors"><code class="xref">cors</code></a></td><td>
+       <em>Cross-Origin Resource Sharing</em></td></tr>
+     <tr class="cg-6">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#cors/credentials"><code class="xref">credentials</code></a></td><td>
+       <em>Enable credentials support in CouchDB</em></td></tr>
+     <tr class="cg-6">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#cors/headers"><code class="xref">headers</code></a></td><td>
+       <em>List of accepted headers</em></td></tr>
+     <tr class="cg-6">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#cors/max_age"><code class="xref">max_age</code></a></td><td>
+       <em>Set Access-Control-Max-Age header</em></td></tr>
+     <tr class="cg-6">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#cors/methods"><code class="xref">methods</code></a></td><td>
+       <em>List of accepted methods</em></td></tr>
+     <tr class="cg-6">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#cors/origins"><code class="xref">origins</code></a></td><td>
+       <em>List of allowed origins</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-couch_peruser"><td></td><td>
+       <strong>couch_peruser</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-7" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/couch-peruser.html#couch_peruser"><code class="xref">couch_peruser</code></a></td><td>
+       <em>Database Per User Options</em></td></tr>
+     <tr class="cg-7">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couch-peruser.html#couch_peruser/delete_dbs"><code class="xref">delete_dbs</code></a></td><td>
+       <em>Enable deleting user-db after user delete</em></td></tr>
+     <tr class="cg-7">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couch-peruser.html#couch_peruser/enable"><code class="xref">enable</code></a></td><td>
+       <em>Enable private per-user database pattern</em></td></tr>
+     <tr class="cg-7">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couch-peruser.html#couch_peruser/q"><code class="xref">q</code></a></td><td>
+       <em>Sharding value for per-user databases</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-couchdb"><td></td><td>
+       <strong>couchdb</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-8" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/couchdb.html#couchdb"><code class="xref">couchdb</code></a></td><td>
+       <em>Base CouchDB Options</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/attachment_stream_buffer_size"><code class="xref">attachment_stream_buffer_size</code></a></td><td>
+       <em>Attachment streaming buffer</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/database_dir"><code class="xref">database_dir</code></a></td><td>
+       <em>Databases location directory</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/default_security"><code class="xref">default_security</code></a></td><td>
+       <em>Default security</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/enable_database_recovery"><code class="xref">enable_database_recovery</code></a></td><td>
+       <em>Enable database recovery</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/file_compression"><code class="xref">file_compression</code></a></td><td>
+       <em>Compression method for documents</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/maintenance_mode"><code class="xref">maintenance_mode</code></a></td><td>
+       <em>Maintenance mode</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/max_dbs_open"><code class="xref">max_dbs_open</code></a></td><td>
+       <em>Limit of simultaneously opened databases</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/max_document_size"><code class="xref">max_document_size</code></a></td><td>
+       <em>Limit maximum document body size</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/os_process_timeout"><code class="xref">os_process_timeout</code></a></td><td>
+       <em>External processes time limit</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/single_node"><code class="xref">single_node</code></a></td><td>
+       <em>Start in single node mode.</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/uri_file"><code class="xref">uri_file</code></a></td><td>
+       <em>Discovery CouchDB help file</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/users_db_security_editable"><code class="xref">users_db_security_editable</code></a></td><td>
+       <em>Protect ``_users`` DB security obj</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/users_db_suffix"><code class="xref">users_db_suffix</code></a></td><td>
+       <em>Users database suffix</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/util_driver_dir"><code class="xref">util_driver_dir</code></a></td><td>
+       <em>CouchDB binary utility drivers</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/uuid"><code class="xref">uuid</code></a></td><td>
+       <em>CouchDB server UUID</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/view_index_dir"><code class="xref">view_index_dir</code></a></td><td>
+       <em>View indexes location directory</em></td></tr>
+     <tr class="cg-8">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/couchdb.html#couchdb/write_xxhash_checksums"><code class="xref">write_xxhash_checksums</code></a></td><td>
+       <em>Enable writting xxHash checksums</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-csp"><td></td><td>
+       <strong>csp</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-9" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/misc.html#csp"><code class="xref">csp</code></a></td><td>
+       <em>Content-Security-Policy</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/attachments_enable"><code class="xref">attachments_enable</code></a></td><td>
+       <em>Enable CSP-Header (attachments)</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/attachments_header_value"><code class="xref">attachments_header_value</code></a></td><td>
+       <em>Set CSP-Header value (attachments)</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/enable"><code class="xref">enable</code></a></td><td>
+       <em>Enable CSP-Header (deprecated)</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/header_value"><code class="xref">header_value</code></a></td><td>
+       <em>Set CSP-Header value (deprecated)</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/showlist_enable"><code class="xref">showlist_enable</code></a></td><td>
+       <em>Enable CSP-Header (Show/List-Functions)</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/showlist_header_value"><code class="xref">showlist_header_value</code></a></td><td>
+       <em>Set CSP-Header value (Show/List-Functions)</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/utils_enable"><code class="xref">utils_enable</code></a></td><td>
+       <em>Enable Content-Security-Policy header (Fauxton)</em></td></tr>
+     <tr class="cg-9">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#csp/utils_header_value"><code class="xref">utils_header_value</code></a></td><td>
+       <em>Set CSP-Header value (Fauxton)</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-database_compaction"><td></td><td>
+       <strong>database_compaction</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-10" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/compaction.html#database_compaction"><code class="xref">database_compaction</code></a></td><td>
+       <em>Database Compaction Options</em></td></tr>
+     <tr class="cg-10">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#database_compaction/checkpoint_after"><code class="xref">checkpoint_after</code></a></td><td>
+       <em>Checkpoint trigger</em></td></tr>
+     <tr class="cg-10">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#database_compaction/doc_buffer_size"><code class="xref">doc_buffer_size</code></a></td><td>
+       <em>Documents buffer size</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-disk_monitor"><td></td><td>
+       <strong>disk_monitor</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-11" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/disk-monitor.html#disk_monitor"><code class="xref">disk_monitor</code></a></td><td>
+       <em>Disk Monitor Options</em></td></tr>
+     <tr class="cg-11">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/disk-monitor.html#disk_monitor/background_view_indexing_threshold"><code class="xref">background_view_indexing_threshold</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-11">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/disk-monitor.html#disk_monitor/enable"><code class="xref">enable</code></a></td><td>
+       <em>enable disk monitoring</em></td></tr>
+     <tr class="cg-11">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/disk-monitor.html#disk_monitor/interactive_database_writes_threshold"><code class="xref">interactive_database_writes_threshold</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-11">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/disk-monitor.html#disk_monitor/interactive_view_indexing_threshold"><code class="xref">interactive_view_indexing_threshold</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-dreyfus"><td></td><td>
+       <strong>dreyfus</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-12" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/query-servers.html#dreyfus"><code class="xref">dreyfus</code></a></td><td>
+       <em>Search Subsystem Configuration</em></td></tr>
+     <tr class="cg-12">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#dreyfus/limit"><code class="xref">limit</code></a></td><td>
+       <em>Default result set limit for global search</em></td></tr>
+     <tr class="cg-12">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#dreyfus/limit_partitions"><code class="xref">limit_partitions</code></a></td><td>
+       <em>Default result set limit for partitioned DBs</em></td></tr>
+     <tr class="cg-12">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#dreyfus/max_limit"><code class="xref">max_limit</code></a></td><td>
+       <em>Maximum result set for global search</em></td></tr>
+     <tr class="cg-12">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#dreyfus/max_limit_partitions"><code class="xref">max_limit_partitions</code></a></td><td>
+       <em>Maximum result set for partitioned search</em></td></tr>
+     <tr class="cg-12">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#dreyfus/name"><code class="xref">name</code></a></td><td>
+       <em>Clouseau JVM node name and location</em></td></tr>
+     <tr class="cg-12">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#dreyfus/retry_limit"><code class="xref">retry_limit</code></a></td><td>
+       <em>Maximum number of connection retries</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-httpd"><td></td><td>
+       <strong>httpd</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-13" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/http.html#httpd"><code class="xref">httpd</code></a></td><td>
+       <em>HTTP Server Options</em></td></tr>
+     <tr class="cg-13">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#httpd/server_options"><code class="xref">server_options</code></a></td><td>
+       <em>MochiWeb Server Options</em></td></tr>
+     <tr class="cg-13">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#httpd/socket_options"><code class="xref">socket_options</code></a></td><td>
+       <em>Socket Options</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ioq"><td></td><td>
+       <strong>ioq</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-14" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/ioq.html#ioq"><code class="xref">ioq</code></a></td><td>
+       <em>IO Queue Configuration</em></td></tr>
+     <tr class="cg-14">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq/concurrency"><code class="xref">concurrency</code></a></td><td>
+       <em>Number of in-flight IO requests</em></td></tr>
+     <tr class="cg-14">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq/ratio"><code class="xref">ratio</code></a></td><td>
+       <em>Preference for selecting background over interactive IO</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ioq.bypass"><td></td><td>
+       <strong>ioq.bypass</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-15" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/ioq.html#ioq.bypass"><code class="xref">ioq.bypass</code></a></td><td>
+       <em>Bypass Selected IO Classes</em></td></tr>
+     <tr class="cg-15">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq.bypass/compaction"><code class="xref">compaction</code></a></td><td>
+       <em>Bypass Disk IO for compaction job requests</em></td></tr>
+     <tr class="cg-15">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq.bypass/os_process"><code class="xref">os_process</code></a></td><td>
+       <em>Bypass IO messages to external processes</em></td></tr>
+     <tr class="cg-15">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq.bypass/read"><code class="xref">read</code></a></td><td>
+       <em>Bypass Disk IO read requests</em></td></tr>
+     <tr class="cg-15">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq.bypass/reshard"><code class="xref">reshard</code></a></td><td>
+       <em>Bypass Disk IO for resharding jobs</em></td></tr>
+     <tr class="cg-15">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq.bypass/shard_sync"><code class="xref">shard_sync</code></a></td><td>
+       <em>Bypass Disk IO for shard syncing requests</em></td></tr>
+     <tr class="cg-15">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq.bypass/view_update"><code class="xref">view_update</code></a></td><td>
+       <em>Bypass Disk IO view update requests</em></td></tr>
+     <tr class="cg-15">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/ioq.html#ioq.bypass/write"><code class="xref">write</code></a></td><td>
+       <em>Bypass Disk IO write requests</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-jwt_auth"><td></td><td>
+       <strong>jwt_auth</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-16" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/auth.html#jwt_auth"><code class="xref">jwt_auth</code></a></td><td>
+       <em>JWT Authentication</em></td></tr>
+     <tr class="cg-16">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#jwt_auth/required_claims"><code class="xref">required_claims</code></a></td><td>
+       <em>Mandatory claims in JWT tokens</em></td></tr>
+     <tr class="cg-16">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#jwt_auth/roles_claim_name"><code class="xref">roles_claim_name</code></a></td><td>
+       <em>Optional CouchDB roles claim in JWT token (deprecated)</em></td></tr>
+     <tr class="cg-16">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/auth.html#jwt_auth/roles_claim_path"><code class="xref">roles_claim_path</code></a></td><td>
+       <em>(Nested) CouchDB roles claim in JWT token</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ken"><td></td><td>
+       <strong>ken</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-17" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/indexbuilds.html#ken"><code class="xref">ken</code></a></td><td>
+       <em>Background Index Builds</em></td></tr>
+     <tr class="cg-17">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/indexbuilds.html#ken/batch_channels"><code class="xref">batch_channels</code></a></td><td>
+       <em>Steady-state build concurrency</em></td></tr>
+     <tr class="cg-17">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/indexbuilds.html#ken/incremental_channels"><code class="xref">incremental_channels</code></a></td><td>
+       <em>Additional slots for short jobs</em></td></tr>
+     <tr class="cg-17">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/indexbuilds.html#ken/max_incremental_updates"><code class="xref">max_incremental_updates</code></a></td><td>
+       <em>Threshold defining a job as short</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ken.ignore"><td></td><td>
+       <strong>ken.ignore</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-18" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/indexbuilds.html#ken.ignore"><code class="xref">ken.ignore</code></a></td><td>
+       <em>Auto-Indexing Blocklist</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-log"><td></td><td>
+       <strong>log</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-19" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/logging.html#log"><code class="xref">log</code></a></td><td>
+       <em>Logging Options</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/file"><code class="xref">file</code></a></td><td>
+       <em>Logging file path</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/include_sasl"><code class="xref">include_sasl</code></a></td><td>
+       <em>Include SASL information in logs</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/level"><code class="xref">level</code></a></td><td>
+       <em>Logging verbose level</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/syslog_appid"><code class="xref">syslog_appid</code></a></td><td>
+       <em>Application name for syslog</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/syslog_facility"><code class="xref">syslog_facility</code></a></td><td>
+       <em>Syslog designations for message sources</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/syslog_host"><code class="xref">syslog_host</code></a></td><td>
+       <em>Syslog host</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/syslog_port"><code class="xref">syslog_port</code></a></td><td>
+       <em>Syslog port</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/write_buffer"><code class="xref">write_buffer</code></a></td><td>
+       <em>File log write buffer size</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/write_delay"><code class="xref">write_delay</code></a></td><td>
+       <em>Wait delay before commiting logs to disk</em></td></tr>
+     <tr class="cg-19">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/logging.html#log/writer"><code class="xref">writer</code></a></td><td>
+       <em>Set the log writer to use.</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-mango"><td></td><td>
+       <strong>mango</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-20" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/query-servers.html#mango"><code class="xref">mango</code></a></td><td>
+       <em>Mango Configuration</em></td></tr>
+     <tr class="cg-20">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#mango/default_limit"><code class="xref">default_limit</code></a></td><td>
+       <em>Default limit value for Mango queries.</em></td></tr>
+     <tr class="cg-20">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#mango/index_all_disabled"><code class="xref">index_all_disabled</code></a></td><td>
+       <em>Disable &#34;index all fields&#34; behaviour</em></td></tr>
+     <tr class="cg-20">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#mango/index_scan_warning_threshold"><code class="xref">index_scan_warning_threshold</code></a></td><td>
+       <em>Ratio threshold that generates an index scan warning</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-native_query_servers"><td></td><td>
+       <strong>native_query_servers</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-21" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/query-servers.html#native_query_servers"><code class="xref">native_query_servers</code></a></td><td>
+       <em>Native Erlang Query Server</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-nouveau"><td></td><td>
+       <strong>nouveau</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-22" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/query-servers.html#nouveau"><code class="xref">nouveau</code></a></td><td>
+       <em>Nouveau Server Configuration</em></td></tr>
+     <tr class="cg-22">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#nouveau/enable"><code class="xref">enable</code></a></td><td>
+       <em>Whether nouveau is enabled</em></td></tr>
+     <tr class="cg-22">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#nouveau/max_pipeline_size"><code class="xref">max_pipeline_size</code></a></td><td>
+       <em>Max pipeline size</em></td></tr>
+     <tr class="cg-22">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#nouveau/max_sessions"><code class="xref">max_sessions</code></a></td><td>
+       <em>Maximum number of ibrowse sessions</em></td></tr>
+     <tr class="cg-22">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#nouveau/url"><code class="xref">url</code></a></td><td>
+       <em>Nouveau Server location</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-prometheus"><td></td><td>
+       <strong>prometheus</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-23" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/misc.html#prometheus"><code class="xref">prometheus</code></a></td><td>
+       <em>Configuration of Prometheus Options</em></td></tr>
+     <tr class="cg-23">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#prometheus/additional_port"><code class="xref">additional_port</code></a></td><td>
+       <em>Enable a separate, non-authenticated port for prometheus data</em></td></tr>
+     <tr class="cg-23">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#prometheus/bind_address"><code class="xref">bind_address</code></a></td><td>
+       <em>IP address binding</em></td></tr>
+     <tr class="cg-23">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#prometheus/port"><code class="xref">port</code></a></td><td>
+       <em>Port for querying Prometheus data without authentication</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-purge"><td></td><td>
+       <strong>purge</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-24" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/misc.html#purge"><code class="xref">purge</code></a></td><td>
+       <em>Configuration of Database Purge</em></td></tr>
+     <tr class="cg-24">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#purge/index_lag_warn_seconds"><code class="xref">index_lag_warn_seconds</code></a></td><td>
+       <em>Allowed duration for purge checkpoint document</em></td></tr>
+     <tr class="cg-24">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#purge/max_document_id_number"><code class="xref">max_document_id_number</code></a></td><td>
+       <em>Allowed number of documents per Delete-Request</em></td></tr>
+     <tr class="cg-24">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#purge/max_revisions_number"><code class="xref">max_revisions_number</code></a></td><td>
+       <em>Allowed number of accumulated revisions per Purge-Request</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-query_server_config"><td></td><td>
+       <strong>query_server_config</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-25" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/query-servers.html#query_server_config"><code class="xref">query_server_config</code></a></td><td>
+       <em>Query Servers Configuration</em></td></tr>
+     <tr class="cg-25">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#query_server_config/commit_freq"><code class="xref">commit_freq</code></a></td><td>
+       <em>View index commit delay</em></td></tr>
+     <tr class="cg-25">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#query_server_config/os_process_limit"><code class="xref">os_process_limit</code></a></td><td>
+       <em>Query Server process hard limit</em></td></tr>
+     <tr class="cg-25">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#query_server_config/os_process_soft_limit"><code class="xref">os_process_soft_limit</code></a></td><td>
+       <em>Query Server process soft limit</em></td></tr>
+     <tr class="cg-25">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/query-servers.html#query_server_config/reduce_limit"><code class="xref">reduce_limit</code></a></td><td>
+       <em>Reduce limit control</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-replicator"><td></td><td>
+       <strong>replicator</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-26" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/replicator.html#replicator"><code class="xref">replicator</code></a></td><td>
+       <em>Replicator Database Configuration</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/auth_plugins"><code class="xref">auth_plugins</code></a></td><td>
+       <em>List of replicator client authentication plugins</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/cert_file"><code class="xref">cert_file</code></a></td><td>
+       <em>Path to user PEM certificate file</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/checkpoint_interval"><code class="xref">checkpoint_interval</code></a></td><td>
+       <em>Replication checkpoint interval</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/connection_timeout"><code class="xref">connection_timeout</code></a></td><td>
+       <em>Per replication connection timeout</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/http_connections"><code class="xref">http_connections</code></a></td><td>
+       <em>Maximum number of HTTP connections</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/ibrowse_options"><code class="xref">ibrowse_options</code></a></td><td>
+       <em>ibrowse options</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/interval"><code class="xref">interval</code></a></td><td>
+       <em>Checking interval of replication jobs</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/key_file"><code class="xref">key_file</code></a></td><td>
+       <em>Path to private user PEM file</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/max_churn"><code class="xref">max_churn</code></a></td><td>
+       <em>Maximum number of jobs to start and stop</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/max_history"><code class="xref">max_history</code></a></td><td>
+       <em>Maximum number of events recorded for each job</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/max_jobs"><code class="xref">max_jobs</code></a></td><td>
+       <em>Maximum replications jobs</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/password"><code class="xref">password</code></a></td><td>
+       <em>Optional password for protected key file</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/priority_coeff"><code class="xref">priority_coeff</code></a></td><td>
+       <em>Priority coefficient decays</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/retries_per_request"><code class="xref">retries_per_request</code></a></td><td>
+       <em>Number of retries per request</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/socket_options"><code class="xref">socket_options</code></a></td><td>
+       <em>Erlang socket options</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/ssl_certificate_max_depth"><code class="xref">ssl_certificate_max_depth</code></a></td><td>
+       <em>Maximum peer certificate depth checking size</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/ssl_trusted_certificates_file"><code class="xref">ssl_trusted_certificates_file</code></a></td><td>
+       <em>Trusted peer certificates</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/update_docs"><code class="xref">update_docs</code></a></td><td>
+       <em>Update replication document with error and triggered states</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/usage_coeff"><code class="xref">usage_coeff</code></a></td><td>
+       <em>Usage coefficient decay</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/use_bulk_get"><code class="xref">use_bulk_get</code></a></td><td>
+       <em>Use ``_bulk_get`` to fetch docs from the source</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/use_checkpoints"><code class="xref">use_checkpoints</code></a></td><td>
+       <em>Use checkpoints during replication</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/valid_endpoint_protocols"><code class="xref">valid_endpoint_protocols</code></a></td><td>
+       <em>Replicator endpoint protocols</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/valid_endpoint_protocols_log"><code class="xref">valid_endpoint_protocols_log</code></a></td><td>
+       <em>Log security issues with endpoints</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/valid_ibrowse_options"><code class="xref">valid_ibrowse_options</code></a></td><td>
+       <em>ibrowse options</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/valid_proxy_protocols"><code class="xref">valid_proxy_protocols</code></a></td><td>
+       <em>Replicator proxy protocols</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/valid_socket_options"><code class="xref">valid_socket_options</code></a></td><td>
+       <em>Erlang socket options</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/verify_ssl_certificates"><code class="xref">verify_ssl_certificates</code></a></td><td>
+       <em>Check peer certificates</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/verify_ssl_certificates_log"><code class="xref">verify_ssl_certificates_log</code></a></td><td>
+       <em>Log security issues with endpoints</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/worker_batch_size"><code class="xref">worker_batch_size</code></a></td><td>
+       <em>Batch size of workers</em></td></tr>
+     <tr class="cg-26">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator/worker_processes"><code class="xref">worker_processes</code></a></td><td>
+       <em>Number of worker processes</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-replicator.shares"><td></td><td>
+       <strong>replicator.shares</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-27" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/replicator.html#replicator.shares"><code class="xref">replicator.shares</code></a></td><td>
+       <em>Per-Database Fair Share Allocation</em></td></tr>
+     <tr class="cg-27">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/replicator.html#replicator.shares/{replicator_db}"><code class="xref">{replicator_db}</code></a></td><td>
+       <em>Value for a replicator database</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-resharding"><td></td><td>
+       <strong>resharding</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-28" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/resharding.html#resharding"><code class="xref">resharding</code></a></td><td>
+       <em>Resharding Configuration</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/delete_source"><code class="xref">delete_source</code></a></td><td>
+       <em>Delete source after resharding</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/max_history"><code class="xref">max_history</code></a></td><td>
+       <em>Maximum size of the event log</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/max_jobs"><code class="xref">max_jobs</code></a></td><td>
+       <em>Maximum resharding jobs per node</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/max_retries"><code class="xref">max_retries</code></a></td><td>
+       <em>Maximum number of retries before failing resharding job</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/require_node_param"><code class="xref">require_node_param</code></a></td><td>
+       <em>Require node parameter when creating resharding job</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/require_range_param"><code class="xref">require_range_param</code></a></td><td>
+       <em>Require range parameter when creating resharding job</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/retry_interval_sec"><code class="xref">retry_interval_sec</code></a></td><td>
+       <em>Wait time between resharding retries</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/source_close_timeout_sec"><code class="xref">source_close_timeout_sec</code></a></td><td>
+       <em>Source shard wait time before close</em></td></tr>
+     <tr class="cg-28">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/resharding.html#resharding/update_shard_map_timeout_sec"><code class="xref">update_shard_map_timeout_sec</code></a></td><td>
+       <em>Shard map update waiting time</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-rexi"><td></td><td>
+       <strong>rexi</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-29" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/cluster.html#rexi"><code class="xref">rexi</code></a></td><td>
+       <em>Internal RPC Tuning</em></td></tr>
+     <tr class="cg-29">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#rexi/buffer_count"><code class="xref">buffer_count</code></a></td><td>
+       <em>Number of buffered messages before dropping</em></td></tr>
+     <tr class="cg-29">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#rexi/server_per_node"><code class="xref">server_per_node</code></a></td><td>
+       <em>Enable or disable one local `gen_server` process per node</em></td></tr>
+     <tr class="cg-29">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/cluster.html#rexi/stream_limit"><code class="xref">stream_limit</code></a></td><td>
+       <em>Number of send messages without waiting for acknowledgement from the coordinator</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-smoosh"><td></td><td>
+       <strong>smoosh</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-30" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/compaction.html#smoosh"><code class="xref">smoosh</code></a></td><td>
+       <em>Compaction Daemon Rules</em></td></tr>
+     <tr class="cg-30">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh/cleanup_index_files"><code class="xref">cleanup_index_files</code></a></td><td>
+       <em>Automatically delete orphaned index files</em></td></tr>
+     <tr class="cg-30">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh/db_channels"><code class="xref">db_channels</code></a></td><td>
+       <em>Active database channels</em></td></tr>
+     <tr class="cg-30">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh/staleness"><code class="xref">staleness</code></a></td><td>
+       <em>Minimum time between priority calculations</em></td></tr>
+     <tr class="cg-30">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh/view_channels"><code class="xref">view_channels</code></a></td><td>
+       <em>Active secondary index channels</em></td></tr>
+     <tr class="cg-30">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh/wait_secs"><code class="xref">wait_secs</code></a></td><td>
+       <em>Warmup period before triggering first compaction</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-smoosh.{channel-name}"><td></td><td>
+       <strong>smoosh.{channel-name}</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-31" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/compaction.html#smoosh.{channel-name}"><code class="xref">smoosh.{channel-name}</code></a></td><td>
+       <em>Per-channel configuration</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/capacity"><code class="xref">capacity</code></a></td><td>
+       <em>Maximum number of items</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/concurrency"><code class="xref">concurrency</code></a></td><td>
+       <em>Maximum number of concurrent jobs</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/from"><code class="xref">from</code></a></td><td>
+       <em>Time window start</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/max_priority"><code class="xref">max_priority</code></a></td><td>
+       <em>Maximum priority of item to be enqueued</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/max_size"><code class="xref">max_size</code></a></td><td>
+       <em>Maximum size of item to be enqueued</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/min_changes"><code class="xref">min_changes</code></a></td><td>
+       <em>Minimum number of changes of item to be enqueued</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/min_priority"><code class="xref">min_priority</code></a></td><td>
+       <em>Minimum priority of item to be enqueued</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/min_size"><code class="xref">min_size</code></a></td><td>
+       <em>Minimum size of item to be enqueued</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/priority"><code class="xref">priority</code></a></td><td>
+       <em>Method for priority calculation</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/strict_window"><code class="xref">strict_window</code></a></td><td>
+       <em>Run compaction only within the time window</em></td></tr>
+     <tr class="cg-31">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#smoosh.{channel-name}/to"><code class="xref">to</code></a></td><td>
+       <em>Time window end</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ssl"><td></td><td>
+       <strong>ssl</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-32" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/http.html#ssl"><code class="xref">ssl</code></a></td><td>
+       <em>HTTPS (SSL/TLS) Options</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/cacert_file"><code class="xref">cacert_file</code></a></td><td>
+       <em>CA Certificate file</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/cert_file"><code class="xref">cert_file</code></a></td><td>
+       <em>Certificate file</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/ciphers"><code class="xref">ciphers</code></a></td><td>
+       <em>Specify permitted server cipher list</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/fail_if_no_peer_cert"><code class="xref">fail_if_no_peer_cert</code></a></td><td>
+       <em>Require presence of client certificate if certificate verification is enabled</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/key_file"><code class="xref">key_file</code></a></td><td>
+       <em>Certificate key file</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/password"><code class="xref">password</code></a></td><td>
+       <em>Certificate key password</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/secure_renegotiate"><code class="xref">secure_renegotiate</code></a></td><td>
+       <em>Enable secure renegotiation</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/ssl_certificate_max_depth"><code class="xref">ssl_certificate_max_depth</code></a></td><td>
+       <em>Maximum peer certificate depth</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/tls_versions"><code class="xref">tls_versions</code></a></td><td>
+       <em>Specify permitted server SSL/TLS protocol versions</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/verify_fun"><code class="xref">verify_fun</code></a></td><td>
+       <em>SSL verification function</em></td></tr>
+     <tr class="cg-32">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/http.html#ssl/verify_ssl_certificates"><code class="xref">verify_ssl_certificates</code></a></td><td>
+       <em>Enable certificate verification</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-stats"><td></td><td>
+       <strong>stats</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-33" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/misc.html#stats"><code class="xref">stats</code></a></td><td>
+       <em>Statistic Calculation</em></td></tr>
+     <tr class="cg-33">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#stats/interval"><code class="xref">interval</code></a></td><td>
+       <em>Statistics gathering interval</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-uuids"><td></td><td>
+       <strong>uuids</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-34" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/misc.html#uuids"><code class="xref">uuids</code></a></td><td>
+       <em>UUIDs Configuration</em></td></tr>
+     <tr class="cg-34">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#uuids/algorithm"><code class="xref">algorithm</code></a></td><td>
+       <em>Generation Algorithm</em></td></tr>
+     <tr class="cg-34">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#uuids/max_count"><code class="xref">max_count</code></a></td><td>
+       <em>Per-Request UUID Limit</em></td></tr>
+     <tr class="cg-34">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/misc.html#uuids/utc_id_suffix"><code class="xref">utc_id_suffix</code></a></td><td>
+       <em>UTC ID Suffix</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-vendor"><td></td><td>
+       <strong>vendor</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-35" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/misc.html#vendor"><code class="xref">vendor</code></a></td><td>
+       <em>Vendor information</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-vhosts"><td></td><td>
+       <strong>vhosts</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-36" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/http.html#vhosts"><code class="xref">vhosts</code></a></td><td>
+       <em>Virtual Hosts</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-view_compaction"><td></td><td>
+       <strong>view_compaction</strong></td><td></td></tr>
+     <tr>
+       <td><img src="_static/minus.png" class="toggler"
+              id="toggle-37" style="display: none" alt="-" /></td>
+       <td>
+       <a href="config/compaction.html#view_compaction"><code class="xref">view_compaction</code></a></td><td>
+       <em>View Compaction Options</em></td></tr>
+     <tr class="cg-37">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="config/compaction.html#view_compaction/keyvalue_buffer_size"><code class="xref">keyvalue_buffer_size</code></a></td><td>
+       <em>Key-Values buffer size</em></td></tr>
+   </table>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

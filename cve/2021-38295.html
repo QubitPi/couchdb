@@ -1,0 +1,250 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.14. CVE-2021-38295: Apache CouchDB Privilege Escalation &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/cve/2021-38295.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.15. CVE-2022-24706: Apache CouchDB Remote Privilege Escalation" href="2022-24706.html" />
+    <link rel="prev" title="2.13. CVE-2020-1955: Apache CouchDB Remote Privilege Escalation" href="2020-1955.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. Security Issues / CVEs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2010-0009.html">2.1. CVE-2010-0009: Apache CouchDB Timing Attack Vulnerability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2010-2234.html">2.2. CVE-2010-2234: Apache CouchDB Cross Site Request Forgery Attack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2010-3854.html">2.3. CVE-2010-3854: Apache CouchDB Cross Site Scripting Issue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2012-5641.html">2.4. CVE-2012-5641: Information disclosure via unescaped backslashes in URLs on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2012-5649.html">2.5. CVE-2012-5649: JSONP arbitrary code execution with Adobe Flash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2012-5650.html">2.6. CVE-2012-5650: DOM based Cross-Site Scripting via Futon UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2014-2668.html">2.7. CVE-2014-2668: DoS (CPU and memory consumption) via the count parameter to /_uuids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2017-12635.html">2.8. CVE-2017-12635: Apache CouchDB Remote Privilege Escalation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2017-12636.html">2.9. CVE-2017-12636: Apache CouchDB Remote Code Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2018-11769.html">2.10. CVE-2018-11769: Apache CouchDB Remote Code Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2018-17188.html">2.11. CVE-2018-17188: Apache CouchDB Remote Privilege Escalations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2018-8007.html">2.12. CVE-2018-8007: Apache CouchDB Remote Code Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2020-1955.html">2.13. CVE-2020-1955: Apache CouchDB Remote Privilege Escalation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.14. CVE-2021-38295: Apache CouchDB Privilege Escalation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">2.14.1. Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mitigation">2.14.2. Mitigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#credit">2.14.3. Credit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2022-24706.html">2.15. CVE-2022-24706: Apache CouchDB Remote Privilege Escalation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2023-26268.html">2.16. CVE-2023-26268: Apache CouchDB: Information sharing via couchjs processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2023-45725.html">2.17. CVE-2023-45725: Apache CouchDB: Privilege Escalation Using Design Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">2. </span>Security Issues / CVEs</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2.14. </span>CVE-2021-38295: Apache CouchDB Privilege Escalation</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cve/2021-38295.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cve-2021-38295-apache-couchdb-privilege-escalation">
+<span id="cve-2021-38295"></span><h1><span class="section-number">2.14. </span>CVE-2021-38295: Apache CouchDB Privilege Escalation<a class="headerlink" href="#cve-2021-38295-apache-couchdb-privilege-escalation" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>12.10.2021</p>
+</dd>
+<dt class="field-even">Affected<span class="colon">:</span></dt>
+<dd class="field-even"><p>3.1.1 and below</p>
+</dd>
+<dt class="field-odd">Severity<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Low</p>
+</dd>
+<dt class="field-even">Vendor<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Apache Software Foundation</p>
+</dd>
+</dl>
+<section id="description">
+<h2><span class="section-number">2.14.1. </span>Description<a class="headerlink" href="#description" title="Permalink to this heading">¶</a></h2>
+<p>A malicious user with permission to create documents in a database is able
+to attach a HTML attachment to a document. If a CouchDB admin opens that
+attachment in a browser, e.g. via the CouchDB admin interface Fauxton,
+any JavaScript code embedded in that HTML attachment will be executed within
+the security context of that admin. A similar route is available with the
+already deprecated <cite>_show</cite> and <cite>_list</cite> functionality.</p>
+<p>This <em>privilege escalation</em> vulnerability allows an attacker to add or remove
+data in any database or make configuration changes.</p>
+</section>
+<section id="mitigation">
+<h2><span class="section-number">2.14.2. </span>Mitigation<a class="headerlink" href="#mitigation" title="Permalink to this heading">¶</a></h2>
+<p>CouchDB <a class="reference internal" href="../whatsnew/3.2.html#release-3-2-0"><span class="std std-ref">3.2.0</span></a>  and onwards adds <cite>Content-Security-Policy</cite>
+headers for all attachment, <cite>_show</cite> and <cite>_list</cite> requests. This breaks certain
+niche use-cases and there are configuration options to restore the previous
+behaviour for those who need it.</p>
+<p>CouchDB <a class="reference internal" href="../whatsnew/3.1.html#release-3-1-2"><span class="std std-ref">3.1.2</span></a>  defaults to the previous behaviour, but
+adds configuration options to turn <cite>Content-Security-Policy</cite> headers on for
+all affected requests.</p>
+</section>
+<section id="credit">
+<h2><span class="section-number">2.14.3. </span>Credit<a class="headerlink" href="#credit" title="Permalink to this heading">¶</a></h2>
+<p>This issue was identified by <a class="reference external" href="mailto:cory&#37;&#52;&#48;secureideas&#46;com">Cory Sabol</a> of <a class="reference external" href="https://secureideas.com/">Secure Ideas</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="2020-1955.html" class="btn btn-neutral float-left" title="2.13. CVE-2020-1955: Apache CouchDB Remote Privilege Escalation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="2022-24706.html" class="btn btn-neutral float-right" title="2.15. CVE-2022-24706: Apache CouchDB Remote Privilege Escalation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

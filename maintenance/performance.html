@@ -1,0 +1,485 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.2. Performance &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/maintenance/performance.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.3. Backing up CouchDB" href="backups.html" />
+    <link rel="prev" title="5.1. Compaction" href="compaction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. Maintenance</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">5.1. Compaction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.2. Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#disk-i-o">5.2.1. Disk I/O</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#file-size">5.2.1.1. File Size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#disk-and-file-system-performance">5.2.1.2. Disk and File System Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#system-resource-limits">5.2.2. System Resource Limits</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#couchdb-configuration-options">5.2.2.1. CouchDB Configuration Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#erlang">5.2.2.2. Erlang</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#maximum-open-file-descriptors-ulimit">5.2.2.3. Maximum open file descriptors (ulimit)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#network">5.2.3. Network</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#connection-limit">5.2.3.1. Connection limit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#couchdb">5.2.4. CouchDB</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#delete-operation">5.2.4.1. DELETE operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#document-s-id">5.2.4.2. Document’s ID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#views">5.2.5. Views</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#views-generation">5.2.5.1. Views Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#built-in-reduce-functions">5.2.5.2. Built-In Reduce Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html">5.3. Backing up CouchDB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">5. </span>Maintenance</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5.2. </span>Performance</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/maintenance/performance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="performance">
+<span id="id1"></span><h1><span class="section-number">5.2. </span>Performance<a class="headerlink" href="#performance" title="Permalink to this heading">¶</a></h1>
+<p>With up to tens of thousands of documents you will generally find CouchDB to
+perform well no matter how you write your code. Once you start getting into
+the millions of documents you need to be a lot more careful.</p>
+<section id="disk-i-o">
+<h2><span class="section-number">5.2.1. </span>Disk I/O<a class="headerlink" href="#disk-i-o" title="Permalink to this heading">¶</a></h2>
+<section id="file-size">
+<h3><span class="section-number">5.2.1.1. </span>File Size<a class="headerlink" href="#file-size" title="Permalink to this heading">¶</a></h3>
+<p>The smaller your file size, the less <cite>I/O</cite> operations there will be,
+the more of the file can be cached by CouchDB and the operating system,
+the quicker it is to replicate, backup etc. Consequently you should carefully
+examine the data you are storing. For example it would be silly to use keys
+that are hundreds of characters long, but your program would be hard to
+maintain if you only used single character keys. Carefully consider data
+that is duplicated by putting it in views.</p>
+</section>
+<section id="disk-and-file-system-performance">
+<h3><span class="section-number">5.2.1.2. </span>Disk and File System Performance<a class="headerlink" href="#disk-and-file-system-performance" title="Permalink to this heading">¶</a></h3>
+<p>Using faster disks, striped RAID arrays and modern file systems can all speed
+up your CouchDB deployment. However, there is one option that can increase
+the responsiveness of your CouchDB server when disk performance is a
+bottleneck. From the Erlang documentation for the file module:</p>
+<blockquote>
+<div><p>On operating systems with thread support, it is possible to let file
+operations be performed in threads of their own, allowing other Erlang
+processes to continue executing in parallel with the file operations.
+See the <a class="reference external" href="http://erlang.org/doc/man/erl.html">command line flag +A in erl(1)</a>.</p>
+</div></blockquote>
+<p>Setting this argument to a number greater than zero can keep your CouchDB
+installation responsive even during periods of heavy disk utilization. The
+easiest way to set this option is through the <code class="docutils literal notranslate"><span class="pre">ERL_FLAGS</span></code> environment
+variable. For example, to give Erlang four threads with which to perform I/O
+operations add the following to <code class="docutils literal notranslate"><span class="pre">(prefix)/etc/defaults/couchdb</span></code>
+(or equivalent):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">ERL_FLAGS</span><span class="o">=</span><span class="s2">&quot;+A 4&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="system-resource-limits">
+<h2><span class="section-number">5.2.2. </span>System Resource Limits<a class="headerlink" href="#system-resource-limits" title="Permalink to this heading">¶</a></h2>
+<p>One of the problems that administrators run into as their deployments become
+large are resource limits imposed by the system and by the application
+configuration. Raising these limits can allow your deployment to grow beyond
+what the default configuration will support.</p>
+<section id="couchdb-configuration-options">
+<h3><span class="section-number">5.2.2.1. </span>CouchDB Configuration Options<a class="headerlink" href="#couchdb-configuration-options" title="Permalink to this heading">¶</a></h3>
+<section id="max-dbs-open">
+<h4><span class="section-number">5.2.2.1.1. </span>max_dbs_open<a class="headerlink" href="#max-dbs-open" title="Permalink to this heading">¶</a></h4>
+<p>In your <a class="reference internal" href="../config/index.html#config"><span class="std std-ref">configuration</span></a> (local.ini or similar) familiarize
+yourself with the <a class="reference internal" href="../config/couchdb.html#couchdb/max_dbs_open" title="max_dbs_open"><code class="xref config config-option docutils literal notranslate"><span class="pre">couchdb/max_dbs_open</span></code></a>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[couchdb]</span>
+<span class="na">max_dbs_open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100</span>
+</pre></div>
+</div>
+<p>This option places an upper bound on the number of databases that can be
+open at one time. CouchDB reference counts database accesses internally and
+will close idle databases when it must. Sometimes it is necessary to keep
+more than the default open at once, such as in deployments where many databases
+will be continuously replicating.</p>
+</section>
+</section>
+<section id="erlang">
+<h3><span class="section-number">5.2.2.2. </span>Erlang<a class="headerlink" href="#erlang" title="Permalink to this heading">¶</a></h3>
+<p>Even if you’ve increased the maximum connections CouchDB will allow,
+the Erlang runtime system will not allow more than 65536 connections by
+default. Adding the following directive to <code class="docutils literal notranslate"><span class="pre">(prefix)/etc/vm.args</span></code> (or
+equivalent) will increase this limit (in this case to 102400):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+</span><span class="n">Q</span> <span class="mi">102400</span>
+</pre></div>
+</div>
+<p>Note that on Windows, Erlang will not actually increase the file descriptor
+limit past 8192 (i.e. the system header–defined value of <code class="docutils literal notranslate"><span class="pre">FD_SETSIZE</span></code>). On
+macOS, the limit may be as low as 1024. See <a class="reference external" href="http://erlang.org/pipermail/erlang-questions/2011-December/063119.html">this tip for a possible
+workaround</a> and <a class="reference external" href="http://erlang.org/pipermail/erlang-questions/2011-October/061971.html">this thread for a deeper explanation</a>.</p>
+</section>
+<section id="maximum-open-file-descriptors-ulimit">
+<h3><span class="section-number">5.2.2.3. </span>Maximum open file descriptors (ulimit)<a class="headerlink" href="#maximum-open-file-descriptors-ulimit" title="Permalink to this heading">¶</a></h3>
+<p>In general, modern UNIX-like systems can handle very large numbers of file
+handles per process (e.g. 100000) without problem. Don’t be afraid to increase
+this limit on your system.</p>
+<p>The method of increasing these limits varies, depending on your init system and
+particular OS release. The default value for many OSes is 1024 or 4096. On a
+system with many databases or many views, CouchDB can very rapidly hit this
+limit.</p>
+<p>For systemd-based Linuxes (such as CentOS/RHEL 7, Ubuntu 16.04+, Debian 8
+or newer), assuming you are launching CouchDB from systemd, you must
+override the upper limit via editing the override file. The best practice
+for this is via the <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">edit</span> <span class="pre">couchdb</span></code> command. Add these lines to
+the file in the editor:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Service</span><span class="p">]</span>
+<span class="n">LimitNOFILE</span><span class="o">=</span><span class="mi">65536</span>
+</pre></div>
+</div>
+<p>…or whatever value you like. To increase this value higher than 65536, you
+must also add the Erlang <code class="docutils literal notranslate"><span class="pre">+Q</span></code> parameter to your <code class="docutils literal notranslate"><span class="pre">etc/vm.args</span></code> file by
+adding the line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+</span><span class="n">Q</span> <span class="mi">102400</span>
+</pre></div>
+</div>
+<p>The old <code class="docutils literal notranslate"><span class="pre">ERL_MAX_PORTS</span></code> environment variable is ignored by the version of
+Erlang supplied with CouchDB.</p>
+<p>If your system is set up to use the Pluggable Authentication Modules (<a class="reference external" href="http://www.linux-pam.org/">PAM</a>),
+and you are <strong>not</strong> launching CouchDB from systemd, increasing this limit
+is straightforward. For example, creating a file named
+<code class="docutils literal notranslate"><span class="pre">/etc/security/limits.d/100-couchdb.conf</span></code> with the following contents will
+ensure that CouchDB can open up to 65536 file descriptors at once:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#&lt;domain&gt;    &lt;type&gt;    &lt;item&gt;    &lt;value&gt;</span>
+<span class="n">couchdb</span>      <span class="n">hard</span>      <span class="n">nofile</span>    <span class="mi">65536</span>
+<span class="n">couchdb</span>      <span class="n">soft</span>      <span class="n">nofile</span>    <span class="mi">65536</span>
+</pre></div>
+</div>
+<p>If you are using our Debian/Ubuntu sysvinit script (<code class="docutils literal notranslate"><span class="pre">/etc/init.d/couchdb</span></code>),
+you also need to raise the limits for the root user:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#&lt;domain&gt;    &lt;type&gt;    &lt;item&gt;    &lt;value&gt;</span>
+<span class="n">root</span>         <span class="n">hard</span>      <span class="n">nofile</span>    <span class="mi">65536</span>
+<span class="n">root</span>         <span class="n">soft</span>      <span class="n">nofile</span>    <span class="mi">65536</span>
+</pre></div>
+</div>
+<p>You may also have to edit the <code class="docutils literal notranslate"><span class="pre">/etc/pam.d/common-session</span></code> and
+<code class="docutils literal notranslate"><span class="pre">/etc/pam.d/common-session-noninteractive</span></code> files to add the line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">session</span> <span class="n">required</span> <span class="n">pam_limits</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+<p>if it is not already present.</p>
+<p>If your system does not use PAM, a <cite>ulimit</cite> command is usually available for
+use in a custom script to launch CouchDB with increased resource limits.
+Typical syntax would be something like <cite>ulimit -n 65536</cite>.</p>
+</section>
+</section>
+<section id="network">
+<h2><span class="section-number">5.2.3. </span>Network<a class="headerlink" href="#network" title="Permalink to this heading">¶</a></h2>
+<p>There is latency overhead making and receiving each request/response.
+In general you should do your requests in batches. Most APIs have some
+mechanism to do batches, usually by supplying lists of documents or keys in
+the request body. Be careful what size you pick for the batches. The larger
+batch requires more time your client has to spend encoding the items into JSON
+and more time is spent decoding that number of responses. Do some benchmarking
+with your own configuration and typical data to find the sweet spot.
+It is likely to be between one and ten thousand documents.</p>
+<p>If you have a fast I/O system then you can also use concurrency - have
+multiple requests/responses at the same time. This mitigates the latency
+involved in assembling JSON, doing the networking and decoding JSON.</p>
+<p>As of CouchDB 1.1.0, users often report lower write performance of documents
+compared to older releases. The main reason is that this release ships with
+the more recent version of the HTTP server library MochiWeb, which by default
+sets the TCP socket option <a class="reference external" href="http://en.wikipedia.org/wiki/Nagle%27s_algorithm">SO_NODELAY</a> to false. This means that small data
+sent to the TCP socket, like the reply to a document write request (or reading
+a very small document), will not be sent immediately to the network - TCP will
+buffer it for a while hoping that it will be asked to send more data through
+the same socket and then send all the data at once for increased performance.
+This TCP buffering behaviour can be disabled via
+<a class="reference internal" href="../config/http.html#httpd/socket_options" title="socket_options"><code class="xref config config-option docutils literal notranslate"><span class="pre">httpd/socket_options</span></code></a>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[httpd]</span>
+<span class="na">socket_options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">[{nodelay, true}]</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Bulk <a class="reference internal" href="../api/database/bulk-api.html#api-db-all-docs"><span class="std std-ref">load</span></a> and <a class="reference internal" href="../api/database/bulk-api.html#api-db-bulk-docs"><span class="std std-ref">store</span></a> API.</p>
+</div>
+<section id="connection-limit">
+<h3><span class="section-number">5.2.3.1. </span>Connection limit<a class="headerlink" href="#connection-limit" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mochi/mochiweb">MochiWeb</a> handles CouchDB requests.
+The default maximum number of connections is 2048. To change this limit, use the
+<code class="docutils literal notranslate"><span class="pre">server_options</span></code> configuration variable. <code class="docutils literal notranslate"><span class="pre">max</span></code> indicates maximum number of
+connections.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[chttpd]</span>
+<span class="na">server_options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">[{backlog, 128}, {acceptor_pool_size, 16}, {max, 4096}]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="couchdb">
+<h2><span class="section-number">5.2.4. </span>CouchDB<a class="headerlink" href="#couchdb" title="Permalink to this heading">¶</a></h2>
+<section id="delete-operation">
+<h3><span class="section-number">5.2.4.1. </span>DELETE operation<a class="headerlink" href="#delete-operation" title="Permalink to this heading">¶</a></h3>
+<p>When you <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.5">DELETE</a> a document the database will create a new
+revision which contains the <code class="docutils literal notranslate"><span class="pre">_id</span></code> and <code class="docutils literal notranslate"><span class="pre">_rev</span></code> fields as well as
+the <cite>_deleted</cite> flag. This revision will remain even after a <cite>database
+compaction</cite> so that the deletion can be replicated. Deleted documents, like
+non-deleted documents, can affect view build times, <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.4">PUT</a> and
+<a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-4.3.5">DELETE</a> request times, and the size of the database since they
+increase the size of the B+Tree. You can see the number of deleted documents
+in <a class="reference internal" href="../api/database/common.html#get--db" title="GET /{db}"><code class="xref http http-get docutils literal notranslate"><span class="pre">database</span> <span class="pre">information</span></code></a>. If your use case creates lots of
+deleted documents (for example, if you are storing short-term data like log
+entries, message queues, etc), you might want to periodically switch to a new
+database and delete the old one (once the entries in it have all expired).</p>
+</section>
+<section id="document-s-id">
+<h3><span class="section-number">5.2.4.2. </span>Document’s ID<a class="headerlink" href="#document-s-id" title="Permalink to this heading">¶</a></h3>
+<p>The db file size is derived from your document and view sizes but also on a
+multiple of your <code class="docutils literal notranslate"><span class="pre">_id</span></code> sizes. Not only is the <code class="docutils literal notranslate"><span class="pre">_id</span></code> present in the document,
+but it and parts of it are duplicated in the binary tree structure CouchDB uses
+to navigate the file to find the document in the first place. As a real world
+example for one user switching from 16 byte ids to 4 byte ids made a database
+go from 21GB to 4GB with 10 million documents (the raw JSON text when from
+2.5GB to 2GB).</p>
+<p>Inserting with sequential (and at least sorted) ids is faster than random ids.
+Consequently you should consider generating ids yourself, allocating them
+sequentially and using an encoding scheme that consumes fewer bytes.
+For example, 8 bytes will take 16 hex digits to represent, and those same
+8 bytes can be encoded in only 11 digits/chars in base64url (no padding).</p>
+</section>
+</section>
+<section id="views">
+<h2><span class="section-number">5.2.5. </span>Views<a class="headerlink" href="#views" title="Permalink to this heading">¶</a></h2>
+<section id="views-generation">
+<span id="id2"></span><h3><span class="section-number">5.2.5.1. </span>Views Generation<a class="headerlink" href="#views-generation" title="Permalink to this heading">¶</a></h3>
+<p>Views with the JavaScript query server are extremely slow to generate when
+there are a non-trivial number of documents to process. The generation process
+won’t even saturate a single CPU let alone your I/O. The cause is the latency
+involved in the CouchDB server and separate <cite>couchjs</cite> query server, dramatically
+indicating how important it is to take latency out of your implementation.</p>
+<p>You can let view access be “stale” but it isn’t practical to determine when
+that will occur giving you a quick response and when views will be updated
+which will take a long time. (A 10 million document database took about 10
+minutes to load into CouchDB but about 4 hours to do view generation).</p>
+<p>In a cluster, “stale” requests are serviced by a fixed set of shards in order
+to present users with consistent results between requests. This comes with an
+availability trade-off - the fixed set of shards might not be the most
+responsive / available within the cluster. If you don’t need this kind of
+consistency (e.g. your indexes are relatively static), you can tell CouchDB to
+use any available replica by specifying <code class="docutils literal notranslate"><span class="pre">stable=false&amp;update=false</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">stale=ok</span></code>, or <code class="docutils literal notranslate"><span class="pre">stable=false&amp;update=lazy</span></code> instead of <code class="docutils literal notranslate"><span class="pre">stale=update_after</span></code>.</p>
+<p>View information isn’t replicated - it is rebuilt on each database so you
+can’t do the view generation on a separate sever.</p>
+</section>
+<section id="built-in-reduce-functions">
+<h3><span class="section-number">5.2.5.2. </span>Built-In Reduce Functions<a class="headerlink" href="#built-in-reduce-functions" title="Permalink to this heading">¶</a></h3>
+<p>If you’re using a very simple view function that only performs a sum or count
+reduction, you can call native Erlang implementations of them by simply
+writing <code class="docutils literal notranslate"><span class="pre">_sum</span></code> or <code class="docutils literal notranslate"><span class="pre">_count</span></code> in place of your function declaration.
+This will speed up things dramatically, as it cuts down on IO between CouchDB
+and the <a class="reference internal" href="../query-server/javascript.html#query-server-js"><span class="std std-ref">JavaScript query server</span></a>. For example, as
+<a class="reference external" href="http://mail-archives.apache.org/mod_mbox/couchdb-user/201003.mbox/%3c5E07E00E-3D69-4A8C-ADA3-1B20CF0BA4C8&#64;julianstahnke.com%3e">mentioned on the mailing list</a>, the time for outputting an (already indexed
+and cached) view with about 78,000 items went down from 60 seconds to 4 seconds.</p>
+<p>Before:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_design/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;views&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;bar&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;map&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;function (doc) { emit(doc.author, 1); }&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;reduce&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;function (keys, values, rereduce) { return sum(values); }&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>After:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_design/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;views&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;bar&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;map&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;function (doc) { emit(doc.author, 1); }&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;reduce&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_sum&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../ddocs/ddocs.html#reducefun-builtin"><span class="std std-ref">Built-in Reduce Functions</span></a></p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="compaction.html" class="btn btn-neutral float-left" title="5.1. Compaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="backups.html" class="btn btn-neutral float-right" title="5.3. Backing up CouchDB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

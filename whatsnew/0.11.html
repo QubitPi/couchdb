@@ -1,0 +1,593 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.17. 0.11.x Branch &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/whatsnew/0.11.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.18. 0.10.x Branch" href="0.10.html" />
+    <link rel="prev" title="1.16. 1.0.x Branch" href="1.0.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Release Notes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="3.3.html">1.1. 3.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2.html">1.2. 3.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.1.html">1.3. 3.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.0.html">1.4. 3.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3.html">1.5. 2.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2.html">1.6. 2.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.1.html">1.7. 2.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.0.html">1.8. 2.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.7.html">1.9. 1.7.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.6.html">1.10. 1.6.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.5.html">1.11. 1.5.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4.html">1.12. 1.4.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3.html">1.13. 1.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2.html">1.14. 1.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.1.html">1.15. 1.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.0.html">1.16. 1.0.x Branch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.17. 0.11.x Branch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-notes">1.17.1. Upgrade Notes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#changes-between-0-11-0-and-0-11-1">1.17.1.1. Changes Between 0.11.0 and 0.11.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#changes-between-0-10-x-and-0-11-0">1.17.1.2. Changes Between 0.10.x and 0.11.0</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-0-11-2">1.17.2. Version 0.11.2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#authentication">1.17.2.1. Authentication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#futon">1.17.2.2. Futon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-interface">1.17.2.3. HTTP Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replicator">1.17.2.4. Replicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#security">1.17.2.5. Security</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-0-11-1">1.17.3. Version 0.11.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#build-and-system-integration">1.17.3.1. Build and System Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-system">1.17.3.2. Configuration System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.17.3.3. Futon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1.17.3.4. HTTP Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#javascript-clients">1.17.3.5. JavaScript Clients</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#log-system">1.17.3.6. Log System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replication-system">1.17.3.7. Replication System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">1.17.3.8. Security</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#storage-system">1.17.3.9. Storage System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test-suite">1.17.3.10. Test Suite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#view-server">1.17.3.11. View Server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#url-rewriter-vhosts">1.17.3.12. URL Rewriter &amp; Vhosts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-0-11-0">1.17.4. Version 0.11.0</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">1.17.4.1. Build and System Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">1.17.4.2. Futon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">1.17.4.3. HTTP Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replication">1.17.4.4. Replication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#runtime-statistics">1.17.4.5. Runtime Statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">1.17.4.6. Security</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">1.17.4.7. Storage System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">1.17.4.8. View Server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="0.10.html">1.18. 0.10.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.9.html">1.19. 0.9.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.8.html">1.20. 0.8.x Branch</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Release Notes</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.17. </span>0.11.x Branch</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/whatsnew/0.11.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x-branch">
+<span id="release-0-11-x"></span><h1><span class="section-number">1.17. </span>0.11.x Branch<a class="headerlink" href="#x-branch" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#upgrade-notes" id="id11">Upgrade Notes</a></p></li>
+<li><p><a class="reference internal" href="#version-0-11-2" id="id12">Version 0.11.2</a></p></li>
+<li><p><a class="reference internal" href="#version-0-11-1" id="id13">Version 0.11.1</a></p></li>
+<li><p><a class="reference internal" href="#version-0-11-0" id="id14">Version 0.11.0</a></p></li>
+</ul>
+</nav>
+<section id="upgrade-notes">
+<span id="release-0-11-x-upgrade"></span><h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">1.17.1. </span>Upgrade Notes</a><a class="headerlink" href="#upgrade-notes" title="Permalink to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a class="reference internal" href="#release-0-11-2"><span class="std std-ref">Version 0.11.2</span></a> contains important security fixes. Previous <cite>0.11.x</cite>
+releases are not recommended for regular usage.</p>
+</div>
+<section id="changes-between-0-11-0-and-0-11-1">
+<h3><span class="section-number">1.17.1.1. </span>Changes Between 0.11.0 and 0.11.1<a class="headerlink" href="#changes-between-0-11-0-and-0-11-1" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_log</span></code> and <code class="docutils literal notranslate"><span class="pre">_temp_views</span></code> are now admin-only resources.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_bulk_docs</span></code> now requires a valid <cite>Content-Type</cite> header of
+<code class="docutils literal notranslate"><span class="pre">application/json</span></code>.</p></li>
+<li><p><cite>JSONP</cite> is disabled by default. An .ini option was added to selectively
+enable it.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">startkey</span></code> and <code class="docutils literal notranslate"><span class="pre">endkey</span></code> properties of the request object
+passed to <a class="reference internal" href="../ddocs/ddocs.html#listfun"><span class="std std-ref">list</span></a> and <a class="reference internal" href="../ddocs/ddocs.html#showfun"><span class="std std-ref">show</span></a> functions now
+contain JSON objects representing the URL encoded string values in the query
+string. Previously, these properties contained strings which needed to be
+converted to JSON before using.</p></li>
+</ul>
+</section>
+<section id="changes-between-0-10-x-and-0-11-0">
+<h3><span class="section-number">1.17.1.2. </span>Changes Between 0.10.x and 0.11.0<a class="headerlink" href="#changes-between-0-10-x-and-0-11-0" title="Permalink to this heading">¶</a></h3>
+<section id="show-list-update-and-validation-functions">
+<h4><span class="section-number">1.17.1.2.1. </span>show, list, update and validation functions<a class="headerlink" href="#show-list-update-and-validation-functions" title="Permalink to this heading">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">req</span></code> argument to show, list, update and validation functions now contains
+the member method with the specified HTTP method of the current request.
+Previously, this member was called <code class="docutils literal notranslate"><span class="pre">verb</span></code>. <code class="docutils literal notranslate"><span class="pre">method</span></code> is following <span class="target" id="index-0"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2616.html"><strong>RFC 2616</strong></a>
+(HTTP 1.1) closer.</p>
+</section>
+<section id="admins-security">
+<h4><span class="section-number">1.17.1.2.2. </span>_admins -&gt; _security<a class="headerlink" href="#admins-security" title="Permalink to this heading">¶</a></h4>
+<p>The <cite>/db/_admins</cite> handler has been removed and replaced with a
+<a class="reference internal" href="../api/database/security.html#api-db-security"><span class="std std-ref">/{db}/_security</span></a> object. Any existing <cite>_admins</cite> will be
+dropped and need to be added to the security object again. The reason for this
+is that the old system made no distinction between names and roles, while the
+new one does, so there is no way to automatically upgrade the old admins list.</p>
+<p>The security object has 2 special fields, <code class="docutils literal notranslate"><span class="pre">admins</span></code> and <code class="docutils literal notranslate"><span class="pre">readers</span></code>, which
+contain lists of names and roles which are admins or readers on that database.
+Anything else may be stored in other fields on the security object. The entire
+object is made available to validation functions.</p>
+</section>
+<section id="json2-js">
+<h4><span class="section-number">1.17.1.2.3. </span>json2.js<a class="headerlink" href="#json2-js" title="Permalink to this heading">¶</a></h4>
+<p>JSON handling in the query server has been upgraded to use <a class="reference external" href="https://github.com/douglascrockford/JSON-js/blob/master/json2.js">json2.js</a>.
+This allows us to use faster native JSON serialization when it is available.</p>
+<p>In previous versions, attempts to serialize undefined would throw an exception,
+causing the doc that emitted undefined to be dropped from the view index.
+The new behavior is to serialize undefined as null. Applications depending on
+the old behavior will need to explicitly check for undefined.</p>
+<p>Another change is that E4X’s XML objects will not automatically be
+stringified. XML users will need to call <code class="docutils literal notranslate"><span class="pre">my_xml_object.toXMLString()</span></code>
+to return a string value. <a class="reference external" href="https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=commit;h=8d3b7ab3">#8d3b7ab3</a></p>
+</section>
+<section id="www-authenticate">
+<h4><span class="section-number">1.17.1.2.4. </span>WWW-Authenticate<a class="headerlink" href="#www-authenticate" title="Permalink to this heading">¶</a></h4>
+<p>The default configuration has been changed to avoid causing basic-auth popups
+which result from sending the WWW-Authenticate header. To enable basic-auth
+popups, uncomment the config option <code class="docutils literal notranslate"><span class="pre">httpd/WWW-Authenticate</span></code> line in
+<cite>local.ini</cite>.</p>
+</section>
+<section id="query-server-line-protocol">
+<h4><span class="section-number">1.17.1.2.5. </span>Query server line protocol<a class="headerlink" href="#query-server-line-protocol" title="Permalink to this heading">¶</a></h4>
+<p>The query server line protocol has changed for all functions except
+<a class="reference internal" href="../query-server/protocol.html#qs-map-doc"><span class="std std-ref">map</span></a>, <a class="reference internal" href="../query-server/protocol.html#qs-reduce"><span class="std std-ref">reduce</span></a>, and
+<a class="reference internal" href="../query-server/protocol.html#qs-rereduce"><span class="std std-ref">rereduce</span></a>. This allows us to cache the entire design
+document in the query server process, which results in faster performance for
+common operations. It also gives more flexibility to query server
+implementers and shouldn’t require major changes in the future when adding
+new query server features.</p>
+</section>
+<section id="utf8-json">
+<h4><span class="section-number">1.17.1.2.6. </span>UTF8 JSON<a class="headerlink" href="#utf8-json" title="Permalink to this heading">¶</a></h4>
+<p>JSON request bodies are validated for proper UTF-8 before saving, instead of
+waiting to fail on subsequent read requests.</p>
+</section>
+<section id="changes-line-format">
+<h4><span class="section-number">1.17.1.2.7. </span>_changes line format<a class="headerlink" href="#changes-line-format" title="Permalink to this heading">¶</a></h4>
+<p>Continuous changes are now newline delimited, instead of having each line
+followed by a comma.</p>
+</section>
+</section>
+</section>
+<section id="version-0-11-2">
+<span id="release-0-11-2"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">1.17.2. </span>Version 0.11.2</a><a class="headerlink" href="#version-0-11-2" title="Permalink to this heading">¶</a></h2>
+<section id="authentication">
+<h3><span class="section-number">1.17.2.1. </span>Authentication<a class="headerlink" href="#authentication" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>User documents can now be deleted by admins or the user.</p></li>
+</ul>
+</section>
+<section id="futon">
+<h3><span class="section-number">1.17.2.2. </span>Futon<a class="headerlink" href="#futon" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Add some Futon files that were missing from the Makefile.</p></li>
+</ul>
+</section>
+<section id="http-interface">
+<h3><span class="section-number">1.17.2.3. </span>HTTP Interface<a class="headerlink" href="#http-interface" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Better error messages on invalid URL requests.</p></li>
+</ul>
+</section>
+<section id="replicator">
+<h3><span class="section-number">1.17.2.4. </span>Replicator<a class="headerlink" href="#replicator" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fix bug when pushing design docs by non-admins, which was hanging the
+replicator for no good reason.</p></li>
+<li><p>Fix bug when pulling design documents from a source that requires
+basic-auth.</p></li>
+</ul>
+</section>
+<section id="security">
+<h3><span class="section-number">1.17.2.5. </span>Security<a class="headerlink" href="#security" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Avoid potential DOS attack by guarding all creation of atoms.</p></li>
+<li><p>Fixed <a class="reference internal" href="../cve/2010-2234.html#cve-2010-2234"><span class="std std-ref">CVE-2010-2234: Apache CouchDB Cross Site Request Forgery Attack</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="version-0-11-1">
+<span id="release-0-11-1"></span><h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">1.17.3. </span>Version 0.11.1</a><a class="headerlink" href="#version-0-11-1" title="Permalink to this heading">¶</a></h2>
+<section id="build-and-system-integration">
+<h3><span class="section-number">1.17.3.1. </span>Build and System Integration<a class="headerlink" href="#build-and-system-integration" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Output of <cite>couchdb –help</cite> has been improved.</p></li>
+<li><p>Fixed compatibility with the Erlang R14 series.</p></li>
+<li><p>Fixed warnings on Linux builds.</p></li>
+<li><p>Fixed build error when aclocal needs to be called during the build.</p></li>
+<li><p>Require ICU 4.3.1.</p></li>
+<li><p>Fixed compatibility with Solaris.</p></li>
+</ul>
+</section>
+<section id="configuration-system">
+<h3><span class="section-number">1.17.3.2. </span>Configuration System<a class="headerlink" href="#configuration-system" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed timeout with large .ini files.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3><span class="section-number">1.17.3.3. </span>Futon<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Use “expando links” for over-long document values in Futon.</p></li>
+<li><p>Added continuous replication option.</p></li>
+<li><p>Added option to replicating test results anonymously to a community
+CouchDB instance.</p></li>
+<li><p>Allow creation and deletion of config entries.</p></li>
+<li><p>Fixed display issues with doc ids that have escaped characters.</p></li>
+<li><p>Fixed various UI issues.</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3><span class="section-number">1.17.3.4. </span>HTTP Interface<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Mask passwords in active tasks and logging.</p></li>
+<li><p>Update mochijson2 to allow output of BigNums not in float form.</p></li>
+<li><p>Added support for X-HTTP-METHOD-OVERRIDE.</p></li>
+<li><p>Better error message for database names.</p></li>
+<li><p>Disable jsonp by default.</p></li>
+<li><p>Accept gzip encoded standalone attachments.</p></li>
+<li><p>Made max_concurrent_connections configurable.</p></li>
+<li><p>Made changes API more robust.</p></li>
+<li><p>Send newly generated document rev to callers of an update function.</p></li>
+</ul>
+</section>
+<section id="javascript-clients">
+<h3><span class="section-number">1.17.3.5. </span>JavaScript Clients<a class="headerlink" href="#javascript-clients" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added tests for couch.js and jquery.couch.js</p></li>
+<li><p>Added changes handler to jquery.couch.js.</p></li>
+<li><p>Added cache busting to jquery.couch.js if the user agent is msie.</p></li>
+<li><p>Added support for multi-document-fetch (via _all_docs) to jquery.couch.js.</p></li>
+<li><p>Added attachment versioning to jquery.couch.js.</p></li>
+<li><p>Added option to control ensure_full_commit to jquery.couch.js.</p></li>
+<li><p>Added list functionality to jquery.couch.js.</p></li>
+<li><p>Fixed issues where bulkSave() wasn’t sending a POST body.</p></li>
+</ul>
+</section>
+<section id="log-system">
+<h3><span class="section-number">1.17.3.6. </span>Log System<a class="headerlink" href="#log-system" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Log HEAD requests as HEAD, not GET.</p></li>
+<li><p>Keep massive JSON blobs out of the error log.</p></li>
+<li><p>Fixed a timeout issue.</p></li>
+</ul>
+</section>
+<section id="replication-system">
+<h3><span class="section-number">1.17.3.7. </span>Replication System<a class="headerlink" href="#replication-system" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Refactored various internal APIs related to attachment streaming.</p></li>
+<li><p>Fixed hanging replication.</p></li>
+<li><p>Fixed keepalive issue.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3><span class="section-number">1.17.3.8. </span>Security<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added authentication redirect URL to log in clients.</p></li>
+<li><p>Fixed query parameter encoding issue in oauth.js.</p></li>
+<li><p>Made authentication timeout configurable.</p></li>
+<li><p>Temporary views are now admin-only resources.</p></li>
+</ul>
+</section>
+<section id="storage-system">
+<h3><span class="section-number">1.17.3.9. </span>Storage System<a class="headerlink" href="#storage-system" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Don’t require a revpos for attachment stubs.</p></li>
+<li><p>Added checking to ensure when a revpos is sent with an attachment stub,
+it’s correct.</p></li>
+<li><p>Make file deletions async to avoid pauses during compaction and db
+deletion.</p></li>
+<li><p>Fixed for wrong offset when writing headers and converting them to blocks,
+only triggered when header is larger than 4k.</p></li>
+<li><p>Preserve _revs_limit and instance_start_time after compaction.</p></li>
+</ul>
+</section>
+<section id="test-suite">
+<h3><span class="section-number">1.17.3.10. </span>Test Suite<a class="headerlink" href="#test-suite" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Made the test suite overall more reliable.</p></li>
+</ul>
+</section>
+<section id="view-server">
+<h3><span class="section-number">1.17.3.11. </span>View Server<a class="headerlink" href="#view-server" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Provide a UUID to update functions (and all other functions) that they can
+use to create new docs.</p></li>
+<li><p>Upgrade CommonJS modules support to 1.1.1.</p></li>
+<li><p>Fixed erlang filter funs and normalize filter fun API.</p></li>
+<li><p>Fixed hang in view shutdown.</p></li>
+</ul>
+</section>
+<section id="url-rewriter-vhosts">
+<h3><span class="section-number">1.17.3.12. </span>URL Rewriter &amp; Vhosts<a class="headerlink" href="#url-rewriter-vhosts" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Allow more complex keys in rewriter.</p></li>
+<li><p>Allow global rewrites so system defaults are available in vhosts.</p></li>
+<li><p>Allow isolation of databases with vhosts.</p></li>
+<li><p>Fix issue with passing variables to query parameters.</p></li>
+</ul>
+</section>
+</section>
+<section id="version-0-11-0">
+<span id="release-0-11-0"></span><h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">1.17.4. </span>Version 0.11.0</a><a class="headerlink" href="#version-0-11-0" title="Permalink to this heading">¶</a></h2>
+<section id="id5">
+<h3><span class="section-number">1.17.4.1. </span>Build and System Integration<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Updated and improved source documentation.</p></li>
+<li><p>Fixed distribution preparation for building on Mac OS X.</p></li>
+<li><p>Added support for building a Windows installer as part of ‘make dist’.</p></li>
+<li><p>Bug fix for building couch.app’s module list.</p></li>
+<li><p>ETap tests are now run during make distcheck. This included a number of
+updates to the build system to properly support VPATH builds.</p></li>
+<li><p>Gavin McDonald set up a build-bot instance. More info can be found at
+<a class="reference external" href="http://ci.apache.org/buildbot.html">http://ci.apache.org/buildbot.html</a></p></li>
+</ul>
+</section>
+<section id="id6">
+<h3><span class="section-number">1.17.4.2. </span>Futon<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added a button for view compaction.</p></li>
+<li><p>JSON strings are now displayed as-is in the document view, without the
+escaping of new-lines and quotes. That dramatically improves readability of
+multi-line strings.</p></li>
+<li><p>Same goes for editing of JSON string values. When a change to a field value is
+submitted, and the value is not valid JSON it is assumed to be a string. This
+improves editing of multi-line strings a lot.</p></li>
+<li><p>Hitting tab in textareas no longer moves focus to the next form field, but
+simply inserts a tab character at the current caret position.</p></li>
+<li><p>Fixed some font declarations.</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3><span class="section-number">1.17.4.3. </span>HTTP Interface<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Provide Content-MD5 header support for attachments.</p></li>
+<li><p>Added URL Rewriter handler.</p></li>
+<li><p>Added virtual host handling.</p></li>
+</ul>
+</section>
+<section id="replication">
+<h3><span class="section-number">1.17.4.4. </span>Replication<a class="headerlink" href="#replication" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added option to implicitly create replication target databases.</p></li>
+<li><p>Avoid leaking file descriptors on automatic replication restarts.</p></li>
+<li><p>Added option to replicate a list of documents by id.</p></li>
+<li><p>Allow continuous replication to be cancelled.</p></li>
+</ul>
+</section>
+<section id="runtime-statistics">
+<h3><span class="section-number">1.17.4.5. </span>Runtime Statistics<a class="headerlink" href="#runtime-statistics" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Statistics are now calculated for a moving window instead of non-overlapping
+timeframes.</p></li>
+<li><p>Fixed a problem with statistics timers and system sleep.</p></li>
+<li><p>Moved statistic names to a term file in the priv directory.</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3><span class="section-number">1.17.4.6. </span>Security<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed CVE-2010-0009: Apache CouchDB Timing Attack Vulnerability.</p></li>
+<li><p>Added default cookie-authentication and users database.</p></li>
+<li><p>Added Futon user interface for user signup and login.</p></li>
+<li><p>Added per-database reader access control lists.</p></li>
+<li><p>Added per-database security object for configuration data in validation
+functions.</p></li>
+<li><p>Added proxy authentication handler</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3><span class="section-number">1.17.4.7. </span>Storage System<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Adds batching of multiple updating requests, to improve throughput with many
+writers. Removed the now redundant couch_batch_save module.</p></li>
+<li><p>Adds configurable compression of attachments.</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3><span class="section-number">1.17.4.8. </span>View Server<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added optional ‘raw’ binary collation for faster view builds where Unicode
+collation is not important.</p></li>
+<li><p>Improved view index build time by reducing ICU collation callouts.</p></li>
+<li><p>Improved view information objects.</p></li>
+<li><p>Bug fix for partial updates during view builds.</p></li>
+<li><p>Move query server to a design-doc based protocol.</p></li>
+<li><p>Use json2.js for JSON serialization for compatibility with native JSON.</p></li>
+<li><p>Major refactoring of couchjs to lay the groundwork for disabling cURL
+support. The new HTTP interaction acts like a synchronous XHR. Example usage
+of the new system is in the JavaScript CLI test runner.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="1.0.html" class="btn btn-neutral float-left" title="1.16. 1.0.x Branch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="0.10.html" class="btn btn-neutral float-right" title="1.18. 0.10.x Branch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

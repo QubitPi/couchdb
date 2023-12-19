@@ -1,0 +1,341 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.6. TLS Erlang Distribution &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/cluster/tls_erlang_distribution.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.7. Troubleshooting CouchDB 3 with WeatherReport" href="troubleshooting.html" />
+    <link rel="prev" title="4.5. Clustered Purge" href="purging.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Cluster Management</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="theory.html">4.1. Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes.html">4.2. Node Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databases.html">4.3. Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharding.html">4.4. Shard Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="purging.html">4.5. Clustered Purge</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.6. TLS Erlang Distribution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#generate-certificate">4.6.1. Generate Certificate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#config-settings">4.6.2. Config Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connect-to-remsh">4.6.3. Connect to Remsh</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">4.7. Troubleshooting CouchDB 3 with WeatherReport</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">4. </span>Cluster Management</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4.6. </span>TLS Erlang Distribution</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cluster/tls_erlang_distribution.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tls-erlang-distribution">
+<span id="cluster-tls-erlang-distribution"></span><h1><span class="section-number">4.6. </span>TLS Erlang Distribution<a class="headerlink" href="#tls-erlang-distribution" title="Permalink to this heading">¶</a></h1>
+<p>The main purpose is specifically to allow using TLS for Erlang distribution
+between nodes, with the ability to connect to some nodes using TCP as well.
+TLS distribution will enhance data security during data migration between
+nodes.</p>
+<p>This section describes how to enable TLS distribution for additional
+verification and security.</p>
+<p>Reference: <a class="reference external" href="https://erlang.org/doc/apps/ssl/ssl_distribution.html">Using TLS for Erlang Distribution</a></p>
+<section id="generate-certificate">
+<h2><span class="section-number">4.6.1. </span>Generate Certificate<a class="headerlink" href="#generate-certificate" title="Permalink to this heading">¶</a></h2>
+<p>To distribute using TLS, appropriate certificates need to be provided.
+In the following example (couch_dist.conf), the cert.pem certificate must be
+trusted by a root certificate known to the server, and the erlserver.pem file
+contains the “certificate” and its “private key”.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[{server,
+  [{cacertfile, &quot;&lt;/absolute_path/to/ca-cert.pem&gt;&quot;},
+   {certfile,   &quot;&lt;/absolute_path/to/erlserver.pem&gt;&quot;},
+   {secure_renegotiate, true},
+   {verify, verify_peer},
+   {fail_if_no_peer_cert, true}]},
+ {client,
+  [{cacertfile, &quot;&lt;/absolute_path/to/ca-cert.pem&gt;&quot;},
+   {keyfile,    &quot;&lt;/absolute_path/to/key.pem&gt;&quot;},
+   {certfile,   &quot;&lt;/absolute_path/to/cert.pem&gt;&quot;},
+   {secure_renegotiate, true},
+   {verify, verify_peer}]}].
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">{verify,</span> <span class="pre">verify_peer}</span></code> to enable verification,
+but it requires appropriate certificates to verify.</p>
+<p>This is an example of generating certificates.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/rnewson/elixir-certs
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>elixir-certs
+$<span class="w"> </span>./certs<span class="w"> </span>self-signed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out-cert<span class="w"> </span>ca-cert.pem<span class="w"> </span>--out-key<span class="w"> </span>ca-key.pem<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--template<span class="w"> </span>root-ca<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--subject<span class="w"> </span><span class="s2">&quot;/CN=CouchDB Root CA&quot;</span>
+$./certs<span class="w"> </span>create-cert<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--issuer-cert<span class="w"> </span>ca-cert.pem<span class="w"> </span>--issuer-key<span class="w"> </span>ca-key.pem<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out-cert<span class="w"> </span>cert.pem<span class="w"> </span>--out-key<span class="w"> </span>key.pem<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--template<span class="w"> </span>server<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--subject<span class="w"> </span><span class="s2">&quot;/CN=&lt;hostname&gt;&quot;</span>
+$<span class="w"> </span>cat<span class="w"> </span>key.pem<span class="w"> </span>cert.pem<span class="w"> </span>&gt;erlserver.pem
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The above examples are <strong>not</strong> an endorsement of specific expiration limits, key sizes, or algorithms.</p></li>
+<li><p>If option <code class="docutils literal notranslate"><span class="pre">verify_peer</span></code> is set, the <code class="docutils literal notranslate"><span class="pre">server_name_indication</span></code> option should also be specified.</p></li>
+<li><p>The option <code class="docutils literal notranslate"><span class="pre">{fail_if_no_peer_cert,</span> <span class="pre">true}</span></code> should only be used on the server side in OTP 26,
+for previous versions it can be specified both on the server side and client side.</p></li>
+<li><p>When generating certificates, make sure Common Name (FQDN) should be different in CA certificate and certificate.
+Also, FQDN in the certificate should be the same as the hostname.</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="config-settings">
+<h2><span class="section-number">4.6.2. </span>Config Settings<a class="headerlink" href="#config-settings" title="Permalink to this heading">¶</a></h2>
+<p>To enable TLS distribution, make sure to set custom parameters in <code class="docutils literal notranslate"><span class="pre">vm.args</span></code>.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Don&#39;t forget to override the paths to point to your cert and conf file!
+
+-proto_dist couch
+-couch_dist no_tls \&quot;clouseau@127.0.0.1\&quot;
+-ssl_dist_optfile &lt;/absolute_path/to/couch_dist.conf&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The default value of <code class="docutils literal notranslate"><span class="pre">no_tls</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>. If the user does not
+set any <code class="docutils literal notranslate"><span class="pre">no_tls</span></code> flag, all nodes will use <code class="docutils literal notranslate"><span class="pre">TCP</span></code>.</p></li>
+<li><p>To ensure “search” works, make sure to set <code class="docutils literal notranslate"><span class="pre">no_tls</span></code> option for the
+<code class="docutils literal notranslate"><span class="pre">clouseau</span></code> node. By default, this will be <code class="docutils literal notranslate"><span class="pre">&quot;clouseau&#64;127.0.0.1&quot;</span></code>.</p></li>
+</ul>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">no_tls</span></code> flag can have these values:</p>
+<ol class="arabic">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">TLS</span></code> only, set to <code class="docutils literal notranslate"><span class="pre">false</span></code> (default value), such as:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-couch_dist no_tls false
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">TCP</span></code> only, set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, such as:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-couch_dist no_tls true
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Specify some nodes to use <code class="docutils literal notranslate"><span class="pre">TCP</span></code>, others to use <code class="docutils literal notranslate"><span class="pre">TLS</span></code>, such as:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Specify node1 and node2 to use TCP, others use TLS
+
+-couch_dist no_tls &#39;&quot;node1@127.0.0.1&quot;&#39;
+-couch_dist no_tls \&quot;node2@127.0.0.1\&quot;
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Any nodes end with &quot;@127.0.0.1&quot; will use TCP, others use TLS
+
+-couch_dist no_tls \&quot;*@127.0.0.1\&quot;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Asterisk(*)</strong>: matches a sequence of zero or more occurrences of the regular
+expression.</p>
+<p><strong>Question mark(?)</strong>: matches zero or one occurrences of the regular expression.</p>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</section>
+<section id="connect-to-remsh">
+<h2><span class="section-number">4.6.3. </span>Connect to Remsh<a class="headerlink" href="#connect-to-remsh" title="Permalink to this heading">¶</a></h2>
+<p>Start Erlang using a remote shell connected to Node.</p>
+<ul>
+<li><p>If the node uses <code class="docutils literal notranslate"><span class="pre">TCP</span></code>:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./remsh
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>If the node uses <code class="docutils literal notranslate"><span class="pre">TLS</span></code>:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./remsh<span class="w"> </span>-t<span class="w"> </span>&lt;/absolute_path/to/couch_dist.conf&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="purging.html" class="btn btn-neutral float-left" title="4.5. Clustered Purge" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="troubleshooting.html" class="btn btn-neutral float-right" title="4.7. Troubleshooting CouchDB 3 with WeatherReport" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

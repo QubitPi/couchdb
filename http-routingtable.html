@@ -1,0 +1,948 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Quick Reference &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/http-routingtable.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="search" title="Search" href="search.html" />
+ 
+
+    <script>
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="#">API Quick Reference</a></li>
+<li><a href="config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Quick Reference</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+   <h1>API Quick Reference</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-/"><strong>/</strong></a> | 
+   <a href="#cap-/_active_tasks"><strong>/_active_tasks</strong></a> | 
+   <a href="#cap-/_all_dbs"><strong>/_all_dbs</strong></a> | 
+   <a href="#cap-/_cluster_setup"><strong>/_cluster_setup</strong></a> | 
+   <a href="#cap-/_db_updates"><strong>/_db_updates</strong></a> | 
+   <a href="#cap-/_dbs_info"><strong>/_dbs_info</strong></a> | 
+   <a href="#cap-/_membership"><strong>/_membership</strong></a> | 
+   <a href="#cap-/_node"><strong>/_node</strong></a> | 
+   <a href="#cap-/_nouveau_analyze"><strong>/_nouveau_analyze</strong></a> | 
+   <a href="#cap-/_replicate"><strong>/_replicate</strong></a> | 
+   <a href="#cap-/_reshard"><strong>/_reshard</strong></a> | 
+   <a href="#cap-/_scheduler"><strong>/_scheduler</strong></a> | 
+   <a href="#cap-/_search_analyze"><strong>/_search_analyze</strong></a> | 
+   <a href="#cap-/_session"><strong>/_session</strong></a> | 
+   <a href="#cap-/_up"><strong>/_up</strong></a> | 
+   <a href="#cap-/_utils"><strong>/_utils</strong></a> | 
+   <a href="#cap-/_uuids"><strong>/_uuids</strong></a> | 
+   <a href="#cap-/favicon.ico"><strong>/favicon.ico</strong></a> | 
+   <a href="#cap-/{db}"><strong>/{db}</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/"><td></td><td>
+       <strong>/</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--"><code class="xref">GET /</code></a></td><td>
+       <em>Returns the welcome message and version information</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_active_tasks"><td></td><td>
+       <strong>/_active_tasks</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_active_tasks"><code class="xref">GET /_active_tasks</code></a></td><td>
+       <em>Obtains a list of the tasks running in the server</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_all_dbs"><td></td><td>
+       <strong>/_all_dbs</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_all_dbs"><code class="xref">GET /_all_dbs</code></a></td><td>
+       <em>Returns a list of all the databases</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_cluster_setup"><td></td><td>
+       <strong>/_cluster_setup</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_cluster_setup"><code class="xref">GET /_cluster_setup</code></a></td><td>
+       <em>Return the status of the cluster setup wizard</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#post--_cluster_setup"><code class="xref">POST /_cluster_setup</code></a></td><td>
+       <em>Sets up a node as a single node or as part of a cluster.</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_db_updates"><td></td><td>
+       <strong>/_db_updates</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_db_updates"><code class="xref">GET /_db_updates</code></a></td><td>
+       <em>Return the server changes of databases</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_dbs_info"><td></td><td>
+       <strong>/_dbs_info</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_dbs_info"><code class="xref">GET /_dbs_info</code></a></td><td>
+       <em>Returns all databases information</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#post--_dbs_info"><code class="xref">POST /_dbs_info</code></a></td><td>
+       <em>Returns information of a list of the specified databases</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_membership"><td></td><td>
+       <strong>/_membership</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_membership"><code class="xref">GET /_membership</code></a></td><td>
+       <em>Returns a list of nodes</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_node"><td></td><td>
+       <strong>/_node</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_node-node-name"><code class="xref">GET /_node/{node-name}</code></a></td><td>
+       <em>Returns node name</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/configuration.html#get--_node-node-name-_config"><code class="xref">GET /_node/{node-name}/_config</code></a></td><td>
+       <em>Obtains a list of the entire server configuration</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/configuration.html#get--_node-node-name-_config-section"><code class="xref">GET /_node/{node-name}/_config/{section}</code></a></td><td>
+       <em>Returns all the configuration values for the specified section</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/configuration.html#get--_node-node-name-_config-section-key"><code class="xref">GET /_node/{node-name}/_config/{section}/{key}</code></a></td><td>
+       <em>Returns a specific section/configuration value</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_node-node-name-_prometheus"><code class="xref">GET /_node/{node-name}/_prometheus</code></a></td><td>
+       <em>Returns server statistics in prometheus format</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_node-node-name-_smoosh-status"><code class="xref">GET /_node/{node-name}/_smoosh/status</code></a></td><td>
+       <em>Returns metrics of the CouchDB&#39;s auto-compaction daemon</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_node-node-name-_stats"><code class="xref">GET /_node/{node-name}/_stats</code></a></td><td>
+       <em>Returns server statistics</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_node-node-name-_system"><code class="xref">GET /_node/{node-name}/_system</code></a></td><td>
+       <em>Returns system-level server statistics</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_node-node-name-_versions"><code class="xref">GET /_node/{node-name}/_versions</code></a></td><td>
+       <em>Returns system-level server version informations</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/configuration.html#post--_node-node-name-_config-_reload"><code class="xref">POST /_node/{node-name}/_config/_reload</code></a></td><td>
+       <em>Reload the configuration from disk</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#post--_node-node-name-_restart"><code class="xref">POST /_node/{node-name}/_restart</code></a></td><td>
+       <em>Restarts CouchDB application on a given node</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/configuration.html#put--_node-node-name-_config-section-key"><code class="xref">PUT /_node/{node-name}/_config/{section}/{key}</code></a></td><td>
+       <em>Sets the specified configuration value</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/configuration.html#delete--_node-node-name-_config-section-key"><code class="xref">DELETE /_node/{node-name}/_config/{section}/{key}</code></a></td><td>
+       <em>Removes the current setting</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_nouveau_analyze"><td></td><td>
+       <strong>/_nouveau_analyze</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#post--_nouveau_analyze"><code class="xref">POST /_nouveau_analyze</code></a></td><td>
+       <em>Tests the results of analyzer tokenization</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_replicate"><td></td><td>
+       <strong>/_replicate</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#post--_replicate"><code class="xref">POST /_replicate</code></a></td><td>
+       <em>Starts or cancels the replication</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_reshard"><td></td><td>
+       <strong>/_reshard</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_reshard"><code class="xref">GET /_reshard</code></a></td><td>
+       <em>Retrieve summary information about resharding on the cluster</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_reshard-jobs"><code class="xref">GET /_reshard/jobs</code></a></td><td>
+       <em>Retrieve information about all the resharding jobs on the cluster</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_reshard-jobs-jobid"><code class="xref">GET /_reshard/jobs/{jobid}</code></a></td><td>
+       <em>Retrieve information about a particular resharding job</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_reshard-jobs-jobid-state"><code class="xref">GET /_reshard/jobs/{jobid}/state</code></a></td><td>
+       <em>Retrieve the state of a single resharding job</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_reshard-state"><code class="xref">GET /_reshard/state</code></a></td><td>
+       <em>Retrieve the state of resharding on the cluster</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#post--_reshard-jobs"><code class="xref">POST /_reshard/jobs</code></a></td><td>
+       <em>Create one or more resharding jobs</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#put--_reshard-jobs-jobid-state"><code class="xref">PUT /_reshard/jobs/{jobid}/state</code></a></td><td>
+       <em>Change the state of a resharding job</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#put--_reshard-state"><code class="xref">PUT /_reshard/state</code></a></td><td>
+       <em>Change resharding state on the cluster</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#delete--_reshard-jobs-jobid"><code class="xref">DELETE /_reshard/jobs/{jobid}</code></a></td><td>
+       <em>Remove a resharding job</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_scheduler"><td></td><td>
+       <strong>/_scheduler</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_scheduler-docs"><code class="xref">GET /_scheduler/docs</code></a></td><td>
+       <em>Retrieve information about replication documents from the
+``_replicator`` database.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_scheduler-docs-replicator_db"><code class="xref">GET /_scheduler/docs/{replicator_db}</code></a></td><td>
+       <em>Retrieve information about replication documents from a specific
+replicator database.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_scheduler-docs-replicator_db-docid"><code class="xref">GET /_scheduler/docs/{replicator_db}/{docid}</code></a></td><td>
+       <em>Retrieve information about a particular replication document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_scheduler-jobs"><code class="xref">GET /_scheduler/jobs</code></a></td><td>
+       <em>Retrieve information about replication jobs</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_search_analyze"><td></td><td>
+       <strong>/_search_analyze</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#post--_search_analyze"><code class="xref">POST /_search_analyze</code></a></td><td>
+       <em>Tests the results of analyzer tokenization</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_session"><td></td><td>
+       <strong>/_session</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/authn.html#get--_session"><code class="xref">GET /_session</code></a></td><td>
+       <em>Returns Cookie-based login user information</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/authn.html#post--_session"><code class="xref">POST /_session</code></a></td><td>
+       <em>Authenticates user by Cookie-based user login</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/authn.html#delete--_session"><code class="xref">DELETE /_session</code></a></td><td>
+       <em>Logout Cookie-based user</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_up"><td></td><td>
+       <strong>/_up</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_up"><code class="xref">GET /_up</code></a></td><td>
+       <em>Health check endpoint</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_utils"><td></td><td>
+       <strong>/_utils</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_utils"><code class="xref">GET /_utils</code></a></td><td>
+       <em>Redirects to /_utils/</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_utils-"><code class="xref">GET /_utils/</code></a></td><td>
+       <em>CouchDB administration interface (Fauxton)</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/_uuids"><td></td><td>
+       <strong>/_uuids</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--_uuids"><code class="xref">GET /_uuids</code></a></td><td>
+       <em>Generates a list of UUIDs from the server</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/favicon.ico"><td></td><td>
+       <strong>/favicon.ico</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/server/common.html#get--favicon.ico"><code class="xref">GET /favicon.ico</code></a></td><td>
+       <em>Returns the site icon</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/{db}"><td></td><td>
+       <strong>/{db}</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/common.html#head--db"><code class="xref">HEAD /{db}</code></a></td><td>
+       <em>Checks the database existence</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#head--db-_design-ddoc"><code class="xref">HEAD /{db}/_design/{ddoc}</code></a></td><td>
+       <em>Returns bare information in the HTTP Headers for
+the design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#head--db-_design-ddoc-attname"><code class="xref">HEAD /{db}/_design/{ddoc}/{attname}</code></a></td><td>
+       <em>Returns bare information in the HTTP Headers for the attachment</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/common.html#head--db-docid"><code class="xref">HEAD /{db}/{docid}</code></a></td><td>
+       <em>Returns bare information in the HTTP Headers for the document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/attachments.html#head--db-docid-attname"><code class="xref">HEAD /{db}/{docid}/{attname}</code></a></td><td>
+       <em>Returns bare information in the HTTP Headers for the attachment</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/common.html#get--db"><code class="xref">GET /{db}</code></a></td><td>
+       <em>Returns the database information</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#get--db-_all_docs"><code class="xref">GET /{db}/_all_docs</code></a></td><td>
+       <em>Returns a built-in view of all documents in this database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/changes.html#get--db-_changes"><code class="xref">GET /{db}/_changes</code></a></td><td>
+       <em>Returns changes for the given database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#get--db-_design-ddoc"><code class="xref">GET /{db}/_design/{ddoc}</code></a></td><td>
+       <em>Returns the design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#get--db-_design-ddoc-_info"><code class="xref">GET /{db}/_design/{ddoc}/_info</code></a></td><td>
+       <em>Returns view index information for the specified design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#get--db-_design-ddoc-_list-func-other-ddoc-view"><code class="xref">GET /{db}/_design/{ddoc}/_list/{func}/{other-ddoc}/{view}</code></a></td><td>
+       <em>Executes a list function against the view from other
+design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#get--db-_design-ddoc-_list-func-view"><code class="xref">GET /{db}/_design/{ddoc}/_list/{func}/{view}</code></a></td><td>
+       <em>Executes a list function against the view from the same
+design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/nouveau.html#get--db-_design-ddoc-_nouveau-index"><code class="xref">GET /{db}/_design/{ddoc}/_nouveau/{index}</code></a></td><td>
+       <em>Returns results for the specified nouveau index</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/nouveau.html#get--db-_design-ddoc-_nouveau_info-index"><code class="xref">GET /{db}/_design/{ddoc}/_nouveau_info/{index}</code></a></td><td>
+       <em>Returns metadata for the specified nouveau index</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/search.html#get--db-_design-ddoc-_search-index"><code class="xref">GET /{db}/_design/{ddoc}/_search/{index}</code></a></td><td>
+       <em>Returns results for the specified search index</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/search.html#get--db-_design-ddoc-_search_info-index"><code class="xref">GET /{db}/_design/{ddoc}/_search_info/{index}</code></a></td><td>
+       <em>Returns metadata for the specified search index</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#get--db-_design-ddoc-_show-func"><code class="xref">GET /{db}/_design/{ddoc}/_show/{func}</code></a></td><td>
+       <em>Executes a show function against null document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#get--db-_design-ddoc-_show-func-docid"><code class="xref">GET /{db}/_design/{ddoc}/_show/{func}/{docid}</code></a></td><td>
+       <em>Executes a show function against the specified document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/views.html#get--db-_design-ddoc-_view-view"><code class="xref">GET /{db}/_design/{ddoc}/_view/{view}</code></a></td><td>
+       <em>Returns results for the specified stored view</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#get--db-_design-ddoc-attname"><code class="xref">GET /{db}/_design/{ddoc}/{attname}</code></a></td><td>
+       <em>Gets the attachment of a design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#get--db-_design_docs"><code class="xref">GET /{db}/_design_docs</code></a></td><td>
+       <em>Returns a built-in view of all design documents in this database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/find.html#get--db-_index"><code class="xref">GET /{db}/_index</code></a></td><td>
+       <em>List all indexes.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/local.html#get--db-_local-docid"><code class="xref">GET /{db}/_local/{docid}</code></a></td><td>
+       <em>Returns the latest revision of the local document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/local.html#get--db-_local_docs"><code class="xref">GET /{db}/_local_docs</code></a></td><td>
+       <em>Returns a built-in view of all local (non-replicating) documents
+in this database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/partitioned-dbs.html#get--db-_partition-partition_id"><code class="xref">GET /{db}/_partition/{partition_id}</code></a></td><td>
+       <em>Returns document and size info for the given partition</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/partitioned-dbs.html#get--db-_partition-partition_id-_all_docs"><code class="xref">GET /{db}/_partition/{partition_id}/_all_docs</code></a></td><td>
+       <em>Return all docs in the specified partition</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/partitioned-dbs.html#get--db-_partition-partition_id-_design-ddoc-_view-view"><code class="xref">GET /{db}/_partition/{partition_id}/_design/{ddoc}/_view/{view}</code></a></td><td>
+       <em>Execute a partitioned query</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#get--db-_purged_infos"><code class="xref">GET /{db}/_purged_infos</code></a></td><td>
+       <em>Returns a history list of purged document IDs and revisions</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#get--db-_purged_infos_limit"><code class="xref">GET /{db}/_purged_infos_limit</code></a></td><td>
+       <em>Returns the limit of historical purges to store in the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#get--db-_revs_limit"><code class="xref">GET /{db}/_revs_limit</code></a></td><td>
+       <em>Returns the limit of historical revisions to store for
+a single document in the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/security.html#get--db-_security"><code class="xref">GET /{db}/_security</code></a></td><td>
+       <em>Returns the special security object for the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/shard.html#get--db-_shards"><code class="xref">GET /{db}/_shards</code></a></td><td>
+       <em>Displays the shard map layout of a database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/shard.html#get--db-_shards-docid"><code class="xref">GET /{db}/_shards/{docid}</code></a></td><td>
+       <em>Returns the specific shard in which a document is stored</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/common.html#get--db-docid"><code class="xref">GET /{db}/{docid}</code></a></td><td>
+       <em>Returns the document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/attachments.html#get--db-docid-attname"><code class="xref">GET /{db}/{docid}/{attname}</code></a></td><td>
+       <em>Gets the attachment of a document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/common.html#post--db"><code class="xref">POST /{db}</code></a></td><td>
+       <em>Creates a new document with generated ID if _id is not specified</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#post--db-_all_docs"><code class="xref">POST /{db}/_all_docs</code></a></td><td>
+       <em>Returns a built-in view of all documents in this database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#post--db-_all_docs-queries"><code class="xref">POST /{db}/_all_docs/queries</code></a></td><td>
+       <em>Returns results for the specified queries</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#post--db-_bulk_docs"><code class="xref">POST /{db}/_bulk_docs</code></a></td><td>
+       <em>Inserts or updates multiple documents in to the database in
+a single request</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#post--db-_bulk_get"><code class="xref">POST /{db}/_bulk_get</code></a></td><td>
+       <em>Fetches several documents at the given revisions</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/changes.html#post--db-_changes"><code class="xref">POST /{db}/_changes</code></a></td><td>
+       <em>Returns changes for the given database for certain document IDs</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/compact.html#post--db-_compact"><code class="xref">POST /{db}/_compact</code></a></td><td>
+       <em>Starts a compaction for the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/compact.html#post--db-_compact-ddoc"><code class="xref">POST /{db}/_compact/{ddoc}</code></a></td><td>
+       <em>Starts a compaction for all the views in the selected
+design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#post--db-_design-ddoc-_list-func-other-ddoc-view"><code class="xref">POST /{db}/_design/{ddoc}/_list/{func}/{other-ddoc}/{view}</code></a></td><td>
+       <em>Same as GET method for the related endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#post--db-_design-ddoc-_list-func-view"><code class="xref">POST /{db}/_design/{ddoc}/_list/{func}/{view}</code></a></td><td>
+       <em>Same as GET method for the related endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#post--db-_design-ddoc-_show-func"><code class="xref">POST /{db}/_design/{ddoc}/_show/{func}</code></a></td><td>
+       <em>Same as GET method for the related endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#post--db-_design-ddoc-_show-func-docid"><code class="xref">POST /{db}/_design/{ddoc}/_show/{func}/{docid}</code></a></td><td>
+       <em>Same as GET method for the related endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#post--db-_design-ddoc-_update-func"><code class="xref">POST /{db}/_design/{ddoc}/_update/{func}</code></a></td><td>
+       <em>Executes an update function against the null document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/views.html#post--db-_design-ddoc-_view-view"><code class="xref">POST /{db}/_design/{ddoc}/_view/{view}</code></a></td><td>
+       <em>Returns results for the specified view</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/views.html#post--db-_design-ddoc-_view-view-queries"><code class="xref">POST /{db}/_design/{ddoc}/_view/{view}/queries</code></a></td><td>
+       <em>Returns results for the specified queries</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#post--db-_design_docs"><code class="xref">POST /{db}/_design_docs</code></a></td><td>
+       <em>Returns a built-in view of all design documents in this database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/bulk-api.html#post--db-_design_docs-queries"><code class="xref">POST /{db}/_design_docs/queries</code></a></td><td>
+       <em>Returns results for the specified queries</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/compact.html#post--db-_ensure_full_commit"><code class="xref">POST /{db}/_ensure_full_commit</code></a></td><td>
+       <em>Deprecated endpoint to support CouchDB versions &lt; 3.0
+replicators.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/find.html#post--db-_explain"><code class="xref">POST /{db}/_explain</code></a></td><td>
+       <em>Identify which index is being used by a particular query.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/find.html#post--db-_find"><code class="xref">POST /{db}/_find</code></a></td><td>
+       <em>Find documents within a given database.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/find.html#post--db-_index"><code class="xref">POST /{db}/_index</code></a></td><td>
+       <em>Create a new index.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/find.html#post--db-_index-_bulk_delete"><code class="xref">POST /{db}/_index/_bulk_delete</code></a></td><td>
+       <em>Delete indexes in bulk.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/local.html#post--db-_local_docs"><code class="xref">POST /{db}/_local_docs</code></a></td><td>
+       <em>Returns a built-in view of all local (non-replicating) documents
+in this database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/local.html#post--db-_local_docs-queries"><code class="xref">POST /{db}/_local_docs/queries</code></a></td><td>
+       <em>Returns results for the specified queries</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#post--db-_missing_revs"><code class="xref">POST /{db}/_missing_revs</code></a></td><td>
+       <em>By given list of document revisions returns the document
+revisions that do not exist in the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/partitioned-dbs.html#post--db-_partition-partition_id-_explain"><code class="xref">POST /{db}/_partition/{partition_id}/_explain</code></a></td><td>
+       <em>Find index that is used with a query</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/partitioned-dbs.html#post--db-_partition-partition_id-_find"><code class="xref">POST /{db}/_partition/{partition_id}/_find</code></a></td><td>
+       <em>Query the partition specified by ``partition_id``</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#post--db-_purge"><code class="xref">POST /{db}/_purge</code></a></td><td>
+       <em>Purges documents entirely from database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#post--db-_revs_diff"><code class="xref">POST /{db}/_revs_diff</code></a></td><td>
+       <em>By given list of document revisions returns differences between
+the given revisions and ones that are in the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/shard.html#post--db-_sync_shards"><code class="xref">POST /{db}/_sync_shards</code></a></td><td>
+       <em>Trigger a synchronization of all shard replicas
+in the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/compact.html#post--db-_view_cleanup"><code class="xref">POST /{db}/_view_cleanup</code></a></td><td>
+       <em>Removes view files that are not used by any design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/common.html#put--db"><code class="xref">PUT /{db}</code></a></td><td>
+       <em>Creates a new database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#put--db-_design-ddoc"><code class="xref">PUT /{db}/_design/{ddoc}</code></a></td><td>
+       <em>Creates a new design document or new version of an existing one</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/render.html#put--db-_design-ddoc-_update-func-docid"><code class="xref">PUT /{db}/_design/{ddoc}/_update/{func}/{docid}</code></a></td><td>
+       <em>Executes an update function against the specified document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#put--db-_design-ddoc-attname"><code class="xref">PUT /{db}/_design/{ddoc}/{attname}</code></a></td><td>
+       <em>Adds an attachment of a design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/local.html#put--db-_local-docid"><code class="xref">PUT /{db}/_local/{docid}</code></a></td><td>
+       <em>Inserts a new version of the local document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#put--db-_purged_infos_limit"><code class="xref">PUT /{db}/_purged_infos_limit</code></a></td><td>
+       <em>Sets the limit of historical purges to store in the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/misc.html#put--db-_revs_limit"><code class="xref">PUT /{db}/_revs_limit</code></a></td><td>
+       <em>Sets the limit of historical revisions to store for
+a single document in the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/security.html#put--db-_security"><code class="xref">PUT /{db}/_security</code></a></td><td>
+       <em>Sets the special security object for the database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/common.html#put--db-docid"><code class="xref">PUT /{db}/{docid}</code></a></td><td>
+       <em>Creates a new document or new version of an existing document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/attachments.html#put--db-docid-attname"><code class="xref">PUT /{db}/{docid}/{attname}</code></a></td><td>
+       <em>Adds an attachment of a document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/common.html#delete--db"><code class="xref">DELETE /{db}</code></a></td><td>
+       <em>Deletes an existing database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#delete--db-_design-ddoc"><code class="xref">DELETE /{db}/_design/{ddoc}</code></a></td><td>
+       <em>Deletes the design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#delete--db-_design-ddoc-attname"><code class="xref">DELETE /{db}/_design/{ddoc}/{attname}</code></a></td><td>
+       <em>Deletes an attachment of a design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/database/find.html#delete--db-_index-design_doc-json-name"><code class="xref">DELETE /{db}/_index/{design_doc}/json/{name}</code></a></td><td>
+       <em>Delete an index.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/local.html#delete--db-_local-docid"><code class="xref">DELETE /{db}/_local/{docid}</code></a></td><td>
+       <em>Deletes the local document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/common.html#delete--db-docid"><code class="xref">DELETE /{db}/{docid}</code></a></td><td>
+       <em>Deletes the document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/attachments.html#delete--db-docid-attname"><code class="xref">DELETE /{db}/{docid}/{attname}</code></a></td><td>
+       <em>Deletes an attachment of a document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/common.html#copy--db-_design-ddoc"><code class="xref">COPY /{db}/_design/{ddoc}</code></a></td><td>
+       <em>Copies the design document</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/local.html#copy--db-_local-docid"><code class="xref">COPY /{db}/_local/{docid}</code></a></td><td>
+       <em>Copies the local document within the same database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/document/common.html#copy--db-docid"><code class="xref">COPY /{db}/{docid}</code></a></td><td>
+       <em>Copies the document within the same database</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api/ddoc/rewrites.html#any--db-_design-ddoc-_rewrite-path"><code class="xref">ANY /{db}/_design/{ddoc}/_rewrite/{path}</code></a></td><td>
+       <em>Rewrites HTTP request for the specified path by using stored
+array of routing rules or JavaScript function</em></td></tr>
+   </table>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

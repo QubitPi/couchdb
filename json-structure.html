@@ -1,0 +1,1134 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. JSON Structure Reference &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/json-structure.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Query Server" href="query-server/index.html" />
+    <link rel="prev" title="1.7. Local (non-replicating) Documents" href="api/local.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">1. API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. JSON Structure Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#all-database-documents">2.1. All Database Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bulk-document-response">2.2. Bulk Document Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bulk-documents">2.3. Bulk Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changes-information-for-a-database">2.4. Changes information for a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#couchdb-document">2.5. CouchDB Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#couchdb-error-status">2.6. CouchDB Error Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#couchdb-database-information-object">2.7. CouchDB database information object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#design-document">2.8. Design Document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#design-document-information">2.9. Design Document Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-with-attachments">2.10. Document with Attachments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-active-tasks">2.11. List of Active Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#replication-settings">2.12. Replication Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#replication-status">2.13. Replication Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request-object">2.14. Request object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request2-object">2.15. Request2 object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#response-object">2.16. Response object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#returned-couchdb-document-with-detailed-revision-info">2.17. Returned CouchDB Document with Detailed Revision Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#returned-couchdb-document-with-revision-info">2.18. Returned CouchDB Document with Revision Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#returned-document-with-attachments">2.19. Returned Document with Attachments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#security-object">2.20. Security Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-context-object">2.21. User Context Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#view-head-information">2.22. View Head Information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="http-routingtable.html">API Quick Reference</a></li>
+<li><a href="config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2. </span>JSON Structure Reference</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/json-structure.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="json-structure-reference">
+<h1><span class="section-number">2. </span>JSON Structure Reference<a class="headerlink" href="#json-structure-reference" title="Permalink to this heading">¶</a></h1>
+<p>The following appendix provides a quick reference to all the JSON structures
+that you can supply to CouchDB, or get in return to requests.</p>
+<section id="all-database-documents">
+<h2><span class="section-number">2.1. </span>All Database Documents<a class="headerlink" href="#all-database-documents" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>total_rows</p></td>
+<td><p>Number of documents in the database/view</p></td>
+</tr>
+<tr class="row-odd"><td><p>offset</p></td>
+<td><p>Offset where the document list started</p></td>
+</tr>
+<tr class="row-even"><td><p>update_seq (optional)</p></td>
+<td><p>Current update sequence for the database</p></td>
+</tr>
+<tr class="row-odd"><td><p>rows [array]</p></td>
+<td><p>Array of document object</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bulk-document-response">
+<h2><span class="section-number">2.2. </span>Bulk Document Response<a class="headerlink" href="#bulk-document-response" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>docs [array]</p></td>
+<td><p>Bulk Docs Returned Documents</p></td>
+</tr>
+<tr class="row-odd"><td><p>id</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>Error type</p></td>
+</tr>
+<tr class="row-odd"><td><p>reason</p></td>
+<td><p>Error string with extended reason</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bulk-documents">
+<h2><span class="section-number">2.3. </span>Bulk Documents<a class="headerlink" href="#bulk-documents" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>docs [array]</p></td>
+<td><p>Bulk Documents Document</p></td>
+</tr>
+<tr class="row-odd"><td><p>_id (optional)</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-even"><td><p>_rev (optional)</p></td>
+<td><p>Revision ID (when updating an existing
+document)</p></td>
+</tr>
+<tr class="row-odd"><td><p>_deleted (optional)</p></td>
+<td><p>Whether the document should be deleted</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="changes-information-for-a-database">
+<h2><span class="section-number">2.4. </span>Changes information for a database<a class="headerlink" href="#changes-information-for-a-database" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>last_seq</p></td>
+<td><p>Last update sequence</p></td>
+</tr>
+<tr class="row-odd"><td><p>pending</p></td>
+<td><p>Count of remaining items in the feed</p></td>
+</tr>
+<tr class="row-even"><td><p>results [array]</p></td>
+<td><p>Changes made to a database</p></td>
+</tr>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>Update sequence</p></td>
+</tr>
+<tr class="row-even"><td><p>id</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>changes [array]</p></td>
+<td><p>List of changes, field-by-field, for this
+document</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="couchdb-document">
+<h2><span class="section-number">2.5. </span>CouchDB Document<a class="headerlink" href="#couchdb-document" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>_id (optional)</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>_rev (optional)</p></td>
+<td><p>Revision ID (when updating an existing
+document)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="couchdb-error-status">
+<h2><span class="section-number">2.6. </span>CouchDB Error Status<a class="headerlink" href="#couchdb-error-status" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>id</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>Error type</p></td>
+</tr>
+<tr class="row-even"><td><p>reason</p></td>
+<td><p>Error string with extended reason</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="couchdb-database-information-object">
+<span id="dbinfo-object"></span><h2><span class="section-number">2.7. </span>CouchDB database information object<a class="headerlink" href="#couchdb-database-information-object" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>db_name</p></td>
+<td><p>The name of the database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>committed_update_seq</p></td>
+<td><p>The number of committed updates.</p></td>
+</tr>
+<tr class="row-even"><td><p>doc_count</p></td>
+<td><p>The number of documents in the database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>doc_del_count</p></td>
+<td><p>The number of deleted documents.</p></td>
+</tr>
+<tr class="row-even"><td><p>compact_running</p></td>
+<td><p>Set to true if the database compaction
+routine is operating on this database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>disk_format_version</p></td>
+<td><p>The version of the physical format used for
+the data when it is stored on hard disk.</p></td>
+</tr>
+<tr class="row-even"><td><p>disk_size</p></td>
+<td><p>Size in bytes of the data as stored on disk.
+View indexes are not included in the
+calculation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>instance_start_time</p></td>
+<td><p>Timestamp indicating when the database was
+opened, expressed in microseconds since the
+epoch.</p></td>
+</tr>
+<tr class="row-even"><td><p>purge_seq</p></td>
+<td><p>The number of purge operations on the
+database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_seq</p></td>
+<td><p>Current update sequence for the database.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="design-document">
+<h2><span class="section-number">2.8. </span>Design Document<a class="headerlink" href="#design-document" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>_id</p></td>
+<td><p>Design Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>_rev</p></td>
+<td><p>Design Document Revision</p></td>
+</tr>
+<tr class="row-even"><td><p>views</p></td>
+<td><p>View</p></td>
+</tr>
+<tr class="row-odd"><td><p>viewname</p></td>
+<td><p>View Definition</p></td>
+</tr>
+<tr class="row-even"><td><p>map</p></td>
+<td><p>Map Function for View</p></td>
+</tr>
+<tr class="row-odd"><td><p>reduce (optional)</p></td>
+<td><p>Reduce Function for View</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="design-document-information">
+<h2><span class="section-number">2.9. </span>Design Document Information<a class="headerlink" href="#design-document-information" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>Name/ID of Design Document</p></td>
+</tr>
+<tr class="row-odd"><td><p>view_index</p></td>
+<td><p>View Index</p></td>
+</tr>
+<tr class="row-even"><td><p>compact_running</p></td>
+<td><p>Indicates whether a compaction routine is
+currently running on the view</p></td>
+</tr>
+<tr class="row-odd"><td><p>disk_size</p></td>
+<td><p>Size in bytes of the view as stored on disk</p></td>
+</tr>
+<tr class="row-even"><td><p>language</p></td>
+<td><p>Language for the defined views</p></td>
+</tr>
+<tr class="row-odd"><td><p>purge_seq</p></td>
+<td><p>The purge sequence that has been processed</p></td>
+</tr>
+<tr class="row-even"><td><p>signature</p></td>
+<td><p>MD5 signature of the views for the design
+document</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_seq</p></td>
+<td><p>The update sequence of the corresponding
+database that has been indexed</p></td>
+</tr>
+<tr class="row-even"><td><p>updater_running</p></td>
+<td><p>Indicates if the view is currently being
+updated</p></td>
+</tr>
+<tr class="row-odd"><td><p>waiting_clients</p></td>
+<td><p>Number of clients waiting on views from this
+design document</p></td>
+</tr>
+<tr class="row-even"><td><p>waiting_commit</p></td>
+<td><p>Indicates if there are outstanding commits
+to the underlying database that need to
+processed</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="document-with-attachments">
+<h2><span class="section-number">2.10. </span>Document with Attachments<a class="headerlink" href="#document-with-attachments" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>_id (optional)</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>_rev (optional)</p></td>
+<td><p>Revision ID (when updating an existing
+document)</p></td>
+</tr>
+<tr class="row-even"><td><p>_attachments (optional)</p></td>
+<td><p>Document Attachment</p></td>
+</tr>
+<tr class="row-odd"><td><p>filename</p></td>
+<td><p>Attachment information</p></td>
+</tr>
+<tr class="row-even"><td><p>content_type</p></td>
+<td><p>MIME Content type string</p></td>
+</tr>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>File attachment content, Base64 encoded</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="list-of-active-tasks">
+<h2><span class="section-number">2.11. </span>List of Active Tasks<a class="headerlink" href="#list-of-active-tasks" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tasks [array]</p></td>
+<td><p>Active Tasks</p></td>
+</tr>
+<tr class="row-odd"><td><p>pid</p></td>
+<td><p>Process ID</p></td>
+</tr>
+<tr class="row-even"><td><p>status</p></td>
+<td><p>Task status message</p></td>
+</tr>
+<tr class="row-odd"><td><p>task</p></td>
+<td><p>Task name</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>Operation Type</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="replication-settings">
+<span id="id1"></span><h2><span class="section-number">2.12. </span>Replication Settings<a class="headerlink" href="#replication-settings" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>source</p></td>
+<td><p>Source database name or URL.</p></td>
+</tr>
+<tr class="row-odd"><td><p>target</p></td>
+<td><p>Target database name or URL.</p></td>
+</tr>
+<tr class="row-even"><td><p>cancel (optional)</p></td>
+<td><p>Cancels the replication.</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_interval (optional)</p></td>
+<td><p>Specifies the checkpoint interval in ms.</p></td>
+</tr>
+<tr class="row-even"><td><p>continuous (optional)</p></td>
+<td><p>Configure the replication to be continuous.</p></td>
+</tr>
+<tr class="row-odd"><td><p>create_target (optional)</p></td>
+<td><p>Creates the target database.</p></td>
+</tr>
+<tr class="row-even"><td><p>doc_ids (optional)</p></td>
+<td><p>Array of document IDs to be synchronized.</p></td>
+</tr>
+<tr class="row-odd"><td><p>filter (optional)</p></td>
+<td><p>name of the filter function in the form of
+<code class="docutils literal notranslate"><span class="pre">ddoc/myfilter</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>source_proxy (optional)</p></td>
+<td><p>Address of a proxy server through which
+replication from the source should occur.</p></td>
+</tr>
+<tr class="row-odd"><td><p>target_proxy (optional)</p></td>
+<td><p>Address of a proxy server through which
+replication to the target should occur.</p></td>
+</tr>
+<tr class="row-even"><td><p>query_params (optional)</p></td>
+<td><p>Query parameter that are passed to the
+filter function; the value should be a
+document containing parameters as members.</p></td>
+</tr>
+<tr class="row-odd"><td><p>selector (optional)</p></td>
+<td><p>Select the documents included in the
+replication. This option provides
+performance benefits compared with using
+the <code class="docutils literal notranslate"><span class="pre">filter</span></code> option.</p></td>
+</tr>
+<tr class="row-even"><td><p>since_seq (optional)</p></td>
+<td><p>Sequence from which the replication should
+start.</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_checkpoints (optional)</p></td>
+<td><p>Whether to use replication checkpoints
+or not.</p></td>
+</tr>
+<tr class="row-even"><td><p>winning_revs_only (optional)</p></td>
+<td><p>Replicate only the winning revisions.</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_bulk_get (optional)</p></td>
+<td><p>Try to use <code class="docutils literal notranslate"><span class="pre">_bulk_get</span></code> to fetch revisions.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="replication-status">
+<span id="id2"></span><h2><span class="section-number">2.13. </span>Replication Status<a class="headerlink" href="#replication-status" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ok</p></td>
+<td><p>Replication status</p></td>
+</tr>
+<tr class="row-odd"><td><p>session_id</p></td>
+<td><p>Unique session ID</p></td>
+</tr>
+<tr class="row-even"><td><p>source_last_seq</p></td>
+<td><p>Last sequence number read from the source
+database</p></td>
+</tr>
+<tr class="row-odd"><td><p>history [array]</p></td>
+<td><p>Replication History</p></td>
+</tr>
+<tr class="row-even"><td><p>session_id</p></td>
+<td><p>Session ID for this replication operation</p></td>
+</tr>
+<tr class="row-odd"><td><p>recorded_seq</p></td>
+<td><p>Last recorded sequence number</p></td>
+</tr>
+<tr class="row-even"><td><p>docs_read</p></td>
+<td><p>Number of documents read</p></td>
+</tr>
+<tr class="row-odd"><td><p>docs_written</p></td>
+<td><p>Number of documents written to target</p></td>
+</tr>
+<tr class="row-even"><td><p>doc_write_failures</p></td>
+<td><p>Number of document write failures</p></td>
+</tr>
+<tr class="row-odd"><td><p>start_time</p></td>
+<td><p>Date/Time replication operation started</p></td>
+</tr>
+<tr class="row-even"><td><p>start_last_seq</p></td>
+<td><p>First sequence number in changes stream</p></td>
+</tr>
+<tr class="row-odd"><td><p>end_time</p></td>
+<td><p>Date/Time replication operation completed</p></td>
+</tr>
+<tr class="row-even"><td><p>end_last_seq</p></td>
+<td><p>Last sequence number in changes stream</p></td>
+</tr>
+<tr class="row-odd"><td><p>missing_checked</p></td>
+<td><p>Number of missing documents checked</p></td>
+</tr>
+<tr class="row-even"><td><p>missing_found</p></td>
+<td><p>Number of missing documents found</p></td>
+</tr>
+<tr class="row-odd"><td><p>bulk_get_attempts</p></td>
+<td><p>Number of attempted _bulk_get fetches</p></td>
+</tr>
+<tr class="row-even"><td><p>bulk_get_docs</p></td>
+<td><p>Number of documents read with _bulk_get</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="request-object">
+<span id="id3"></span><h2><span class="section-number">2.14. </span>Request object<a class="headerlink" href="#request-object" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>body</p></td>
+<td><p>Request body data as <cite>string</cite>.
+If the request method is <cite>GET</cite> this field
+contains the value <code class="docutils literal notranslate"><span class="pre">&quot;undefined&quot;</span></code>. If the
+method is <cite>DELETE</cite> or <cite>HEAD</cite> the value is
+<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> (empty string).</p></td>
+</tr>
+<tr class="row-odd"><td><p>cookie</p></td>
+<td><p>Cookies <cite>object</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>form</p></td>
+<td><p>Form data <cite>object</cite>.
+Contains the decoded body as key-value
+pairs if the <cite>Content-Type</cite> header was
+<code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>headers</p></td>
+<td><p>Request headers <cite>object</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>id</p></td>
+<td><p>Requested document id <cite>string</cite> if it was
+specified or <code class="docutils literal notranslate"><span class="pre">null</span></code> otherwise.</p></td>
+</tr>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p><a class="reference internal" href="#dbinfo-object"><span class="std std-ref">Database information</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>method</p></td>
+<td><p>Request method as <cite>string</cite> or <cite>array</cite>.
+String value is a method as one of: <cite>HEAD</cite>,
+<cite>GET</cite>, <cite>POST</cite>, <cite>PUT</cite>, <cite>DELETE</cite>, <cite>OPTIONS</cite>,
+and <cite>TRACE</cite>. Otherwise it will be
+represented as an array of char codes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>List of requested path sections.</p></td>
+</tr>
+<tr class="row-even"><td><p>peer</p></td>
+<td><p>Request source IP address.</p></td>
+</tr>
+<tr class="row-odd"><td><p>query</p></td>
+<td><p>URL query parameters <cite>object</cite>.
+Note that multiple keys are not supported
+and the last key value suppresses others.</p></td>
+</tr>
+<tr class="row-even"><td><p>requested_path</p></td>
+<td><p>List of actual requested path section.</p></td>
+</tr>
+<tr class="row-odd"><td><p>raw_path</p></td>
+<td><p>Raw requested path <cite>string</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>secObj</p></td>
+<td><p><a class="reference internal" href="#security-object"><span class="std std-ref">Security Object</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>userCtx</p></td>
+<td><p><a class="reference internal" href="#userctx-object"><span class="std std-ref">User Context Object</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>uuid</p></td>
+<td><p>Generated UUID by a specified algorithm in
+the config file.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;body&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;undefined&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;cookie&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;AuthSession&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cm9vdDo1MDZBRjQzRjrfcuikzPRfAn-EA37FmjyfM8G8Lw&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;m&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3234&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;form&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">    </span><span class="s2">&quot;headers&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Accept&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Accept-Charset&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ISO-8859-1,utf-8;q=0.7,*;q=0.3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Accept-Encoding&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gzip,deflate,sdch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Accept-Language&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;en-US,en;q=0.8&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Connection&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keep-alive&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Cookie&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;m=3234:t|3247:t|6493:t|6967:t|34e2:|18c3:t|2c69:t|5acb:t|ca3:t|c01:t|5e55:t|77cb:t|2a03:t|1d98:t|47ba:t|64b8:t|4a01:t; AuthSession=cm9vdDo1MDZBRjQzRjrfcuikzPRfAn-EA37FmjyfM8G8Lw&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Host&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1:5984&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;User-Agent&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Mozilla/5.0 (Windows NT 5.2) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.75 Safari/535.7&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;info&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;committed_update_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2701412</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;compact_running&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;db_name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;mailbox&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;disk_format_version&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;doc_count&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2262757</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;doc_del_count&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">560</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;instance_start_time&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1347601025628957&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;purge_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;sizes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">7580843252</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;disk&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">14325313673</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;external&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">7803423459</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;update_seq&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2701412</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;method&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;path&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;mailbox&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;request&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;_show&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;dump&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;foo&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;peer&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">    </span><span class="s2">&quot;raw_path&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;/mailbox/_design/request/_show/dump/foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;requested_path&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;mailbox&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;_design&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;request&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;_show&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;dump&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;foo&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;secObj&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;admins&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;names&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;Bob&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;members&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;names&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;Mike&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;Alice&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;userCtx&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;db&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;mailbox&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Mike&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;user&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;uuid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3184f9d1ea934e1f81a24c71bde5c168&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="request2-object">
+<span id="id4"></span><h2><span class="section-number">2.15. </span>Request2 object<a class="headerlink" href="#request2-object" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>body</p></td>
+<td><p>Request body data as <cite>string</cite>.
+If the request method is <cite>GET</cite> this field
+contains the value <code class="docutils literal notranslate"><span class="pre">&quot;undefined&quot;</span></code>. If the
+method is <cite>DELETE</cite> or <cite>HEAD</cite> the value is
+<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> (empty string).</p></td>
+</tr>
+<tr class="row-odd"><td><p>cookie</p></td>
+<td><p>Cookies <cite>object</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>headers</p></td>
+<td><p>Request headers <cite>object</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>method</p></td>
+<td><p>Request method as <cite>string</cite> or <cite>array</cite>.
+String value is a method as one of: <cite>HEAD</cite>,
+<cite>GET</cite>, <cite>POST</cite>, <cite>PUT</cite>, <cite>DELETE</cite>, <cite>OPTIONS</cite>,
+and <cite>TRACE</cite>. Otherwise it will be
+represented as an array of char codes.</p></td>
+</tr>
+<tr class="row-even"><td><p>path</p></td>
+<td><p>List of requested path sections.</p></td>
+</tr>
+<tr class="row-odd"><td><p>peer</p></td>
+<td><p>Request source IP address.</p></td>
+</tr>
+<tr class="row-even"><td><p>query</p></td>
+<td><p>URL query parameters <cite>object</cite>.
+Note that multiple keys are not supported
+and the last key value suppresses others.</p></td>
+</tr>
+<tr class="row-odd"><td><p>requested_path</p></td>
+<td><p>List of actual requested path section.</p></td>
+</tr>
+<tr class="row-even"><td><p>raw_path</p></td>
+<td><p>Raw requested path <cite>string</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>secObj</p></td>
+<td><p><a class="reference internal" href="#security-object"><span class="std std-ref">Security Object</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>userCtx</p></td>
+<td><p><a class="reference internal" href="#userctx-object"><span class="std std-ref">User Context Object</span></a>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="response-object">
+<span id="id5"></span><h2><span class="section-number">2.16. </span>Response object<a class="headerlink" href="#response-object" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>code</p></td>
+<td><p>HTTP status code <cite>number</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>json</p></td>
+<td><p>JSON encodable <cite>object</cite>.
+Implicitly sets <cite>Content-Type</cite> header as
+<code class="docutils literal notranslate"><span class="pre">application/json</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>body</p></td>
+<td><p>Raw response text <cite>string</cite>.
+Implicitly sets <cite>Content-Type</cite> header as
+<code class="docutils literal notranslate"><span class="pre">text/html;</span> <span class="pre">charset=utf-8</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>base64</p></td>
+<td><p>Base64 encoded <cite>string</cite>.
+Implicitly sets <cite>Content-Type</cite> header as
+<code class="docutils literal notranslate"><span class="pre">application/binary</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>headers</p></td>
+<td><p>Response headers <cite>object</cite>.
+<cite>Content-Type</cite> header from this object
+overrides any implicitly assigned one.</p></td>
+</tr>
+<tr class="row-odd"><td><p>stop</p></td>
+<td><p><cite>boolean</cite> signal to stop iteration over
+view result rows (for list functions only)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">body</span></code>, <code class="docutils literal notranslate"><span class="pre">base64</span></code> and <code class="docutils literal notranslate"><span class="pre">json</span></code> object keys are overlapping each other
+where the last one wins. Since most realizations of key-value objects do
+not preserve the key order or if they are mixed, confusing situations can
+occur. Try to use only one of them.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any custom property makes CouchDB raise an internal exception. Furthermore,
+the <cite>Response object</cite> could be a simple string value which would be
+implicitly wrapped into a <code class="docutils literal notranslate"><span class="pre">{&quot;body&quot;:</span> <span class="pre">...}</span></code> object.</p>
+</div>
+</section>
+<section id="returned-couchdb-document-with-detailed-revision-info">
+<h2><span class="section-number">2.17. </span>Returned CouchDB Document with Detailed Revision Info<a class="headerlink" href="#returned-couchdb-document-with-detailed-revision-info" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>_id (optional)</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>_rev (optional)</p></td>
+<td><p>Revision ID (when updating an existing
+document)</p></td>
+</tr>
+<tr class="row-even"><td><p>_revs_info [array]</p></td>
+<td><p>CouchDB document extended revision info</p></td>
+</tr>
+<tr class="row-odd"><td><p>rev</p></td>
+<td><p>Full revision string</p></td>
+</tr>
+<tr class="row-even"><td><p>status</p></td>
+<td><p>Status of the revision</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returned-couchdb-document-with-revision-info">
+<h2><span class="section-number">2.18. </span>Returned CouchDB Document with Revision Info<a class="headerlink" href="#returned-couchdb-document-with-revision-info" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>_id (optional)</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>_rev (optional)</p></td>
+<td><p>Revision ID (when updating an existing
+document)</p></td>
+</tr>
+<tr class="row-even"><td><p>_revisions</p></td>
+<td><p>CouchDB document revisions</p></td>
+</tr>
+<tr class="row-odd"><td><p>ids [array]</p></td>
+<td><p>Array of valid revision IDs, in reverse
+order (latest first)</p></td>
+</tr>
+<tr class="row-even"><td><p>start</p></td>
+<td><p>Prefix number for the latest revision</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returned-document-with-attachments">
+<h2><span class="section-number">2.19. </span>Returned Document with Attachments<a class="headerlink" href="#returned-document-with-attachments" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>_id (optional)</p></td>
+<td><p>Document ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>_rev (optional)</p></td>
+<td><p>Revision ID (when updating an existing
+document)</p></td>
+</tr>
+<tr class="row-even"><td><p>_attachments (optional)</p></td>
+<td><p>Document attachment</p></td>
+</tr>
+<tr class="row-odd"><td><p>filename</p></td>
+<td><p>Attachment</p></td>
+</tr>
+<tr class="row-even"><td><p>stub</p></td>
+<td><p>Indicates whether the attachment is a stub</p></td>
+</tr>
+<tr class="row-odd"><td><p>content_type</p></td>
+<td><p>MIME Content type string</p></td>
+</tr>
+<tr class="row-even"><td><p>length</p></td>
+<td><p>Length (bytes) of the attachment data</p></td>
+</tr>
+<tr class="row-odd"><td><p>revpos</p></td>
+<td><p>Revision where this attachment exists</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="security-object">
+<span id="id6"></span><h2><span class="section-number">2.20. </span>Security Object<a class="headerlink" href="#security-object" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>admins</p></td>
+<td><p>Roles/Users with admin privileges</p></td>
+</tr>
+<tr class="row-odd"><td><p>roles [array]</p></td>
+<td><p>List of roles with parent privilege</p></td>
+</tr>
+<tr class="row-even"><td><p>names [array]</p></td>
+<td><p>List of users with parent privilege</p></td>
+</tr>
+<tr class="row-odd"><td><p>members</p></td>
+<td><p>Roles/Users with non-admin privileges</p></td>
+</tr>
+<tr class="row-even"><td><p>roles [array]</p></td>
+<td><p>List of roles with parent privilege</p></td>
+</tr>
+<tr class="row-odd"><td><p>names [array]</p></td>
+<td><p>List of users with parent privilege</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;admins&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;names&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;Bob&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;members&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;names&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;Mike&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Alice&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="user-context-object">
+<span id="userctx-object"></span><h2><span class="section-number">2.21. </span>User Context Object<a class="headerlink" href="#user-context-object" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>db</p></td>
+<td><p>Database name in the context of the
+provided operation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>name</p></td>
+<td><p>User name.</p></td>
+</tr>
+<tr class="row-even"><td><p>roles</p></td>
+<td><p>List of user roles.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;db&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;mailbox&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;roles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;_admin&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="view-head-information">
+<span id="view-head-info-object"></span><h2><span class="section-number">2.22. </span>View Head Information<a class="headerlink" href="#view-head-information" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>total_rows</p></td>
+<td><p>Number of documents in the view</p></td>
+</tr>
+<tr class="row-odd"><td><p>offset</p></td>
+<td><p>Offset where the document list started</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;total_rows&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">42</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;offset&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api/local.html" class="btn btn-neutral float-left" title="1.7. Local (non-replicating) Documents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="query-server/index.html" class="btn btn-neutral float-right" title="3. Query Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

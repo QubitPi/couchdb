@@ -1,0 +1,620 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.14. Miscellaneous Parameters &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/config/misc.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.15. Resharding" href="resharding.html" />
+    <link rel="prev" title="3.13. Query Servers" href="query-servers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Introduction To Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb.html">3.2. Base Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">3.3. Configuring Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couch-peruser.html">3.4. Database Per User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk-monitor.html">3.5. Disk Monitor Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html">3.6. CouchDB HTTP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html">3.7. Authentication and Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compaction.html">3.8. Compaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexbuilds.html">3.9. Background Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ioq.html">3.10. IO Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">3.11. Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replicator.html">3.12. Replicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query-servers.html">3.13. Query Servers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.14. Miscellaneous Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-of-attachment-storage">3.14.1. Configuration of Attachment Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#statistic-calculation">3.14.2. Statistic Calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uuids-configuration">3.14.3. UUIDs Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vendor-information">3.14.4. Vendor information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#content-security-policy">3.14.5. Content-Security-Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-of-database-purge">3.14.6. Configuration of Database Purge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-of-prometheus-endpoint">3.14.7. Configuration of Prometheus Endpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">3.15. Resharding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Configuration</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.14. </span>Miscellaneous Parameters</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/config/misc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="miscellaneous-parameters">
+<h1><span class="section-number">3.14. </span>Miscellaneous Parameters<a class="headerlink" href="#miscellaneous-parameters" title="Permalink to this heading">¶</a></h1>
+<section id="configuration-of-attachment-storage">
+<span id="config-attachments"></span><h2><span class="section-number">3.14.1. </span>Configuration of Attachment Storage<a class="headerlink" href="#configuration-of-attachment-storage" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="attachments">
+<span class="sig-name descname"><span class="pre">[attachments]</span></span><a class="headerlink" href="#attachments" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="attachments/compression_level">
+<span class="sig-name descname"><span class="pre">compression_level</span></span><a class="headerlink" href="#attachments/compression_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines zlib compression level for the attachments from <code class="docutils literal notranslate"><span class="pre">1</span></code> (lowest,
+fastest) to <code class="docutils literal notranslate"><span class="pre">9</span></code> (highest, slowest). A value of <code class="docutils literal notranslate"><span class="pre">0</span></code> disables
+compression:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[attachments]</span>
+<span class="na">compression_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">8</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="attachments/compressible_types">
+<span class="sig-name descname"><span class="pre">compressible_types</span></span><a class="headerlink" href="#attachments/compressible_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Since compression is ineffective for some types of files, it is
+possible to let CouchDB compress only some types of attachments,
+specified by their MIME type:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[attachments]</span>
+<span class="na">compressible_types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">text/*, application/javascript, application/json, application/xml</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="statistic-calculation">
+<span id="config-stats"></span><h2><span class="section-number">3.14.2. </span>Statistic Calculation<a class="headerlink" href="#statistic-calculation" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="stats">
+<span class="sig-name descname"><span class="pre">[stats]</span></span><a class="headerlink" href="#stats" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="stats/interval">
+<span class="sig-name descname"><span class="pre">interval</span></span><a class="headerlink" href="#stats/interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interval between gathering statistics in seconds:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[stats]</span>
+<span class="na">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="uuids-configuration">
+<span id="config-uuids"></span><h2><span class="section-number">3.14.3. </span>UUIDs Configuration<a class="headerlink" href="#uuids-configuration" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="uuids">
+<span class="sig-name descname"><span class="pre">[uuids]</span></span><a class="headerlink" href="#uuids" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="uuids/algorithm">
+<span class="sig-name descname"><span class="pre">algorithm</span></span><a class="headerlink" href="#uuids/algorithm" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.3: </span>Added <code class="docutils literal notranslate"><span class="pre">utc_id</span></code> algorithm.</p>
+</div>
+<p>CouchDB provides various algorithms to generate the UUID values that
+are  used for document <cite>_id</cite>’s by default:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[uuids]</span>
+<span class="na">algorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">sequential</span>
+</pre></div>
+</div>
+<p>Available algorithms:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">random</span></code>: 128 bits of random awesome. All awesome, all the time:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;uuids&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;5fcbbf2cb171b1d5c3bc6df3d4affb32&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;9115e0942372a87a977f1caf30b2ac29&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;3840b51b0b81b46cab99384d5cd106e3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;b848dbdeb422164babf2705ac18173e1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;b7a8566af7e0fc02404bb676b47c3bf7&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;a006879afdcae324d70e925c420c860d&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;5f7716ee487cc4083545d4ca02cd45d4&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;35fdd1c8346c22ccc43cc45cd632e6d6&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;97bbdb4a1c7166682dc026e1ac97a64c&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;eb242b506a6ae330bda6969bb2677079&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sequential</span></code>: Monotonically increasing ids with random increments.
+The first 26 hex characters are random, the last 6 increment in
+random amounts until an overflow occurs. On overflow, the random
+prefix is regenerated and the process starts over.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;uuids&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54804894&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da5480512f&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54805c25&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54806ba1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da548072b3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54807609&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54807718&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54807754&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54807e5d&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4e17c12963f4bee0e6ec90da54808d28&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">utc_random</span></code>: The time since Jan 1, 1970 UTC, in microseconds. The
+first 14 characters are the time in hex. The last 18 are random.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;uuids&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af699659b6db9486a9c58c62&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af69bb1c2ac7ebfee0a50d88&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af69d8591b99a8e86a76e0fb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af69f4a18a76efd89867f4f4&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af6a1f7925001274bbfde952&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af6a3fe8ea9b120ed906a57f&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af6a5b5c518809d3d4b76654&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af6a78f6ab32f1e928593c73&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af6a99916c665d6bbf857475&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32b3af6ab558dd3f2c0afacb7d66&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">utc_id</span></code>: The time since Jan 1, 1970 UTC, in microseconds, plus the
+<code class="docutils literal notranslate"><span class="pre">utc_id_suffix</span></code> string. The first 14 characters are the time in
+hex. The <a class="reference internal" href="#uuids/utc_id_suffix" title="utc_id_suffix"><code class="xref config config-option docutils literal notranslate"><span class="pre">uuids/utc_id_suffix</span></code></a> string value is appended to
+these.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;uuids&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eabcc@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eabee@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eac05@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eac28@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eac43@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eac58@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eac6e@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eac84@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eac98@mycouch&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;04dd32bd5eacad@mycouch&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Impact of UUID choices:</strong> the choice of UUID has a significant
+impact on the layout of the B-tree, prior to compaction.</p>
+<p>For example, using a sequential UUID algorithm while uploading a
+large batch of documents will avoid the need to rewrite many
+intermediate B-tree nodes. A random UUID algorithm may require
+rewriting intermediate nodes on a regular basis, resulting in
+significantly decreased throughput and wasted disk space space due to
+the append-only B-tree design.</p>
+<p>It is generally recommended to set your own UUIDs, or use the
+sequential algorithm unless you have a specific need and take into
+account the likely need for compaction to re-balance the B-tree and
+reclaim wasted space.</p>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="uuids/utc_id_suffix">
+<span class="sig-name descname"><span class="pre">utc_id_suffix</span></span><a class="headerlink" href="#uuids/utc_id_suffix" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.</span></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">utc_id_suffix</span></code> value will be appended to UUIDs generated by the
+<code class="docutils literal notranslate"><span class="pre">utc_id</span></code> algorithm. Replicating instances should have unique
+<code class="docutils literal notranslate"><span class="pre">utc_id_suffix</span></code> values to ensure uniqueness of <code class="docutils literal notranslate"><span class="pre">utc_id</span></code> ids.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[uuid]</span>
+<span class="na">utc_id_suffix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">my-awesome-suffix</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="uuids/max_count">
+<span class="sig-name descname"><span class="pre">max_count</span></span><a class="headerlink" href="#uuids/max_count" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.5.1.</span></p>
+</div>
+<p>No more than this number of UUIDs will be sent in a single request. If
+more UUIDs are requested, an HTTP error response will be thrown.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[uuid]</span>
+<span class="na">max_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="vendor-information">
+<span id="config-vendor"></span><h2><span class="section-number">3.14.4. </span>Vendor information<a class="headerlink" href="#vendor-information" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="vendor">
+<span class="sig-name descname"><span class="pre">[vendor]</span></span><a class="headerlink" href="#vendor" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.</span></p>
+</div>
+<p>CouchDB distributors have the option of customizing CouchDB’s welcome
+message. This is returned when requesting <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[vendor]</span>
+<span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">The Apache Software Foundation</span>
+<span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1.5.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="content-security-policy">
+<span id="config-csp"></span><h2><span class="section-number">3.14.5. </span>Content-Security-Policy<a class="headerlink" href="#content-security-policy" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="csp">
+<span class="sig-name descname"><span class="pre">[csp]</span></span><a class="headerlink" href="#csp" title="Permalink to this definition">¶</a></dt>
+<dd><p>You can configure <code class="docutils literal notranslate"><span class="pre">Content-Security-Policy</span></code> header for Fauxton, attachments and
+show/list functions separately. See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">MDN Content-Security-Policy</a>
+for more details on CSP.</p>
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/utils_enable">
+<span class="sig-name descname"><span class="pre">utils_enable</span></span><a class="headerlink" href="#csp/utils_enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable the sending of the header <code class="docutils literal notranslate"><span class="pre">Content-Security-Policy</span></code> for <code class="docutils literal notranslate"><span class="pre">/_utils</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">utils_enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/utils_header_value">
+<span class="sig-name descname"><span class="pre">utils_header_value</span></span><a class="headerlink" href="#csp/utils_header_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the exact header value to send. Defaults to:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">utils_header_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">default-src &#39;self&#39;</span><span class="c1">; img-src &#39;self&#39;; font-src *; script-src &#39;self&#39; &#39;unsafe-eval&#39;; style-src &#39;self&#39; &#39;unsafe-inline&#39;;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/attachments_enable">
+<span class="sig-name descname"><span class="pre">attachments_enable</span></span><a class="headerlink" href="#csp/attachments_enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable sending the <code class="docutils literal notranslate"><span class="pre">Content-Security-Policy</span></code> header for attachments:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">attachments_enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/attachments_header_value">
+<span class="sig-name descname"><span class="pre">attachments_header_value</span></span><a class="headerlink" href="#csp/attachments_header_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the exact header value to send. Defaults to:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">attachments_header_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">sandbox</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/showlist_enable">
+<span class="sig-name descname"><span class="pre">showlist_enable</span></span><a class="headerlink" href="#csp/showlist_enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable sending the <code class="docutils literal notranslate"><span class="pre">Content-Security-Policy</span></code> header for show and list functions:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">showlist_enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/showlist_header_value">
+<span class="sig-name descname"><span class="pre">showlist_header_value</span></span><a class="headerlink" href="#csp/showlist_header_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the exact header value to send. Defaults to:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">showlist_header_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">sandbox</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>The pre 3.2.0 behaviour is still honoured, but we recommend updating
+to the new format.</p>
+<p>Experimental support of CSP headers for <code class="docutils literal notranslate"><span class="pre">/_utils</span></code> (Fauxton).</p>
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><a class="headerlink" href="#csp/enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable the sending of the Header <code class="docutils literal notranslate"><span class="pre">Content-Security-Policy</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="csp/header_value">
+<span class="sig-name descname"><span class="pre">header_value</span></span><a class="headerlink" href="#csp/header_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>You can change the default value for the Header which is sent:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[csp]</span>
+<span class="na">header_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">default-src &#39;self&#39;</span><span class="c1">; img-src *; font-src *;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="configuration-of-database-purge">
+<span id="config-purge"></span><h2><span class="section-number">3.14.6. </span>Configuration of Database Purge<a class="headerlink" href="#configuration-of-database-purge" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="purge">
+<span class="sig-name descname"><span class="pre">[purge]</span></span><a class="headerlink" href="#purge" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="purge/max_document_id_number">
+<span class="sig-name descname"><span class="pre">max_document_id_number</span></span><a class="headerlink" href="#purge/max_document_id_number" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.</span></p>
+</div>
+<p>Sets the maximum number of documents allowed in a single purge request:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[purge]</span>
+<span class="na">max_document_id_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="purge/max_revisions_number">
+<span class="sig-name descname"><span class="pre">max_revisions_number</span></span><a class="headerlink" href="#purge/max_revisions_number" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.</span></p>
+</div>
+<p>Sets the maximum number of accumulated revisions allowed in a single purge
+request:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[purge]</span>
+<span class="na">max_revisions_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="purge/index_lag_warn_seconds">
+<span class="sig-name descname"><span class="pre">index_lag_warn_seconds</span></span><a class="headerlink" href="#purge/index_lag_warn_seconds" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.</span></p>
+</div>
+<p>Sets the allowed duration when index is not updated for local purge checkpoint
+document. Default is 24 hours:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[purge]</span>
+<span class="na">index_lag_warn_seconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">86400</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="configuration-of-prometheus-endpoint">
+<span id="config-prometheus"></span><h2><span class="section-number">3.14.7. </span>Configuration of Prometheus Endpoint<a class="headerlink" href="#configuration-of-prometheus-endpoint" title="Permalink to this heading">¶</a></h2>
+<dl class="config section">
+<dt class="sig sig-object config" id="prometheus">
+<span class="sig-name descname"><span class="pre">[prometheus]</span></span><a class="headerlink" href="#prometheus" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="config option">
+<dt class="sig sig-object config" id="prometheus/additional_port">
+<span class="sig-name descname"><span class="pre">additional_port</span></span><a class="headerlink" href="#prometheus/additional_port" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.</span></p>
+</div>
+<p>Sets whether or not to create a separate, non-authenticated port (default is false):</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[prometheus]</span>
+<span class="na">additional_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="prometheus/bind_address">
+<span class="sig-name descname"><span class="pre">bind_address</span></span><a class="headerlink" href="#prometheus/bind_address" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.</span></p>
+</div>
+<p>The IP address to bind:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[prometheus]</span>
+<span class="na">bind_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">127.0.0.1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="config option">
+<dt class="sig sig-object config" id="prometheus/port">
+<span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#prometheus/port" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.</span></p>
+</div>
+<p>The port on which clients can query prometheus endpoint data without authentication:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[prometheus]</span>
+<span class="na">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">17986</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="query-servers.html" class="btn btn-neutral float-left" title="3.13. Query Servers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="resharding.html" class="btn btn-neutral float-right" title="3.15. Resharding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

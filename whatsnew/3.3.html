@@ -1,0 +1,604 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.1. 3.3.x Branch &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/whatsnew/3.3.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.2. 3.2.x Branch" href="3.2.html" />
+    <link rel="prev" title="1. Release Notes" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">1. API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Release Notes</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.1. 3.3.x Branch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#version-3-3-3">1.1.1. Version 3.3.3</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#features-and-enhancements">1.1.1.1. Features and Enhancements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-3-3-2">1.1.2. Version 3.3.2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">1.1.2.1. Features and Enhancements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-3-3-1">1.1.3. Version 3.3.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.1.3.1. Features and Enhancements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#version-3-3-0">1.1.4. Version 3.3.0</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#highlights">1.1.4.1. Highlights</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1.1.4.2. Features and Enhancements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#performance">1.1.4.3. Performance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bugfixes">1.1.4.4. Bugfixes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests">1.1.4.5. Tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#docs">1.1.4.6. Docs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#builds">1.1.4.7. Builds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other">1.1.4.8. Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3.2.html">1.2. 3.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.1.html">1.3. 3.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.0.html">1.4. 3.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3.html">1.5. 2.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2.html">1.6. 2.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.1.html">1.7. 2.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.0.html">1.8. 2.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.7.html">1.9. 1.7.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.6.html">1.10. 1.6.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.5.html">1.11. 1.5.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4.html">1.12. 1.4.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3.html">1.13. 1.3.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2.html">1.14. 1.2.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.1.html">1.15. 1.1.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.0.html">1.16. 1.0.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.11.html">1.17. 0.11.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.10.html">1.18. 0.10.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.9.html">1.19. 0.9.x Branch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.8.html">1.20. 0.8.x Branch</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1. </span>Release Notes</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.1. </span>3.3.x Branch</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/whatsnew/3.3.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x-branch">
+<span id="release-3-3-x"></span><h1><span class="section-number">1.1. </span>3.3.x Branch<a class="headerlink" href="#x-branch" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#version-3-3-3" id="id4">Version 3.3.3</a></p></li>
+<li><p><a class="reference internal" href="#version-3-3-2" id="id5">Version 3.3.2</a></p></li>
+<li><p><a class="reference internal" href="#version-3-3-1" id="id6">Version 3.3.1</a></p></li>
+<li><p><a class="reference internal" href="#version-3-3-0" id="id7">Version 3.3.0</a></p></li>
+</ul>
+</nav>
+<section id="version-3-3-3">
+<span id="release-3-3-3"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">1.1.1. </span>Version 3.3.3</a><a class="headerlink" href="#version-3-3-3" title="Permalink to this heading">¶</a></h2>
+<section id="features-and-enhancements">
+<h3><span class="section-number">1.1.1.1. </span>Features and Enhancements<a class="headerlink" href="#features-and-enhancements" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4623">#4623</a>: Handle replicator instance start time during upgrades
+better.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4653">#4653</a>: Fix the ability to use <code class="docutils literal notranslate"><span class="pre">;</span></code> in config values.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4626">#4626</a>: Fix purge infos replicating to the wrong shards during shard
+splitting.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4669">#4669</a>: Make it possible to override <code class="docutils literal notranslate"><span class="pre">[replicator]</span>
+<span class="pre">valid_socket_options</span></code> with more than two items.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4670">#4670</a>: Allow setting of some ibrowse replication options such as
+<code class="docutils literal notranslate"><span class="pre">{prefer_ipv6,</span> <span class="pre">true}</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4679">#4679</a>: Fix multipart parser “attachment longer than expected”
+error. Previously there was a small chance attachments were not replicated.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4680">#4680</a>: Allow restarting failed shard splitting jobs.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4722">#4722</a>: Fix badmatch error when purge requests time out.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4736">#4736</a>: Stop client process and clean up if client disconnects when
+processing streaming requests.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4758">#4758</a>: Remove sensitive headers from the mochiweb request in
+process dictionary. This should prevent sensitive headers leaking into logs
+when a request process crashes.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4784">#4784</a>: Extract the correct node name from <code class="docutils literal notranslate"><span class="pre">ERL_FLAGS</span></code> in
+<code class="docutils literal notranslate"><span class="pre">remsh</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4794">#4794</a>: Fix incorrect raising of <code class="docutils literal notranslate"><span class="pre">database_does_not_exist</span></code> error.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4821">#4821</a>: Wait for compacted indexes to flip. Previously, a timeout
+during compact file flips could lead to crashes and a subsequent
+recompaction.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4837">#4837</a>: Fix update bug in ets_lru.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4847">#4847</a>: Require auth for <code class="docutils literal notranslate"><span class="pre">_replicate</span></code> endpoint.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4878">#4878</a>: Add an option to scrub some sensitive headers from external
+json requests.</p></li>
+</ul>
+</section>
+</section>
+<section id="version-3-3-2">
+<span id="release-3-3-2"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.1.2. </span>Version 3.3.2</a><a class="headerlink" href="#version-3-3-2" title="Permalink to this heading">¶</a></h2>
+<section id="id1">
+<h3><span class="section-number">1.1.2.1. </span>Features and Enhancements<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4529">#4529</a>: In Javascript process manager, use a database tag in
+addition to a ddoc ID to quickly find processes. This should improve
+performance.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4509">#4509</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4405">#4405</a>: Make remsh work with quoted cookie values.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4473">#4473</a>: Avoid re-compiling filter view functions. This could speed
+up Javascript filter functions.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4412">#4412</a>: Remove Javascript json2 script and the try/except clause
+around seal.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4513">#4513</a>: Allow configurable timeouts for <code class="docutils literal notranslate"><span class="pre">_view</span></code> and <code class="docutils literal notranslate"><span class="pre">_search</span></code>.
+Search timeouts can be specified as <code class="docutils literal notranslate"><span class="pre">[fabric]</span> <span class="pre">search_timeout</span></code> and
+<code class="docutils literal notranslate"><span class="pre">[fabric]</span> <span class="pre">search_permsg</span></code>. View per-message timeout can be configured as
+<code class="docutils literal notranslate"><span class="pre">[fabric]</span> <span class="pre">view_permsg_timeout</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4438">#4438</a>: Proxy auth can now use one of the configured hash algorithms
+from chttpd_auth/hash_algorithms to decode authentication tokens.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4370">#4370</a>: Ensure design docs are uploaded individually when
+replicating with <code class="docutils literal notranslate"><span class="pre">_bulk_get</span></code>. This restores previous behavior before
+version 3.3.0.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4416">#4416</a>: Allow <code class="docutils literal notranslate"><span class="pre">_local</span></code> doc writes to the replicator dbs.
+Previously this issue prevented replicating the replicator db itself, since
+checkpointing was not working properly.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4363">#4363</a>: Fix replication <code class="docutils literal notranslate"><span class="pre">_scheduler/docs</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;total_rows&quot;</span></code> value.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4380">#4380</a>: Be more defensive about SpiderMonkey location. An error
+should be emitted early if the Spidermonkey library cannot be found.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4388">#4388</a>: Bump recon to 2.5.3. See the <a class="reference external" href="https://ferd.github.io/recon/changelog.html#2-5-3">changelog</a> for more details.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4476">#4476</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4515">#4515</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4490">#4490</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4350">#4350</a>,
+<a class="reference external" href="https://github.com/apache/couchdb/issues/4379">#4379</a>: Various documentation cleanups and fixes.</p></li>
+<li><p>Fix for <a class="reference external" href="https://docs.couchdb.org/en/latest/cve/2023-26268.html">CVE-2023-26268</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="version-3-3-1">
+<span id="release-3-3-1"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.1.3. </span>Version 3.3.1</a><a class="headerlink" href="#version-3-3-1" title="Permalink to this heading">¶</a></h2>
+<section id="id2">
+<h3><span class="section-number">1.1.3.1. </span>Features and Enhancements<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4343">#4343</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4344">#4344</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4345">#4345</a>: Fix <code class="docutils literal notranslate"><span class="pre">undef</span></code> when
+parsing replication doc body with a <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4346">#4346</a>: Add <code class="docutils literal notranslate"><span class="pre">make</span></code> target to find <code class="docutils literal notranslate"><span class="pre">undef</span></code> errors.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4347">#4347</a>: Remove failed <code class="docutils literal notranslate"><span class="pre">couch_plugins</span></code> experiment, fixes more
+<code class="docutils literal notranslate"><span class="pre">undef</span></code> errors.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4348">#4348</a>: Fix <code class="docutils literal notranslate"><span class="pre">undef</span></code> error in <code class="docutils literal notranslate"><span class="pre">weatherreport</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4353">#4353</a>: Allow starting of more than one replication job. (D’OH!)</p></li>
+</ul>
+</section>
+</section>
+<section id="version-3-3-0">
+<span id="release-3-3-0"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">1.1.4. </span>Version 3.3.0</a><a class="headerlink" href="#version-3-3-0" title="Permalink to this heading">¶</a></h2>
+<section id="highlights">
+<h3><span class="section-number">1.1.4.1. </span>Highlights<a class="headerlink" href="#highlights" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4308">#4308</a>: Replicator was optimized and should be faster. It now uses
+the <cite>_bulk_get</cite> endpoint on the source, and can statistically skip calling
+<cite>_revs_diff</cite> on the target. Benchmark tests replicating 1M documents, 10KB
+each, from UK to US East show a 3x speed improvement.</p></li>
+</ul>
+<figure class="align-center">
+<img alt="Replicator, Tea! Earl Grey! Hot! (Because Picard said so)" src="../_images/tea-erl-grey-hot-replicator.png" />
+</figure>
+</section>
+<section id="id3">
+<h3><span class="section-number">1.1.4.2. </span>Features and Enhancements<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3766">#3766</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/3970">#3970</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/3972">#3972</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4093">#4093</a>,
+<a class="reference external" href="https://github.com/apache/couchdb/issues/4102">#4102</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4104">#4104</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4110">#4110</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4111">#4111</a>,
+<a class="reference external" href="https://github.com/apache/couchdb/issues/4114">#4114</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4245">#4245</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4246">#4246</a>:, <a class="reference external" href="https://github.com/apache/couchdb/issues/4266">#4266</a>: Add
+<code class="docutils literal notranslate"><span class="pre">smoosh</span></code> queue persistence. This allows resuming <code class="docutils literal notranslate"><span class="pre">smoosh</span></code> operations
+after a node restart. This is disabled by default and can be enabled with
+<code class="docutils literal notranslate"><span class="pre">[smoosh]</span> <span class="pre">persist</span> <span class="pre">=</span> <span class="pre">true</span></code>. Optimise <code class="docutils literal notranslate"><span class="pre">smoosh</span></code> operations and increase
+test coverage to 90%.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3798">#3798</a>: Add <code class="docutils literal notranslate"><span class="pre">libicu</span></code> version and collation algorithm version to
+<code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_versions</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3837">#3837</a>: The Erlang source tree is now auto-formatted with <code class="docutils literal notranslate"><span class="pre">erlfmt</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3845">#3845</a>: Clean up the <code class="docutils literal notranslate"><span class="pre">couch_ejson_compare</span></code> C-module and squash
+Microsoft compiler warnings.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3832">#3832</a>: Add <code class="docutils literal notranslate"><span class="pre">GET</span></code> variant to <code class="docutils literal notranslate"><span class="pre">_dbs_info</span></code> endpoint, used to be
+<code class="docutils literal notranslate"><span class="pre">POST</span></code> only.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3864">#3864</a>: Improve <code class="docutils literal notranslate"><span class="pre">erlang_ls</span></code> configuration.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3853">#3853</a>: Remove legacy <code class="docutils literal notranslate"><span class="pre">ddoc_cache_opener</span></code> <code class="docutils literal notranslate"><span class="pre">gen_server</span></code> and
+speed up event routing.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3879">#3879</a>: Remove use of <code class="docutils literal notranslate"><span class="pre">ERL_OPTS</span></code> environment variable. All
+supported Erlang versions now use <code class="docutils literal notranslate"><span class="pre">ERL_COMPILER_OPTIONS</span></code> for the same
+purpose.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3883">#3883</a>: Add support for SpiderMonkey 91.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3889">#3889</a>: Track <code class="docutils literal notranslate"><span class="pre">libicu</span></code> collator versions in the view header.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3952">#3952</a>: Make the timeout for receiving requests from attachment
+writers configurable.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3927">#3927</a>: Include index signature in <code class="docutils literal notranslate"><span class="pre">_search_info</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3963">#3963</a>: Optimtize key tree stemming by using maps instead of
+sets. This greatly reduced memory usage for heavily conflicted docs in some
+situations.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3974">#3974</a>: Create new config options in <code class="docutils literal notranslate"><span class="pre">[couchdb]</span></code> and <code class="docutils literal notranslate"><span class="pre">[smoosh]</span></code>
+sections to enable finer control of compaction logging levels.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3983">#3983</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/3984">#3984</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/3985">#3985</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/3987">#3987</a>,
+<a class="reference external" href="https://github.com/apache/couchdb/issues/4033">#4033</a>: Add various functions to <code class="docutils literal notranslate"><span class="pre">couch_debug</span></code> module.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4000">#4000</a>: Ensure <code class="docutils literal notranslate"><span class="pre">Object.prototype.toSource()</span></code> is always available.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4018">#4018</a>: Update <code class="docutils literal notranslate"><span class="pre">jiffy</span></code> to 1.1.1 and <code class="docutils literal notranslate"><span class="pre">b64url</span></code> to 1.0.3.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4021">#4021</a>: Reduce smoosh compaction log level to <code class="docutils literal notranslate"><span class="pre">debug</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4041">#4041</a>: Allow and evaluate nested json claim roles in JWT token.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4060">#4060</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4290">#4290</a>: Add support for Erlang 25.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4064">#4064</a>: Enable replicating purge requests between nodes. Also avoid
+applying interactive purges more than once.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4069">#4069</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4084">#4084</a>: Drop support for Erlang &lt; 23, update
+<code class="docutils literal notranslate"><span class="pre">vm.args</span></code> settings to match. Review this if you have customized your
+<code class="docutils literal notranslate"><span class="pre">vm.args</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4083">#4083</a>: Support Elixir 13.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4085">#4085</a>: Add an option to let <code class="docutils literal notranslate"><span class="pre">custodian</span></code> always use <code class="docutils literal notranslate"><span class="pre">[cluster]</span> <span class="pre">n</span></code>
+value.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4095">#4095</a>: Implement <code class="docutils literal notranslate"><span class="pre">winning_revs_only</span></code> option for the replicator. It
+replicates only the winning revisions from the source to the target,
+effectively discarding conflicts.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4135">#4135</a>: Separate search IO from file IO.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4140">#4140</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4162">#4162</a>: Upgrade hash algorithm for cookie auth (sha1
+-&gt; sha256). This introduces a new config setting <code class="docutils literal notranslate"><span class="pre">hash_algorithms</span></code>. New cookie
+values are hashed with sha256, sha1 hashes are still accepted. Admins can set
+this to sha256 only. Sha1 will be disallowed in the next major release. Show
+supported hash algorithms in <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_versions</span></code> endpoint.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4179">#4179</a>: Don’t double-encode changes sequence strings in the
+replicator.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4182">#4182</a>: Explicitly maintain a fully connected cluster. Previously, it
+was possible for the nodes to disconnect, and for that state to persist until
+the nodes restarted.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4198">#4198</a>: Redact passwords in log file.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4243">#4243</a>: Update <code class="docutils literal notranslate"><span class="pre">mochiweb</span></code> to 3.1.1.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4254">#4254</a>: The <code class="docutils literal notranslate"><span class="pre">_dbs_info</span></code> access control is now configured with the
+<code class="docutils literal notranslate"><span class="pre">[couchdb]</span> <span class="pre">admin_only_all_dbs</span></code> setting. Defaults to true. This was a
+leftover from the 3.0.0 release.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4264">#4264</a>: <code class="docutils literal notranslate"><span class="pre">active</span></code> database sizes is now limited to leaf nodes.
+Previously, it included intermediate tree nodes, which had the effect that
+deleting (large) documents did not decrease <code class="docutils literal notranslate"><span class="pre">active</span></code> database size. In
+addition, <code class="docutils literal notranslate"><span class="pre">smoosh</span></code> now picks up databases where large documents are
+deleted for compaction more eagerly, reclaiming the deleted space quicker.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4270">#4270</a>: Shard splitting now uses its own <code class="docutils literal notranslate"><span class="pre">reshard</span></code> IO priority.
+It can be configured to be safely run in the background with production
+loads, or with maximum IO available, if admins prefer quicker progress.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4274">#4274</a>: Improve validation of replicator job parameters &amp; move
+<code class="docutils literal notranslate"><span class="pre">_replicator</span></code> VDU design doc to internal BDU.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4280">#4280</a>: Add <code class="docutils literal notranslate"><span class="pre">CFLAGS</span></code> and <code class="docutils literal notranslate"><span class="pre">LDFLAGS</span></code> to ICU build parameters.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4284">#4284</a>: Remove all usage of global to avoid potential deadlocks
+in replication jobs.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4287">#4287</a>: Allow <code class="docutils literal notranslate"><span class="pre">=</span></code> in config key names.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4306">#4306</a>: Fauxton was updated to version v1.2.9. Changes since v1.2.8
+can be found <a class="reference external" href="https://github.com/apache/couchdb-fauxton/releases/tag/v1.2.9">here</a></p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4317">#4317</a>: Write “Relax” welcome message to standard out on
+Windows.</p></li>
+</ul>
+</section>
+<section id="performance">
+<h3><span class="section-number">1.1.4.3. </span>Performance<a class="headerlink" href="#performance" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3860">#3860</a>: Add sharding to <code class="docutils literal notranslate"><span class="pre">couch_index_server</span></code>, similar to
+<a class="reference external" href="https://github.com/apache/couchdb/issues/3366">#3366</a>, avoids processing bottlenecks on servers with a lot of
+concurrent view indexing going on.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3891">#3891</a>: Avoid decoding JWT payloads when not necessary.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4031">#4031</a>: Default <code class="docutils literal notranslate"><span class="pre">[rexi]</span> <span class="pre">use_kill_all</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>. This improves
+intra-cluster-node messaging. Set to false if you run a cluster with nodes
+that have a version &lt;3.0.0.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4052">#4052</a>: Optimise <code class="docutils literal notranslate"><span class="pre">couch_util:reorder_results/2,3</span></code>, which speeds up
+<code class="docutils literal notranslate"><span class="pre">_bulk_docs</span></code> and <code class="docutils literal notranslate"><span class="pre">_revs_diff</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4055">#4055</a>: Avoid using <code class="docutils literal notranslate"><span class="pre">length/1</span></code> guard for <code class="docutils literal notranslate"><span class="pre">&gt;0</span></code> or <code class="docutils literal notranslate"><span class="pre">==0</span></code> tests in
+<code class="docutils literal notranslate"><span class="pre">couch_key_tree</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4056">#4056</a>: Optimise <code class="docutils literal notranslate"><span class="pre">couch_key_tree:find_missing/2</span></code>. This speeds up
+<code class="docutils literal notranslate"><span class="pre">_revs_diff</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4059">#4059</a>: Reduce complexity of <code class="docutils literal notranslate"><span class="pre">possible_ancestors</span></code> from quadratic to
+linear. This speeds up working with heavily conflicted documents
+significantly.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4091">#4091</a>: Optimise <code class="docutils literal notranslate"><span class="pre">couch_util:to_hex/1</span></code>, this speeds up all
+operations that need to encode a revision id into JSON (this is most
+operations).</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4106">#4106</a>: Set <code class="docutils literal notranslate"><span class="pre">io_priority</span></code> in all IO paths. Introduces <code class="docutils literal notranslate"><span class="pre">system</span></code>
+<code class="docutils literal notranslate"><span class="pre">io_priority</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4144">#4144</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4172">#4172</a>: Implement <code class="docutils literal notranslate"><span class="pre">_bulk_get</span></code> support for the
+replicator. Backward compatibility is ensured. This speeds up all
+replications. Add option to disable new behaviour for legacy setups.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4163">#4163</a>: Statistically skip <code class="docutils literal notranslate"><span class="pre">_revs_diff</span></code> in the replicator. This
+improves performance for replications into empty targets.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4177">#4177</a>: Remove the long deprecated <code class="docutils literal notranslate"><span class="pre">bigcouch</span> <span class="pre">0.4</span></code> change sequence
+support.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4238">#4238</a>: Optimise <code class="docutils literal notranslate"><span class="pre">_bulk_get</span></code> endpoint. This speeds up replication
+of 1M docs by ~2x. Individual <code class="docutils literal notranslate"><span class="pre">_bulk_get</span></code> requests are up to 8x faster.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3517">#3517</a>: Add experimental fix for reduce performance regression due
+to expensive repeated AST-transformations on newer SpiderMonkey versions.
+Set <code class="docutils literal notranslate"><span class="pre">COUCHDB_QUERY_SERVER_JAVASCRIPT</span></code> env var to
+<code class="docutils literal notranslate"><span class="pre">COUCHDB_QUERY_SERVER_JAVASCRIPT=&quot;/opt/couchdb/bin/couchjs</span>
+<span class="pre">/opt/couchdb/share/server/main-ast-bypass.js&quot;</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4262">#4262</a>: <code class="docutils literal notranslate"><span class="pre">couchjs</span></code> executable built against Spidermonkey &gt;= 78 will
+return the detailed <code class="docutils literal notranslate"><span class="pre">major.minor.patch</span></code> as opposed to just the <code class="docutils literal notranslate"><span class="pre">major</span></code>
+version as previously.</p></li>
+</ul>
+</section>
+<section id="bugfixes">
+<h3><span class="section-number">1.1.4.4. </span>Bugfixes<a class="headerlink" href="#bugfixes" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3817">#3817</a>: Fix undefined function call in <code class="docutils literal notranslate"><span class="pre">weatherreport</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3819">#3819</a>: Return <code class="docutils literal notranslate"><span class="pre">400</span></code> instead of <code class="docutils literal notranslate"><span class="pre">500</span></code> response code for known
+invalid <code class="docutils literal notranslate"><span class="pre">_bulk_docs</span></code> with <code class="docutils literal notranslate"><span class="pre">new_edits=false</span></code> request.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3861">#3861</a>: Add <code class="docutils literal notranslate"><span class="pre">SameSite</span></code> setting when clearing session cookies.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3863">#3863</a>: Fix custom TLS distribution for Erlang 20.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3870">#3870</a>: Always send all cookie attributes.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3886">#3886</a>: Avoid changes feed rewind after shard move with no subsequent
+db updates.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3888">#3888</a>: Make <code class="docutils literal notranslate"><span class="pre">_stats</span></code> endpoint resilient against nodes that go
+offline.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3901">#3901</a>: Use db-creation time instead of <code class="docutils literal notranslate"><span class="pre">0</span></code> for
+<code class="docutils literal notranslate"><span class="pre">instance_start_time</span></code> to help replicator recognise whether a peer database
+was deleted and recreated.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3909">#3909</a>: Fix <code class="docutils literal notranslate"><span class="pre">new_edits:false</span></code> and VDU <code class="docutils literal notranslate"><span class="pre">function_clause</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3934">#3934</a>: Fix <code class="docutils literal notranslate"><span class="pre">replicated_changes</span></code> typo for purge doc updates.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3940">#3940</a>: Ensure the multipart parser always monitors the worker and
+make sure to wait for attachment uploads before responding.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3950">#3950</a>: Ignore responses from timed-out or retried <code class="docutils literal notranslate"><span class="pre">ibrowse</span></code> calls.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3969">#3969</a>: Fix <code class="docutils literal notranslate"><span class="pre">skip</span></code> and <code class="docutils literal notranslate"><span class="pre">limit</span></code> for <code class="docutils literal notranslate"><span class="pre">_all_dbs</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_dbs_info</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3979">#3979</a>: Correctly respond with a <code class="docutils literal notranslate"><span class="pre">500</span></code> code when document updates
+time out under heavy load.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3992">#3992</a>: Show that Search is available if it was available
+before. Avoid Search availability disappearing just because a Search node was
+temporarily not available.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3993">#3993</a>: Return a <code class="docutils literal notranslate"><span class="pre">400</span></code> error when decoding a JWT token fails,
+rather than crashing and not responding at all.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3990">#3990</a>: Prevent creation of ddocs with no name through Mango index
+creation.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4003">#4003</a>: Improve index building during shard splitting.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4016">#4016</a>: Fix <code class="docutils literal notranslate"><span class="pre">function_clause</span></code> error for replicated changes with a
+target VDU.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4020">#4020</a>: Fix <code class="docutils literal notranslate"><span class="pre">maybe_handle_error</span></code> clauses.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4037">#4037</a>: Fix ES{256,384,512} support for JWTs.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4040">#4040</a>: Handle <code class="docutils literal notranslate"><span class="pre">exit(shutdown)</span></code> error in <code class="docutils literal notranslate"><span class="pre">chttpd</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4043">#4043</a>: Fix purge request timeouts (5s -&gt; infinity).</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4146">#4146</a>: The <code class="docutils literal notranslate"><span class="pre">devcontainer</span></code> has been updated.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4050">#4050</a>: Handle <code class="docutils literal notranslate"><span class="pre">all_dbs_active</span></code> in <code class="docutils literal notranslate"><span class="pre">fabric_doc_update</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4160">#4160</a>: Return a proper <code class="docutils literal notranslate"><span class="pre">400</span></code> error when an invalid object is sent
+to <code class="docutils literal notranslate"><span class="pre">_bulk_get</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4070">#4070</a>: Prevent <code class="docutils literal notranslate"><span class="pre">error:function_clause</span></code> in <code class="docutils literal notranslate"><span class="pre">check_security/3</span></code> if
+roles claim is malformed.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4075">#4075</a>: Fix <code class="docutils literal notranslate"><span class="pre">couch_debug:opened_files*</span></code> functions.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4108">#4108</a>: Trim <code class="docutils literal notranslate"><span class="pre">X-Auth-CouchDB-Roles</span></code> header after reading.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4153">#4153</a>: The <code class="docutils literal notranslate"><span class="pre">require_valid_user</span></code> setting is now under <code class="docutils literal notranslate"><span class="pre">chttpd</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4161">#4161</a>: Fix <code class="docutils literal notranslate"><span class="pre">content-type</span></code> handling in <code class="docutils literal notranslate"><span class="pre">_session</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4176">#4176</a>: Fix <code class="docutils literal notranslate"><span class="pre">eventsource</span></code> <code class="docutils literal notranslate"><span class="pre">_changes</span></code> feed.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4197">#4197</a>: Support large (and impractical as-of-yet) <code class="docutils literal notranslate"><span class="pre">q</span></code> values. Fix
+shard open timeouts for <code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">&gt;</span> <span class="pre">64</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4199">#4199</a>: Fix spurious unlock in <code class="docutils literal notranslate"><span class="pre">close_db_if_idle</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4230">#4230</a>: Avoid refresh messages piling up in prometheus server.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4240">#4240</a>: Implement global password hasher process. This fixes a
+race-condition when setting new admin passwords in quick succession on a
+multicore server.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4261">#4261</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4271">#4271</a>: Clean up stale view checkpoints,
+improve purge client cleanup logging</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4272">#4272</a>: Kill all <code class="docutils literal notranslate"><span class="pre">couch_server_N</span></code> if <code class="docutils literal notranslate"><span class="pre">database_dir</span></code> changes.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4313">#4313</a>: Use <code class="docutils literal notranslate"><span class="pre">chttpd</span></code> config section when patching local
+<code class="docutils literal notranslate"><span class="pre">_replicate</span></code> endpoints.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4321">#4321</a>: Downgrade jiffy to allow building on Windows again.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4329">#4329</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4323">#4323</a>: Ignore build windows binaries in
+git.</p></li>
+</ul>
+</section>
+<section id="tests">
+<h3><span class="section-number">1.1.4.5. </span>Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3825">#3825</a>: Eliminate Elixir compiler warnings.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3830">#3830</a>: Reduce skipped Elixir integration tests.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3890">#3890</a>: Handle <code class="docutils literal notranslate"><span class="pre">not_found</span></code> lookups removing ddoc cache key.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3892">#3892</a>: Use Debian Stable for CI, add Erlang 24 to CI.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3898">#3898</a>: Remove CI support for Ubuntu 16.04.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3903">#3903</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/3914">#3914</a>: Refactor Jenkins to dynamically generate
+stages. Drop <code class="docutils literal notranslate"><span class="pre">MINIMUM_ERLANG_VERSION</span></code> to 20, drop the packaging
+<code class="docutils literal notranslate"><span class="pre">ERLANG_VERSION</span></code> to 23, add the <code class="docutils literal notranslate"><span class="pre">weatherreport-test</span></code> as a build step, and
+add <code class="docutils literal notranslate"><span class="pre">ARM</span></code> and <code class="docutils literal notranslate"><span class="pre">POWER</span></code> back into the matrix.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3921">#3921</a>:, <a class="reference external" href="https://github.com/apache/couchdb/issues/3923">#3923</a>: Execute various tests in clean
+<code class="docutils literal notranslate"><span class="pre">database_dir</span></code> to avoid subsequent test flakiness.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3968">#3968</a>: Ensure key tree rev stemming does’t take too much memory.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/3980">#3980</a>: Upgrade Mango test dependency <code class="docutils literal notranslate"><span class="pre">nose</span></code> to <code class="docutils literal notranslate"><span class="pre">nose</span></code> and fix
+flaky-on-Windows tests.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4006">#4006</a>: Remove CI support for Debian 9.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4061">#4061</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4082">#4082</a>: Update PPC CI builder.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4096">#4096</a>: Fix flaky <code class="docutils literal notranslate"><span class="pre">validate_doc_update</span></code> Elixir test.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4123">#4123</a>: Fix <code class="docutils literal notranslate"><span class="pre">haproxy.cfg</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4126">#4126</a>: Return a <code class="docutils literal notranslate"><span class="pre">400</span></code> response for a single <code class="docutils literal notranslate"><span class="pre">new_edits=false</span></code>
+doc update without revision.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4129">#4129</a>: Fix <code class="docutils literal notranslate"><span class="pre">proxyauth_test</span></code> and removed it from skip list.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4132">#4132</a>: Address race condition in <code class="docutils literal notranslate"><span class="pre">cpse_incref_decref</span></code> test.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4151">#4151</a>: Refactor replication tests to use clustered endpoints.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4178">#4178</a>: Add test coverage to prevent junk in <code class="docutils literal notranslate"><span class="pre">eventsource</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4188">#4188</a>: Enable eunit coverage for all applications instead of
+enabling it per-application.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4202">#4202</a>: Fix race condition in ddoc cache LRU test.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4203">#4203</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4205">#4205</a>: Reduce test log noise.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4268">#4268</a>: Improve flaky <code class="docutils literal notranslate"><span class="pre">_dbs_info</span></code> test.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4319">#4319</a>: Fix offline <code class="docutils literal notranslate"><span class="pre">configure</span></code> and <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">release</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4328">#4328</a>: Fix <code class="docutils literal notranslate"><span class="pre">eaddrnotavail</span></code> in Elixir tests under Windows.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4330">#4330</a>: Do not run source checks in main CI build.</p></li>
+</ul>
+</section>
+<section id="docs">
+<h3><span class="section-number">1.1.4.6. </span>Docs<a class="headerlink" href="#docs" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4164">#4164</a>: The CouchDB documentation has been moved into the main
+CouchDB repository.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4307">#4307</a>, <a class="reference external" href="https://github.com/apache/couchdb/issues/4174">#4174</a>: Update Sphinx to version 5.3.0</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4170">#4170</a>: Document the <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_versions</span></code> endpoint.</p></li>
+</ul>
+</section>
+<section id="builds">
+<h3><span class="section-number">1.1.4.7. </span>Builds<a class="headerlink" href="#builds" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4097">#4097</a>: Stop publication of nightly packages. They were not used
+anywhere.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4322">#4322</a>: Reuse installed rebar and rebar3
+for mix. Compatible with Elixir =&lt; 13 only. Elixir 14 is not
+supported yet.</p></li>
+<li><p><a class="reference external" href="https://github.com/apache/couchdb/issues/4326">#4326</a>: Move Elixir source checks to a separate build step.</p></li>
+</ul>
+</section>
+<section id="other">
+<h3><span class="section-number">1.1.4.8. </span>Other<a class="headerlink" href="#other" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added pumpkin spice to selected endpoints. — Thank you for reading the 3.3.0
+release notes.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="1. Release Notes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="3.2.html" class="btn btn-neutral float-right" title="1.2. 3.2.x Branch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

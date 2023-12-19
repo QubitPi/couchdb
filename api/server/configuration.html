@@ -1,0 +1,623 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.2.26. Configuration &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/server/configuration.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.3. Databases" href="../database/index.html" />
+    <link rel="prev" title="1.2.25. Authentication" href="authn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">1.2. Server</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common.html">1.2.1. <code class="docutils literal notranslate"><span class="pre">/</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#active-tasks">1.2.2. <code class="docutils literal notranslate"><span class="pre">/_active_tasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#all-dbs">1.2.3. <code class="docutils literal notranslate"><span class="pre">/_all_dbs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#dbs-info">1.2.4. <code class="docutils literal notranslate"><span class="pre">/_dbs_info</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#cluster-setup">1.2.5. <code class="docutils literal notranslate"><span class="pre">/_cluster_setup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#db-updates">1.2.6. <code class="docutils literal notranslate"><span class="pre">/_db_updates</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#membership">1.2.7. <code class="docutils literal notranslate"><span class="pre">/_membership</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#replicate">1.2.8. <code class="docutils literal notranslate"><span class="pre">/_replicate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#scheduler-jobs">1.2.9. <code class="docutils literal notranslate"><span class="pre">/_scheduler/jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#scheduler-docs">1.2.10. <code class="docutils literal notranslate"><span class="pre">/_scheduler/docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#node-node-name">1.2.11. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#node-node-name-stats">1.2.12. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#node-node-name-prometheus">1.2.13. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_prometheus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#node-node-name-smoosh-status">1.2.14. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_smoosh/status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#node-node-name-system">1.2.15. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_system</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#node-node-name-restart">1.2.16. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_restart</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#node-node-name-versions">1.2.17. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_versions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#search-analyze">1.2.18. <code class="docutils literal notranslate"><span class="pre">/_search_analyze</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#nouveau-analyze">1.2.19. <code class="docutils literal notranslate"><span class="pre">/_nouveau_analyze</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#utils">1.2.20. <code class="docutils literal notranslate"><span class="pre">/_utils</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#up">1.2.21. <code class="docutils literal notranslate"><span class="pre">/_up</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#uuids">1.2.22. <code class="docutils literal notranslate"><span class="pre">/_uuids</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#favicon-ico">1.2.23. <code class="docutils literal notranslate"><span class="pre">/favicon.ico</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="common.html#reshard">1.2.24. <code class="docutils literal notranslate"><span class="pre">/_reshard</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="authn.html">1.2.25. Authentication</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1.2.26. Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#accessing-the-local-node-s-configuration">1.2.26.1. Accessing the local node’s configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-node-name-config">1.2.26.2. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-node-name-config-section">1.2.26.3. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config/{section}</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-node-name-config-section-key">1.2.26.4. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config/{section}/{key}</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-node-name-config-reload">1.2.26.5. <code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config/_reload</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../database/index.html">1.3. Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../document/index.html">1.4. Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ddoc/index.html">1.5. Design Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../local.html">1.7. Local (non-replicating) Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">1. </span>API Reference</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1.2. </span>Server</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.2.26. </span>Configuration</li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/server/configuration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration">
+<span id="api-config"></span><h1><span class="section-number">1.2.26. </span>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h1>
+<p>The CouchDB Server Configuration API provide an interface to query and update
+the various configuration values within a running CouchDB instance.</p>
+<section id="accessing-the-local-node-s-configuration">
+<h2><span class="section-number">1.2.26.1. </span>Accessing the local node’s configuration<a class="headerlink" href="#accessing-the-local-node-s-configuration" title="Permalink to this heading">¶</a></h2>
+<p>The literal string <code class="docutils literal notranslate"><span class="pre">_local</span></code> serves as an alias for the local node name, so
+for all configuration URLs, <code class="docutils literal notranslate"><span class="pre">{node-name}</span></code> may be replaced with <code class="docutils literal notranslate"><span class="pre">_local</span></code>, to
+interact with the local node’s configuration.</p>
+</section>
+<section id="node-node-name-config">
+<h2><span class="section-number">1.2.26.2. </span><code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config</span></code><a class="headerlink" href="#node-node-name-config" title="Permalink to this heading">¶</a></h2>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--_node-node-name-_config">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/_node/{node-name}/_config</span></span><a class="headerlink" href="#get--_node-node-name-_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the entire CouchDB server configuration as a JSON structure. The
+structure is organized by different configuration sections, with
+individual values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Request Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong></p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/_node/nonode@nohost/_config</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">4148</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 10 Aug 2013 12:01:42 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;attachments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;compressible_types&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text/*, application/javascript, application/json,  application/xml&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;compression_level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;8&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;couchdb&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;users_db_suffix&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;_users&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;database_dir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/var/lib/couchdb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;max_attachment_chunk_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4294967296&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;max_dbs_open&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;100&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;os_process_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5000&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;uri_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/var/lib/couchdb/couch.uri&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;util_driver_dir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/usr/lib64/couchdb/erlang/lib/couch-1.5.0/priv/lib&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;view_index_dir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/var/lib/couchdb&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;chttpd&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;allow_jsonp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;false&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;backlog&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;512&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;bind_address&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5984&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;require_valid_user&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;false&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;socket_options&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[{sndbuf, 262144}, {nodelay, true}]&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;server_options&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[{recbuf, undefined}]&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;secure_rewrites&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;true&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;httpd&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;authentication_handlers&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;bind_address&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;192.168.0.2&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;max_connections&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2048&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5984&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;log&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;writer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;file&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/var/log/couchdb/couch.log&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;include_sasl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;true&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;info&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;query_server_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;reduce_limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;true&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;replicator&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;max_http_pipeline_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;max_http_sessions&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;stats&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;uuids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;algorithm&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;utc_random&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="node-node-name-config-section">
+<span id="api-config-section"></span><h2><span class="section-number">1.2.26.3. </span><code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config/{section}</span></code><a class="headerlink" href="#node-node-name-config-section" title="Permalink to this heading">¶</a></h2>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--_node-node-name-_config-section">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/_node/{node-name}/_config/{section}</span></span><a class="headerlink" href="#get--_node-node-name-_config-section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the configuration structure for a single section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – Configuration section name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/_node/nonode@nohost/_config/httpd</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">444</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 10 Aug 2013 12:10:40 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;authentication_handlers&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;bind_address&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;default_handler&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{couch_httpd_db, handle_request}&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5984&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="node-node-name-config-section-key">
+<span id="api-config-section-key"></span><h2><span class="section-number">1.2.26.4. </span><code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config/{section}/{key}</span></code><a class="headerlink" href="#node-node-name-config-section-key" title="Permalink to this heading">¶</a></h2>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--_node-node-name-_config-section-key">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/_node/{node-name}/_config/{section}/{key}</span></span><a class="headerlink" href="#get--_node-node-name-_config-section-key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a single configuration value from within a specific configuration
+section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – Configuration section name</p></li>
+<li><p><strong>key</strong> – Configuration option name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/_node/nonode@nohost/_config/log/level</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">8</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 10 Aug 2013 12:12:59 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="s2">&quot;debug&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned value will be the JSON of the value, which may be a string
+or numeric value, or an array or object. Some client environments may
+not parse simple strings or numeric values as valid JSON.</p>
+</div>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--_node-node-name-_config-section-key">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/_node/{node-name}/_config/{section}/{key}</span></span><a class="headerlink" href="#put--_node-node-name-_config-section-key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a configuration value. The new value should be supplied in the
+request body in the corresponding JSON format. If you are setting a string
+value, you must supply a valid JSON string. In response CouchDB sends old
+value for target section key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – Configuration section name</p></li>
+<li><p><strong>key</strong> – Configuration option name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid JSON request body</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Error setting configuration</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">PUT</span> <span class="nn">/_node/nonode@nohost/_config/log/level</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">7</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="s2">&quot;info&quot;</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">8</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 10 Aug 2013 12:12:59 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="s2">&quot;debug&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--_node-node-name-_config-section-key">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/_node/{node-name}/_config/{section}/{key}</span></span><a class="headerlink" href="#delete--_node-node-name-_config-section-key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a configuration value. The returned JSON will be the value of the
+configuration parameter before it was deleted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – Configuration section name</p></li>
+<li><p><strong>key</strong> – Configuration option name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – CouchDB Server Administrator privileges required</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Specified configuration option not found</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/_node/nonode@nohost/_config/log/level</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">7</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Sat, 10 Aug 2013 12:29:03 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="s2">&quot;info&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="node-node-name-config-reload">
+<span id="api-config-reload"></span><h2><span class="section-number">1.2.26.5. </span><code class="docutils literal notranslate"><span class="pre">/_node/{node-name}/_config/_reload</span></code><a class="headerlink" href="#node-node-name-config-reload" title="Permalink to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.0.</span></p>
+</div>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--_node-node-name-_config-_reload">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/_node/{node-name}/_config/_reload</span></span><a class="headerlink" href="#post--_node-node-name-_config-_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reloads the configuration from disk. This has a side effect of
+flushing any in-memory configuration changes that have not been
+committed to disk.</p>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/_node/nonode@nohost/_config/_reload</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">12</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tues, 21 Jan 2020 11:09:35</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB/3.0.0 (Erlang OTP)</span>
+
+<span class="p">{</span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="authn.html" class="btn btn-neutral float-left" title="1.2.25. Authentication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../database/index.html" class="btn btn-neutral float-right" title="1.3. Databases" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

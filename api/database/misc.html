@@ -1,0 +1,927 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+--><!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.3.18. /{db}/_purge &mdash; Apache CouchDB® 3.3 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://QubitPi.github.io/couchdb/api/database/misc.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.4. Documents" href="../document/index.html" />
+    <link rel="prev" title="1.3.17. /{db}/_security" href="security.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Apache CouchDB®
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+<h2>Table of Contents</h2>
+
+              <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro/index.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replication/index.html">2. Replication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ddocs/index.html">3. Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best-practices/index.html">4. Best Practices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Administration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">2. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config/index.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cluster/index.html">4. Cluster Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance/index.html">5. Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauxton/index.html">6. Fauxton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../experimental.html">7. Experimental Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">1. API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basics.html">1.1. API Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/index.html">1.2. Server</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">1.3. Databases</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common.html">1.3.1. <code class="docutils literal notranslate"><span class="pre">/{db}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html">1.3.2. <code class="docutils literal notranslate"><span class="pre">/{db}/_all_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-design-docs">1.3.3. <code class="docutils literal notranslate"><span class="pre">/{db}/_design_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-bulk-get">1.3.4. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_get</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bulk-api.html#db-bulk-docs">1.3.5. <code class="docutils literal notranslate"><span class="pre">/{db}/_bulk_docs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html">1.3.6. <code class="docutils literal notranslate"><span class="pre">/{db}/_find</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-index">1.3.7. <code class="docutils literal notranslate"><span class="pre">/{db}/_index</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="find.html#db-explain">1.3.8. <code class="docutils literal notranslate"><span class="pre">/{db}/_explain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html">1.3.9. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-shards-docid">1.3.10. <code class="docutils literal notranslate"><span class="pre">/{db}/_shards/{docid}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="shard.html#db-sync-shards">1.3.11. <code class="docutils literal notranslate"><span class="pre">/{db}/_sync_shards</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="changes.html">1.3.12. <code class="docutils literal notranslate"><span class="pre">/{db}/_changes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html">1.3.13. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-compact-ddoc">1.3.14. <code class="docutils literal notranslate"><span class="pre">/{db}/_compact/{ddoc}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-ensure-full-commit">1.3.15. <code class="docutils literal notranslate"><span class="pre">/{db}/_ensure_full_commit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="compact.html#db-view-cleanup">1.3.16. <code class="docutils literal notranslate"><span class="pre">/{db}/_view_cleanup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="security.html">1.3.17. <code class="docutils literal notranslate"><span class="pre">/{db}/_security</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1.3.18. <code class="docutils literal notranslate"><span class="pre">/{db}/_purge</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#internal-replication">1.3.18.1. Internal Replication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#external-replication">1.3.18.2. External Replication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updating-indexes">1.3.18.3. Updating Indexes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#db-purged-infos">1.3.19. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-purged-infos-limit">1.3.20. <code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos_limit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-missing-revs">1.3.21. <code class="docutils literal notranslate"><span class="pre">/{db}/_missing_revs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-revs-diff">1.3.22. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_diff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-revs-limit">1.3.23. <code class="docutils literal notranslate"><span class="pre">/{db}/_revs_limit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../document/index.html">1.4. Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ddoc/index.html">1.5. Design Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partitioned-dbs.html">1.6. Partitioned Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../local.html">1.7. Local (non-replicating) Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../json-structure.html">2. JSON Structure Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query-server/index.html">3. Query Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioned-dbs/index.html">4. Partitioned Databases</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew/index.html">1. Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html">2. Security Issues / CVEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cve/index.html#reporting-new-security-problems-with-apache-couchdb">3. Reporting New Security Problems with Apache CouchDB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">4. License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">5. Contributing to this Documentation</a></li>
+</ul>
+
+<h2>Quick Reference Guides</h2>
+<ul>
+<li><a href="../../http-routingtable.html">API Quick Reference</a></li>
+<li><a href="../../config-ref.html">Configuration Quick Reference</a></li>
+</ul>
+
+
+<h2>Local Links</h2>
+<ul>
+<li><a href="../">Fauxton</a></li>
+</ul>
+
+
+<h2>More Help</h2>
+<ul>
+<li><a href="https://couchdb.apache.org/">CouchDB Homepage</a></li>
+<li><a href="https://couchdb.apache.org/#mailing-list">Mailing Lists</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
+<li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
+<li><a href="../../download.html">Download Docs</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Apache CouchDB®</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><span class="section-number">1. </span>API Reference</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">1.3. </span>Databases</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1.3.18. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_purge</span></code></li>
+  
+    
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/database/misc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="db-purge">
+<span id="api-db-purge"></span><h1><span class="section-number">1.3.18. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_purge</span></code><a class="headerlink" href="#db-purge" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_purge">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_purge</span></span><a class="headerlink" href="#post--db-_purge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A database purge permanently removes the references to documents
+in the database. Normal deletion of a document within CouchDB does not
+remove the document from the database, instead, the document is marked as
+<code class="docutils literal notranslate"><span class="pre">_deleted=true</span></code> (and a new revision is created). This is to ensure that
+deleted documents can be replicated to other databases as having been
+deleted. This also means that you can check the status of a document and
+identify that the document has been deleted by its absence.</p>
+<p>The purge request must include the document IDs, and for each
+document ID, one or more revisions that must be purged. Documents can be
+previously deleted, but it is not necessary. Revisions must be leaf
+revisions.</p>
+<p>The response will contain a list of the document IDs and revisions
+successfully purged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object</strong> – Mapping of document ID to list of revisions to purge</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>purge_seq</strong> (<em>string</em>) – Purge sequence string</p></li>
+<li><p><strong>purged</strong> (<em>object</em>) – Mapping of document ID to list of purged revisions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3">202 Accepted</a></span> – Request was accepted, and was completed successfully on at least
+one replica, but quorum was not reached.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name or JSON payload</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">415 Unsupported Media Type</a></span> – Bad <a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> value</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal server error or timeout</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_purge</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">76</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;c6114c65e295552ab1019e2b046b10e&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;3-b06fcd1c1c9e0ec7c480ee8aa467bf3b&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;3-c50a32451890a3f1c3e423334cc92745&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">107</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Fri, 02 Jun 2017 18:55:54 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB/2.0.0-2ccd4bf (Erlang OTP/18)</span>
+
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;purge_seq&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;purged&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;c6114c65e295552ab1019e2b046b10e&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;3-c50a32451890a3f1c3e423334cc92745&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<figure class="align-center" id="id1">
+<img alt="Document Revision Tree 1" src="../../_images/rev-tree1.png" />
+<figcaption>
+<p><span class="caption-text">Document Revision Tree 1</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>For example, given the above purge tree and issuing the above purge request,
+the whole document will be purged, as it contains only a single branch with a
+leaf revision  <cite>3-c50a32451890a3f1c3e423334cc92745</cite> that will be purged.
+As a result of this purge operation, a document with
+<cite>_id:c6114c65e295552ab1019e2b046b10e</cite> will be completely removed from the
+database’s document b+tree, and sequence b+tree. It will not be available
+through <code class="docutils literal notranslate"><span class="pre">_all_docs</span></code> or <code class="docutils literal notranslate"><span class="pre">_changes</span></code> endpoints, as though this document never
+existed. Also as a result of purge operation, the database’s <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> and
+<code class="docutils literal notranslate"><span class="pre">update_seq</span></code> will be increased.</p>
+<p>Notice, how revision <cite>3-b06fcd1c1c9e0ec7c480ee8aa467bf3b</cite> was ignored. Revisions
+that have already been purged and non-leaf revisions are ignored in a purge
+request.</p>
+<p>If a document has two conflict revisions with the following revision history:</p>
+<figure class="align-center" id="id2">
+<img alt="Document Revision Tree 1" src="../../_images/rev-tree2.png" />
+<figcaption>
+<p><span class="caption-text">Document Revision Tree 2</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>the above purge request will purge only one branch, leaving the document’s
+revision tree with only a single branch:</p>
+<figure class="align-center" id="id3">
+<img alt="Document Revision Tree 3" src="../../_images/rev-tree3.png" />
+<figcaption>
+<p><span class="caption-text">Document Revision Tree 3</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>As a result of this purge operation, a new updated version of the document will
+be available in <code class="docutils literal notranslate"><span class="pre">_all_docs</span></code> and <code class="docutils literal notranslate"><span class="pre">_changes</span></code>, creating a new record in <code class="docutils literal notranslate"><span class="pre">_changes</span></code>.
+The database’s <code class="docutils literal notranslate"><span class="pre">purge_seq</span></code> and <code class="docutils literal notranslate"><span class="pre">update_seq</span></code> will be increased.</p>
+<section id="internal-replication">
+<h2><span class="section-number">1.3.18.1. </span>Internal Replication<a class="headerlink" href="#internal-replication" title="Permalink to this heading">¶</a></h2>
+<p>Purges are automatically replicated between replicas of the same database. Each
+database has an internal purge tree that stores a certain number of the most
+recent purges. This allows internal synchronization between replicas of the same
+database.</p>
+</section>
+<section id="external-replication">
+<h2><span class="section-number">1.3.18.2. </span>External Replication<a class="headerlink" href="#external-replication" title="Permalink to this heading">¶</a></h2>
+<p>Purge operations are not replicated to other external databases. External
+replication works by identifying a source’s document revisions that are missing
+on target, and copying these revisions from source to target. A purge operation
+completely purges revisions from a document’s purge tree making external
+replication of purges impossible.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you need a purge to be effective across multiple effective databases, you
+must run the purge separately on each of the databases.</p>
+</div>
+</div></blockquote>
+</section>
+<section id="updating-indexes">
+<h2><span class="section-number">1.3.18.3. </span>Updating Indexes<a class="headerlink" href="#updating-indexes" title="Permalink to this heading">¶</a></h2>
+<p>The number of purges on a database is tracked using a purge sequence. This is
+used by the view indexer to optimize the updating of views that contain the
+purged documents.</p>
+<p>Each internal database indexer, including the view indexer, keeps its own purge
+sequence. The purge sequence stored in the index can be much smaller than the
+database’s purge sequence up to the number of purge requests allowed to be
+stored in the purge trees of the database. Multiple purge requests can be
+processed by the indexer without incurring a rebuild of the index. The index
+will be updated according to these purge requests.</p>
+<p>The index of documents is based on the winner of the revision tree. Depending on
+which revision is specified in the purge request, the index update observes the
+following behavior:</p>
+<ul class="simple">
+<li><p>If the winner of the revision tree is not specified in the purge request,
+there is no change to the index record of this document.</p></li>
+<li><p>If the winner of the revision tree is specified in the purge request, and
+there is still a revision left after purging, the index record of the document
+will be built according to the new winner of the revision tree.</p></li>
+<li><p>If all revisions of the document are specified in the purge request, the index
+record of the document will be deleted. The document will no longer be found
+in searches.</p></li>
+</ul>
+</section>
+</section>
+<section id="db-purged-infos">
+<span id="api-db-purged-infos"></span><h1><span class="section-number">1.3.19. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos</span></code><a class="headerlink" href="#db-purged-infos" title="Permalink to this heading">¶</a></h1>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_purged_infos">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_purged_infos</span></span><a class="headerlink" href="#get--db-_purged_infos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of purged document IDs and revisions stored in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_purged_infos</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">75</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Thu, 24 Aug 2023 20:56:06 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;purged_infos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;doc_id&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;revs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;1-85cfcb946ba8fea03ba81ec38a7a9998&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;2-c6548393a891f2cec9c7755832ff9d6f&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-purged-infos-limit">
+<span id="api-db-purged-infos-limit"></span><h1><span class="section-number">1.3.20. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_purged_infos_limit</span></code><a class="headerlink" href="#db-purged-infos-limit" title="Permalink to this heading">¶</a></h1>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_purged_infos_limit">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_purged_infos_limit</span></span><a class="headerlink" href="#get--db-_purged_infos_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current <code class="docutils literal notranslate"><span class="pre">purged_infos_limit</span></code> (purged documents limit) setting,
+the maximum number of historical purges (purged document Ids with their
+revisions) that can be stored in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_purged_infos_limit</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">5</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Wed, 14 Jun 2017 14:43:42 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="mi">1000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--db-_purged_infos_limit">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/{db}/_purged_infos_limit</span></span><a class="headerlink" href="#put--db-_purged_infos_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the maximum number of purges (requested purged Ids with their
+revisions) that will be tracked in the database, even after compaction has
+occurred. You can set the purged documents limit on a database with a scalar
+integer of the limit that you want to set as the request body.</p>
+<p>The default value of historical stored purges is 1000. This means up to 1000
+purges can be synchronized between replicas of the same databases in case of
+one of the replicas was down when purges occurred.</p>
+<p>This request sets the soft limit for stored purges. During the compaction
+CouchDB will try to keep only <cite>_purged_infos_limit</cite> of purges in the
+database, but occasionally the number of stored purges can exceed this
+value. If a database has not completed purge synchronization with active
+indexes or active internal replications, it may temporarily store a higher
+number of historical purges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid JSON data</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">PUT</span> <span class="nn">/db/_purged_infos_limit</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">4</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="mi">1500</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">12</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Wed, 14 Jun 2017 14:45:34 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-missing-revs">
+<span id="api-db-missing-revs"></span><h1><span class="section-number">1.3.21. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_missing_revs</span></code><a class="headerlink" href="#db-missing-revs" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_missing_revs">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_missing_revs</span></span><a class="headerlink" href="#post--db-_missing_revs" title="Permalink to this definition">¶</a></dt>
+<dd><p>With given a list of document revisions, returns the document revisions
+that do not exist in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object</strong> – Mapping of document ID to list of revisions to lookup</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>missing_revs</strong> (<em>object</em>) – Mapping of document ID to list of missed
+revisions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name or JSON payload</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_missing_revs</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">76</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;c6114c65e295552ab1019e2b046b10e&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;3-b06fcd1c1c9e0ec7c480ee8aa467bf3b&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;3-0e871ef78849b0c206091f1a7af6ec41&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">64</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 10:53:24 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;missing_revs&quot;</span><span class="p">:{</span>
+<span class="w">        </span><span class="nt">&quot;c6114c65e295552ab1019e2b046b10e&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;3-b06fcd1c1c9e0ec7c480ee8aa467bf3b&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-revs-diff">
+<span id="api-db-revs-diff"></span><h1><span class="section-number">1.3.22. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_revs_diff</span></code><a class="headerlink" href="#db-revs-diff" title="Permalink to this heading">¶</a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--db-_revs_diff">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/{db}/_revs_diff</span></span><a class="headerlink" href="#post--db-_revs_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a set of document/revision IDs, returns the subset of those that do
+not correspond to revisions stored in the database.</p>
+<p>Its primary use is by the replicator, as an important optimization: after
+receiving a set of new revision IDs from the source database, the
+replicator sends this set to the destination database’s <code class="docutils literal notranslate"><span class="pre">_revs_diff</span></code> to
+find out which of them already exist there. It can then avoid fetching and
+sending already-known document bodies.</p>
+<p>Both the request and response bodies are JSON objects whose keys are
+document IDs; but the values are structured differently:</p>
+<ul class="simple">
+<li><p>In the request, a value is an array of revision IDs for that document.</p></li>
+<li><p>In the response, a value is an object with a <code class="docutils literal notranslate"><span class="pre">missing</span></code>: key, whose
+value is a list of revision IDs for that document (the ones that are not
+stored in the database) and optionally a <code class="docutils literal notranslate"><span class="pre">possible_ancestors</span></code> key,
+whose value is an array of revision IDs that are known that might be
+ancestors of the missing revisions.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object</strong> – Mapping of document ID to list of revisions to lookup</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>missing</strong> (<em>array</em>) – List of missed revisions for specified document</p></li>
+<li><p><strong>possible_ancestors</strong> (<em>array</em>) – List of revisions that <em>may be</em> ancestors
+for specified document and its current revision in requested database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid database name or JSON payload</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/db/_revs_diff</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">113</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;190f721ca3411be7aa9477db5f948bbb&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;3-bb72a7682290f94a985f7afac8b27137&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;4-10265e5a26d807a3cfa459cf1a82ef2e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;5-067a00dff5e02add41819138abb3284d&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">88</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 16:56:02 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;190f721ca3411be7aa9477db5f948bbb&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;missing&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;3-bb72a7682290f94a985f7afac8b27137&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;5-067a00dff5e02add41819138abb3284d&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;possible_ancestors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;4-10265e5a26d807a3cfa459cf1a82ef2e&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="db-revs-limit">
+<span id="api-db-revs-limit"></span><h1><span class="section-number">1.3.23. </span><code class="docutils literal notranslate"><span class="pre">/{db}/_revs_limit</span></code><a class="headerlink" href="#db-revs-limit" title="Permalink to this heading">¶</a></h1>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--db-_revs_limit">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/{db}/_revs_limit</span></span><a class="headerlink" href="#get--db-_revs_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current <code class="docutils literal notranslate"><span class="pre">revs_limit</span></code> (revision limit) setting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/db/_revs_limit</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">5</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 17:27:30 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="mi">1000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--db-_revs_limit">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/{db}/_revs_limit</span></span><a class="headerlink" href="#put--db-_revs_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the maximum number of document revisions that will be tracked by
+CouchDB, even after compaction has occurred. You can set the revision limit
+on a database with a scalar integer of the limit that you want to set as
+the request body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – Database name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain</em></p></li>
+</ul>
+</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <em class="mimetype">application/json</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response Headers<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a></span> – <ul>
+<li><p><em class="mimetype">application/json</em></p></li>
+<li><p><em class="mimetype">text/plain; charset=utf-8</em></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ok</strong> (<em>boolean</em>) – Operation status</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Request completed successfully</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Invalid JSON data</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">PUT</span> <span class="nn">/db/_revs_limit</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">5</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:5984</span>
+
+<span class="mi">1000</span>
+</pre></div>
+</div>
+<p><strong>Response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">must-revalidate</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">12</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Mon, 12 Aug 2013 17:47:52 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">CouchDB (Erlang/OTP)</span>
+
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="security.html" class="btn btn-neutral float-left" title="1.3.17. /{db}/_security" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../document/index.html" class="btn btn-neutral float-right" title="1.4. Documents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Apache Software Foundation. CouchDB® is a registered trademark of the Apache Software Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
